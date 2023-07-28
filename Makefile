@@ -6,7 +6,7 @@
 #    By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/25 15:26:25 by vharkush          #+#    #+#              #
-#    Updated: 2023/07/25 19:51:41 by vharkush         ###   ########.fr        #
+#    Updated: 2023/07/26 21:51:12 by vharkush         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,10 @@ LIBFT = ./libft/libft.a
 
 NAME = ./minishell
 
-SRCS =	src/main.c
+SRCS =	src/main.c	\
+		src/env.c	\
+		src/builtin_env.c \
+		src/builtin_pwd.c
 
 CC = cc
 
