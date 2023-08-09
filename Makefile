@@ -1,23 +1,20 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/07/25 15:26:25 by vharkush          #+#    #+#              #
-#    Updated: 2023/07/26 21:51:12 by vharkush         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+
 
 LIBFT = ./libft/libft.a
 
+LIB= -lreadline -lcurses
+
 NAME = ./minishell
 
-SRCS =	src/main.c	\
-		src/env.c	\
-		src/builtin_env.c \
-		src/builtin_pwd.c
+SRCS =	main.c	\
+		env.c	\
+		builtin_env.c \
+		builtin_pwd.c	\
+		pipex.c	\
+		pipex_utils.c	\
+		get_next_line/get_next_line.c	\
+		get_next_line/get_next_line_utils.c
+
 
 CC = cc
 
@@ -31,7 +28,7 @@ all:    $(NAME)
 
 $(NAME): $(OBJS)
 		$(MAKE) -C ./libft
-		$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBFT)
+		$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBFT) $(LIB)
 
 clean:
 		$(MAKE) clean -C ./libft

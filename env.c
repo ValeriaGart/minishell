@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:31:38 by vharkush          #+#    #+#             */
-/*   Updated: 2023/07/28 12:07:43 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/07/29 18:46:54 by yenng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 int	ft_free_env(t_env *env)
 {

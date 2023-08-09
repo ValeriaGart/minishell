@@ -1,9 +1,0 @@
-my_token: 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
-	
-	!execute!
-
-In shell scripting, the export command is used to create environment variables that are accessible to child processes of the current shell. Environment variables are key-value pairs that provide information and configuration settings to various programs and scripts running on the system.
-
-When you use the export command to define an environment variable, it becomes visible to any subprocesses spawned from the current shell. This allows you to pass data or configuration information from one shell session to another or to scripts executed from that shell.
-
-Remember that environment variables created using export are only accessible to child processes, not to the parent process or any other independent shell session. To make an environment variable permanent and accessible across all shell sessions, you may need to define it in your shell's configuration files, such as .bashrc, .bash_profile, or .profile, depending on the shell you are using (e.g., Bash, Zsh, etc.).
