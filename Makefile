@@ -6,12 +6,13 @@ LIB= -lreadline -lcurses
 
 NAME = ./minishell
 
-SRCS =	main.c	\
-		env.c	\
-		builtin_env.c \
-		builtin_pwd.c	\
-		pipex.c	\
-		pipex_utils.c	\
+SRCS =	src/main.c						\
+		src/env.c						\
+		src/input.c						\
+		src/builtin_env.c 				\
+		src/builtin_pwd.c				\
+		src/pipex.c						\
+		src/pipex_utils.c				\
 		get_next_line/get_next_line.c	\
 		get_next_line/get_next_line_utils.c
 
@@ -28,7 +29,7 @@ all:    $(NAME)
 
 $(NAME): $(OBJS)
 		$(MAKE) -C ./libft
-		$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBFT) $(LIB)
+		$(CC) -o $(NAME) $(CFLAGS) $(CPPFLAGS) $(OBJS) $(LIBFT) $(LIB)
 
 clean:
 		$(MAKE) clean -C ./libft

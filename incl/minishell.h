@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/04 14:19:38 by yenng            ###   ########.fr       */
+/*   Updated: 2023/08/09 14:08:49 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <string.h>
-# include "get_next_line/get_next_line.h"
-# include "libft/libft.h"
+# include "../get_next_line/get_next_line.h"
+# include "../libft/libft.h"
 
 typedef struct s_pipex
 {
@@ -73,5 +73,8 @@ char	*ft_gimme_command(char *command, t_pipex *list);
 
 /* pipex.c */
 int		ft_pipex(char **env, char **av, int ac);
+
+/* input.c */
+int		ft_check_input(char	*read_cmd);
 
 #endif

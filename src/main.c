@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/05 13:57:53 by yenng            ###   ########.fr       */
+/*   Updated: 2023/08/09 14:01:07 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			read_cmd = readline("minishell:§ ");
 		if (!read_cmd)
 			printf("Unable to make prompt\n");
+		if (ft_check_input(read_cmd))
+			break;
 		av = ft_split(read_cmd, ' ');
 		if (!av)
 			printf("Unable to split command\n");

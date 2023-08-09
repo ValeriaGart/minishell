@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/02 11:29:58 by yenng            ###   ########.fr       */
+/*   Updated: 2023/08/09 13:52:19 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_bpfree(t_pipex *list, int i)
 	{
 		close(list->pipes[i][0]);
 		close(list->pipes[i][1]);
-		wait(NULL);
+		//wait(NULL);
 		i++;
 	}
 	i = 0;
