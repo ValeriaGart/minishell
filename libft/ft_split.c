@@ -3,132 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ynguyen <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/05 14:13:36 by vharkush          #+#    #+#             */
-/*   Updated: 2023/03/05 14:13:46 by vharkush         ###   ########.fr       */
+/*   Created: 2022/10/24 16:25:26 by ynguyen           #+#    #+#             */
+/*   Updated: 2022/11/03 13:12:53 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-int	count_words(char *s, char c)
+static unsigned int	ft_wordcount(char const *s, char c)
 {
-	int	i;
-	int	j;
+	unsigned int	count;
+	unsigned int	index;
 
-	i = 0;
-	j = 0;
-	while (s[j])
+	count = 0;
+	index = 0;
+	while (s[index] != '\0')
 	{
-		if (s[j] == c && s[j + 1] != '\0' && s[j] != s[0])
-		{
-			while (s[j] == c)
-				j++;
-			i++;
-		}
-		if (s[j] != '\0')
-			j++;
+		while (s[index] == c)
+			index++;
+		if (s[index] && s[index] != c)
+			count++;
+		while (s[index] != c && s[index])
+			index++;
 	}
-	if (i > 0 && s[j - 1] == c && s[j - 2] == c)
-		return (i);
-	return (i + 1);
+	return (count);
 }
 
-int	word_index(int word, char c, char *s)
+static unsigned int	ft_start(char const *s, char c)
 {
-	int	i;
+	unsigned int	start;
 
-	i = 0;
-	while (word--)
+	start = 0;
+	while (s[start])
 	{
-		while (s[i] != c)
-			i++;
-		while (s[i] == c)
-			i++;
+		if (s[start] != c)
+			return (start);
+		start++;
 	}
-	return (i);
+	return (0);
 }
 
-void	*assign_pls(char *s, char c, int word)
+static unsigned int	ft_len(char const *s, char c)
 {
-	int		i;
-	int		length;
-	char	*res;
+	unsigned int	len;
 
-	i = 0;
-	if (word != 0)
-		i = word_index(word, c, (char *)s);
-	length = i;
-	while (s[length] != c && s[length] != '\0')
-		length++;
-	length -= i;
-	res = malloc(sizeof(char) * (length + 1));
-	if (!res)
-		return (0);
-	res[length] = '\0';
-	length = 0;
-	while (s[i] != c && s[i] != '\0')
+	len = 0;
+	while (s[len])
 	{
-		res[length] = s[i];
-		i++;
-		length++;
+		if (s[len] == c)
+			return (len);
+		len++;
 	}
-	return ((char *)res);
+	return (len);
 }
 
-void	res_ass(char *str, char c, char **res, int words)
+static void	*ft_free(char **new, unsigned int index)
 {
-	int	i;
-
-	i = 0;
-	while (words--)
-	{
-		res[i] = assign_pls(str, c, i);
-		i++;
-	}
-	res[i] = 0;
+	while (index--)
+		free(new[index]);
+	free(new);
+	return (NULL);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	*str;
-	char	**res;
-	int		words;
+	unsigned int	size;
+	char			**new;
+	unsigned int	index;
+	unsigned int	start;
+	unsigned int	len;
 
-	if (!s)
+	start = 0;
+	len = 0;
+	index = 0;
+	size = ft_wordcount(s, c);
+	new = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!new)
 		return (NULL);
-	str = (char *)s;
-	while (*str == c)
-		str++;
-	if (*str == '\0' || s[0] == '\0')
+	while (index < size)
 	{
-		res = (char **)malloc(sizeof(char **) * 1);
-		if (!res)
-			return (NULL);
-		res[0] = 0;
-		return (res);
+		start += len + ft_start(&s[start + len], c);
+		len = ft_len(&s[start], c);
+		new[index] = ft_substr(s, start, len);
+		if (!new[index])
+			return (ft_free(new, index));
+		index++;
 	}
-	words = count_words(str, c);
-	res = (char **)malloc(sizeof(char **) * (words + 1));
-	if (!res)
-		return (NULL);
-	res_ass(str, c, res, words);
-	return (res);
+	new[index] = (char *)0;
+	return (new);
 }
-/*int main (int argc, char **argv)
-{
-	char	**print;
-	int		i;
-	
-	i = 0;
-	print = ft_split(argv[1], argv[2][0]);
-	if (argc != 3)
-		return (0);
-	while(print[i])
-	{
-		printf("%s\n", print[i]);
-		i++;
-	}
-}*/
