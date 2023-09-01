@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/29 14:01:58 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/01 11:59:05 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int		ft_free_env(t_env *env);
 int		ft_env_init(t_data *data, char **env);
 
 /* built ins */
-int		ft_env(t_data *data);
-int		ft_pwd(t_data data);
+int		ft_env(t_data *data, t_pipex *list);
+int		ft_pwd(t_data *data, t_pipex *list);
 
 /* pipex_utils.c */
 void	ft_bpfree(t_pipex *list, int i);
@@ -85,5 +85,8 @@ int		ft_check_input(char	*read_cmd);
 
 /* builtins.c */
 void    ft_check_builtins(char **env, t_pipex *list);
+
+/* main.c */
+int		ft_count_words(char **av);
 
 #endif

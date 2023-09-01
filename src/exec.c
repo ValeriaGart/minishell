@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/29 13:57:18 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/01 12:28:43 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void    ft_loop_kids(t_pipex *list, int i, char **env, char **av)
 {
 	ft_check_kid(i, list);
 	list->args = ft_split(av[i], ' ');
+	printf("!!!!!%s!!!!!\n", list->args[0]);
 	if (list->args)
 		ft_check_builtins(env, list);
     if (list->args)
