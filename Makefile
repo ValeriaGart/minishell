@@ -9,10 +9,12 @@ NAME = ./minishell
 SRCS =	src/main.c						\
 		src/env.c						\
 		src/input.c						\
-		src/builtin_env.c 				\
-		src/builtin_pwd.c				\
 		src/pipex.c						\
 		src/pipex_utils.c				\
+		src/exec.c						\
+		builtins/env.c	 				\
+		builtins/pwd.c					\
+		builtins/builtins.c				\
 		get_next_line/get_next_line.c	\
 		get_next_line/get_next_line_utils.c
 

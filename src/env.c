@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:31:38 by vharkush          #+#    #+#             */
-/*   Updated: 2023/07/29 18:46:54 by yenng            ###   ########.fr       */
+/*   Updated: 2023/08/29 14:07:31 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	ft_store_env(t_data *data, char **env_orig, char structt)
 		env = env->next;
 		env->next = NULL;
 	}
+	env->next = NULL;
 	return (0);
 }
 
