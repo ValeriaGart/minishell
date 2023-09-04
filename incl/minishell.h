@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/01 11:59:05 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/04 11:10:57 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <string.h>
+# include <signal.h>
+# include <sys/ioctl.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
-# include "builtins.h"
 
+extern int	minishell_global;
 typedef struct s_env
 {
 	char			*str;
@@ -88,5 +91,8 @@ void    ft_check_builtins(char **env, t_pipex *list);
 
 /* main.c */
 int		ft_count_words(char **av);
+
+/* signal.c */
+void	get_sigint(int sig);
 
 #endif

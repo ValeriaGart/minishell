@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/02 12:31:46 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/04 13:35:09 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	ft_check_kid(int i, t_pipex *list)
 		dup2(list->pipes[i + 1][1], STDOUT_FILENO);
 		close(list->pipes[i][0]);
 		close(list->pipes[i + 1][1]);
-		dup2(list->file1, STDIN_FILENO);
 	}
 	else if (i != list->n - 1 && i != 0)
 	{
@@ -93,6 +92,7 @@ void    ft_loop_kids(t_pipex *list, int i, char **env, char **av)
 		list->command = ft_gimme_com(list->args[0], list);
 	else
 		list->command = NULL;
+	perror_bmsg(NULL, 0, list, i);
 	if (list->args)
 		execve(list->command, list->args, env);
 	exit(0);

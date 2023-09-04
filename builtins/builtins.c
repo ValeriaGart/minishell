@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/01 12:23:50 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/04 11:17:04 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_print_error(int	builtin, char *cmd, t_pipex *list)
 /*
 -1: failed malloc
 -2: too many args env
--3: too many args pwd 
+-3: too many args pwd
 */
 {
 	printf("%s: ", cmd);

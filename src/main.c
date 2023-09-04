@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/04 10:41:41 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/04 11:05:57 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	main(int ac, char **av, char**env)
 	t_data	data;
 
 	(void)av;
+	signal(SIGINT, get_sigint);
 	if (ac > 1)
 		return (0);
 	data.in = 0;
