@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/29 13:07:30 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/04 10:41:41 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,6 @@ char	*ft_gimme_comm(char *command, char **paths)
 		iter++;
 	}
 	return (NULL);
-}
-
-void	ft_execc(char **env, char **av)
-{
-	char	**args;
-	char	*paths;
-	char	*command;
-	char	**com_paths;
-	
-	paths = ft_bcheck_paths(env);
-	com_paths = ft_split(paths, ':');
-	args = ft_split(av[1], ' ');
-	command = ft_gimme_comm(args[0], com_paths);
-	execve(command, args, env);
-	free(args);
 }
 
 char	**malloc_input(char **av, int ac)
