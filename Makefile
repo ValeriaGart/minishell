@@ -11,7 +11,7 @@ SRCS =	src/main.c						\
 		src/input.c						\
 		src/pipex.c						\
 		src/pipex_utils.c				\
-		src/exec.c						\
+		src/execc.c						\
 		src/signal.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\

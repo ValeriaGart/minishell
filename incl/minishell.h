@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/04 11:10:57 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:46:27 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_data
 typedef struct s_pipex
 {
 	pid_t			*pids;
+	int				this_pipe;
+	int				next_pipe;
 	int				n;
 	int				file1;
 	int				file2;
