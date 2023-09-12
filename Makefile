@@ -8,9 +8,13 @@ NAME = ./minishell
 
 SRCS =	src/main.c						\
 		src/env.c						\
+		src/exec.c						\
 		src/input.c						\
 		src/pipex.c						\
 		src/pipex_utils.c				\
+		src/quote.c						\
+		src/quote_utils.c				\
+		src/yen_pipe.c					\
 		src/execc.c						\
 		src/signal.c					\
 		builtins/env.c	 				\

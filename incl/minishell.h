@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/05 11:46:27 by vharkush         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -25,8 +14,41 @@
 # include <sys/wait.h>
 # include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
+# include "builtins.h"
 
 extern int	minishell_global;
+
+typedef struct s_cmd
+{
+	char			**comd;
+	char			*comd_line;
+	char			end_of_cmd;
+	int				index;
+	char			*check_input;
+	int				i;
+	int				j;
+}					t_cmd;
+
+typedef struct		s_dlist
+{
+	char			*str;
+	struct s_dlist	*prev;
+	struct s_dlist	*next;
+}					t_dlist;
+
+typedef struct		s_tlist
+{
+	char			*comd;
+	char			**flargs;
+	char			*op;
+	char			**env;
+	char			*path;
+	pid_t			pid;
+	char			*doc;
+	t_dlist			*prev;
+	t_dlist			*next;
+}					t_tlist;
+// Valeria'part
 typedef struct s_env
 {
 	char			*str;
@@ -35,7 +57,8 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char		comd[1024];
+	char		**comd;
+	int			nbr_comd;
 	int			in;
 	int			out;
 	int			err;
@@ -53,6 +76,7 @@ typedef struct s_pipex
 	int				file2;
 	int				**pipes;
 	int				here_doc;
+	char			**paths;
 	char			*paths;
 	char			*command;
 	char			**com_paths;
@@ -87,6 +111,20 @@ void	ft_exec(char **env, int ac, char **av, t_data *data);
 
 /* input.c */
 int		ft_check_input(char	*read_cmd);
+char	**create_path(t_dlist *c_path);
+
+/* builtins.c */
+void    ft_check_builtins(char **env, t_pipex *list);
+
+// quote.c
+int	are_quotes_closed(char *str);
+int	handle_quote(char *str, int i);
+
+//singal.c
+void	get_sigint(int sig);
+
+/* main.c */
+int		ft_count_words(char **av);
 
 /* builtins.c */
 void    ft_check_builtins(char **env, t_pipex *list);

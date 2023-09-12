@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/05 10:27:25 by vharkush         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-//#include "minishell.h"
+#include "../incl/minishell.h"
 
 char	*ft_gimme_com(char *command, t_pipex *list)
 {
@@ -66,6 +55,7 @@ void	ft_check_kid(int i, t_pipex *list)
 		dup2(list->pipes[i + 1][1], STDOUT_FILENO);
 		close(list->pipes[i][0]);
 		close(list->pipes[i + 1][1]);
+		dup2(list->file1, STDIN_FILENO);
 	}
 	else if (i != list->n - 1 && i != 0)
 	{
