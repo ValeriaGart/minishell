@@ -1,5 +1,4 @@
 
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -70,12 +69,15 @@ typedef struct s_data
 typedef struct s_pipex
 {
 	pid_t			*pids;
+	int				this_pipe;
+	int				next_pipe;
 	int				n;
 	int				file1;
 	int				file2;
 	int				**pipes;
 	int				here_doc;
 	char			**paths;
+	char			*paths;
 	char			*command;
 	char			**com_paths;
 	char			**args;
@@ -123,5 +125,14 @@ void	get_sigint(int sig);
 
 /* main.c */
 int		ft_count_words(char **av);
+
+/* builtins.c */
+void    ft_check_builtins(char **env, t_pipex *list);
+
+/* main.c */
+int		ft_count_words(char **av);
+
+/* signal.c */
+void	get_sigint(int sig);
 
 #endif

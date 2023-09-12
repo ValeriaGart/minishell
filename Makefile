@@ -15,6 +15,7 @@ SRCS =	src/main.c						\
 		src/quote.c						\
 		src/quote_utils.c				\
 		src/yen_pipe.c					\
+		src/execc.c						\
 		src/signal.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\

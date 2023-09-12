@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/04 10:47:17 by yenng            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../incl/minishell.h"
 
@@ -93,6 +82,7 @@ void    ft_loop_kids(t_pipex *list, int i, char **env, char **av)
 		list->command = ft_gimme_com(list->args[0], list);
 	else
 		list->command = NULL;
+	perror_bmsg(NULL, 0, list, i);
 	if (list->args)
 		execve(list->command, list->args, env);
 	exit(0);
