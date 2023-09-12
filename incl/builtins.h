@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/26 21:40:04 by vharkush          #+#    #+#             */
-/*   Updated: 2023/07/29 18:23:55 by yenng            ###   ########.fr       */
+/*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
+/*   Updated: 2023/08/29 07:34:10 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-void	ft_env(t_data data)
-{
-	t_env	*temp;
+# include "minishell.h"
 
-	temp = data.env;
-	while (temp)
-	{
-		ft_putendl_fd(temp->str, data.out);
-		temp = temp->next;
-	}
-}
+#endif

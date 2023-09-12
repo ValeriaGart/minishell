@@ -6,11 +6,11 @@
 /*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:31:38 by vharkush          #+#    #+#             */
-/*   Updated: 2023/07/29 18:46:54 by yenng            ###   ########.fr       */
+/*   Updated: 2023/09/02 12:39:24 by yenng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../incl/minishell.h"
 
 int	ft_free_env(t_env *env)
 {
@@ -63,6 +63,7 @@ int	ft_store_env(t_data *data, char **env_orig, char structt)
 		env = env->next;
 		env->next = NULL;
 	}
+	env->next = NULL;
 	return (0);
 }
 

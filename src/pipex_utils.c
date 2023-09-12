@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/09 13:52:19 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:44:49 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	ft_check_child(int i, t_pipex *list)
 		dup2(list->pipes[i][0], STDIN_FILENO);
 		close(list->pipes[i][0]);
 		dup2(list->file2, STDOUT_FILENO);
-	}
+ 	}
 }
 
 char	*ft_bcheck_paths(char **envp)

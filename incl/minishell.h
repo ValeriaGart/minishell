@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yenng <yenng@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/25 15:24:40 by vharkush          #+#    #+#             */
-/*   Updated: 2023/09/02 12:46:04 by yenng            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -27,10 +17,7 @@
 # include "../libft/libft.h"
 # include "builtins.h"
 
-int	minishell_global;
-
-/*typedef int bool;
-enum { false, true };*/
+extern int	minishell_global;
 
 typedef struct s_cmd
 {
@@ -38,6 +25,7 @@ typedef struct s_cmd
 	char			*comd_line;
 	char			end_of_cmd;
 	int				index;
+	char			*check_input;
 	int				i;
 	int				j;
 }					t_cmd;
@@ -70,7 +58,8 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char		comd[1024];
+	char		**comd;
+	int			nbr_comd;
 	int			in;
 	int			out;
 	int			err;
@@ -86,7 +75,7 @@ typedef struct s_pipex
 	int				file2;
 	int				**pipes;
 	int				here_doc;
-	char			*paths;
+	char			**paths;
 	char			*command;
 	char			**com_paths;
 	char			**args;
@@ -120,9 +109,14 @@ void	ft_exec(char **env, int ac, char **av, t_data *data);
 
 /* input.c */
 int		ft_check_input(char	*read_cmd);
+char	**create_path(t_dlist *c_path);
 
 /* builtins.c */
 void    ft_check_builtins(char **env, t_pipex *list);
+
+// quote.c
+int	are_quotes_closed(char *str);
+int	handle_quote(char *str, int i);
 
 //singal.c
 void	get_sigint(int sig);
