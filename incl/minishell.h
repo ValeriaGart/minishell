@@ -15,6 +15,7 @@
 # include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 # include "builtins.h"
+# define PIPE "|"
 
 extern int	minishell_global;
 
@@ -75,6 +76,7 @@ typedef struct s_pipex
 	int				file1;
 	int				file2;
 	int				**pipes;
+	int				nb_pipe;
 	int				here_doc;
 	char			**paths;
 	char			*paths;
@@ -119,6 +121,9 @@ void    ft_check_builtins(char **env, t_pipex *list);
 // quote.c
 int	are_quotes_closed(char *str);
 int	handle_quote(char *str, int i);
+
+//quote_utils.c
+int	count_index(char *str, int last_inx);
 
 //singal.c
 void	get_sigint(int sig);
