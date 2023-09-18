@@ -62,3 +62,49 @@ void	no_quote_execute(char *s, int i, int j, int double_q)
 		i++;
 	}
 }
+
+
+int inx_in_quote(char *s, int inx)
+{
+	int	quotes;
+
+	if (s[inx] != 39 && s[inx] != 34)
+		return (inx);
+	quotes = s[inx + 1];
+	while (s[inx] != quotes && count_index(s, inx) % 2 == 0)
+	{
+		if (s[inx] == '\0')
+			return (inx);
+		inx++;
+	}
+	return (inx);
+}
+
+int quote_n_pipe(char *s, int inx, int start, int end)
+{
+    char	**tokens;
+	char	*tmp;
+
+	if (!s)
+		return (1);
+	tokens = malloc(sizeof(char *) * (count_pipes(s) + 1));
+	if (!tokens)
+		return (1);
+	while (s[++end] != '\0')
+	{
+		end = skip_quotes(s, end);
+		if (ft_strlen(s) > end && s[end] != '\0'
+			&& s[end] == '|' && s[end - 1] != 39
+			&& nb_esc_chars(s, end) % 2 == 0)
+		{
+			tmp = ft_sdup2(s, start, end);
+			tokens[++inx] = ft_strtrim(tmp, 32);
+			free(tmp);
+			start = end + 1;
+		}
+	}
+	tmp = ft_strdup2(s, start, end);
+	tokens[++inx] = ft_strtrim(tmp, 32);
+	tokens[++inx] = '\0';
+	return (free(tmp), tokens);
+}
