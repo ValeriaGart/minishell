@@ -14,7 +14,6 @@
 # include <sys/wait.h>
 # include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
-# include "builtins.h"
 # define PIPE "|"
 
 extern int	minishell_global;
@@ -78,7 +77,6 @@ typedef struct s_pipex
 	int				**pipes;
 	int				nb_pipe;
 	int				here_doc;
-	char			**paths;
 	char			*paths;
 	char			*command;
 	char			**com_paths;
