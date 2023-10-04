@@ -1,132 +1,75 @@
+#include "minishell.h"
 
-#include "../incl/minishell.h"
-
-char	*ft_gimme_com(char *command, t_pipex *list)
+void    ft_loop_children(t_pipex *list, int i, char **av)
 {
-	char	*temp;
-	char	*ret;
-	char	**iter;
-
-	if (!command)
-		return (NULL);
-	iter = list->com_paths;
-	while (*iter)
-	{
-		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, command);
-		free(temp);
-		if (access(ret, 0) == 0)
-			return (ret);
-		free(ret);
-		iter++;
-	}
-	return (NULL);
-}
-
-int	**ft_gimme_pipess(t_pipex *list)
-{
-	int	**pipes;
-	int	i;
-
-	pipes = malloc(list->n * sizeof(int *));
-	i = -1;
-	while (++i < list->n && pipes != NULL)
-	{
-		pipes[i] = ft_calloc(2, sizeof(int));
-		if (pipes[i] == NULL)
-		{
-			if (i)
-				while (--i)
-					free(pipes[i]);
-			if (pipes[0])
-				free(pipes[0]);
-			free(pipes);
-		}
-	}
-	return (pipes);
-}
-
-void	ft_check_kid(int i, t_pipex *list)
-{
-	if (list->n == 1)
-		return;
-	if (i == 0)
-	{
-		dup2(list->pipes[i + 1][1], STDOUT_FILENO);
-		close(list->pipes[i][0]);
-		close(list->pipes[i + 1][1]);
-		dup2(list->file1, STDIN_FILENO);
-	}
-	else if (i != list->n - 1 && i != 0)
-	{
-		dup2(list->pipes[i + 1][1], STDOUT_FILENO);
-		dup2(list->pipes[i][0], STDIN_FILENO);
-		close(list->pipes[i][0]);
-		close(list->pipes[i + 1][1]);
-	}
-	else
-	{
-		dup2(list->pipes[i][0], STDIN_FILENO);
-		close(list->pipes[i][0]);
-		dup2(list->file2, STDOUT_FILENO);
- 	}
-}
-
-void    ft_loop_kids(t_pipex *list, int i, char **env, char **av)
-{
-	ft_check_kid(i, list);
 	list->args = ft_split(av[i], ' ');
-	if (list->args)
-		ft_check_builtins(env, list);
-    if (list->args)
-		list->command = ft_gimme_com(list->args[0], list);
-	else
-		list->command = NULL;
-	perror_bmsg(NULL, 0, list, i);
-	if (list->args)
-		execve(list->command, list->args, env);
-	exit(0);
+	if (!list->args)
+    {
+        ft_error_msg(list->data, "Malloc failed\n", 15);
+        ft_list_free(list);
+		close(list->pipes[0]);
+		close(list->pipes[1]);
+        exit(1);
+    }
+	ft_redirects(list, list->args);
+	ft_check_kid(i, list);
+//	ft_check_builtins(list);
+    list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
+	list->command = ft_gimme_com(list->args[0], list);
+	execve(list->command, list->args, list->valid_env);
+    ft_error_msg(list->data, "Execve failed\n", 15);
+    ft_list_free(list);
+    exit(1);
 }
 
-void    ft_do_all_to_exec(t_pipex *list, char **env, char **av)
+int    ft_do_all_to_exec(t_pipex *list, char **av)
 {
 	int	i;
 
-    list->pipes = ft_gimme_pipess(list);
-    i = -1;
-    while (++i < list->n)
-	    pipe(list->pipes[i]);
 	i = -1;
-	while (++i < list->n)
+	list->rem_fd = -1;
+	while (++i < list->ac)
 	{
+		if (i < list->ac - 1)
+			pipe(list->pipes);
 		list->pids[i] = fork();
         if (list->pids[i] == 0)
-			ft_loop_kids(list, i, env, av);
+			ft_loop_children(list, i, av);
+		if (list->rem_fd != -1)
+			close(list->rem_fd);
+		if (i < list->ac - 1)
+			list->rem_fd = list->pipes[0];
+		if (list->ac != 1)
+			close(list->pipes[1]);
     }
+	i = -1;
+	while (++i < list->ac)
+		wait(NULL);
+    return (0);
 }
- 
-void	ft_exec(char **env, int ac, char **av, t_data *data)
+
+int	ft_exec(int ac, char **av, t_data *data)
 {
     t_pipex	list;
-	pid_t	*pids;
-	int i = 0;
 
 	list.data = data;
-    list.paths = ft_bcheck_paths(env);
+	list.here_doc = -1;
+    list.paths = ft_bcheck_paths(data, data->env);
+    if (!list.paths)
+        return (1);
     list.com_paths = ft_split(list.paths, ':');
-    list.n = ac;
-    pids = malloc(list.n * sizeof(pid_t));
-    list.pids = pids;
-    list.file1 = 0;
-    list.file2 = 1;
-    ft_do_all_to_exec(&list, env, av);
-    //ft_bpfree(&list, 0);
-    while (i < list.n)
-	{
-		close(list.pipes[i][0]);
-		close(list.pipes[i][1]);
-		wait(NULL);
-		i++;
-	}
-	free(pids);
+    if (!list.com_paths)
+        return (ft_error_msg(data, "Malloc failed\n", 15));
+    list.ac = ac;
+    list.pids = malloc(list.ac * sizeof(pid_t));
+    if (!list.pids)
+    {
+        free(list.com_paths);
+        return (ft_error_msg(data, "Malloc failed\n", 15));
+    }
+    list.redir_in = -1;
+    list.redir_out = -1;
+    ft_do_all_to_exec(&list, av);
+    ft_list_free(&list);
+    return (data->exit_st);
 }

@@ -1,5 +1,4 @@
 
-
 LIBFT = ./libft/libft.a
 
 LIB= -lreadline -lcurses
@@ -9,9 +8,10 @@ NAME = ./minishell
 SRCS =	src/main.c						\
 		src/env.c						\
 		src/exec.c						\
+		src/exec_utils.c				\
+		src/utils.c						\
 		src/input.c						\
-		src/pipex.c						\
-		src/pipex_utils.c				\
+		src/redirects.c					\
 		src/quote.c						\
 		src/quote_utils.c				\
 		src/signal.c					\

@@ -5,7 +5,6 @@ int ft_check_input(t_cmd *re)
 {
     if (are_quotes_closed(re->check_input) == 1)
         return (1);
-	
     return (0);
 }
 

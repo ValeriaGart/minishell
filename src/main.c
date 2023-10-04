@@ -80,7 +80,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			return;
 		free(read_cmd);
 		read_cmd = NULL;
-		ft_exec(env, ac, av, data);
+		ft_exec(ac, av, data);
 		//ft_pipex(env, av, ac);
 		//free(av);
 	}
@@ -96,9 +96,6 @@ int	main(int ac, char **av, char**env)
 	signal(SIGINT, get_sigint);
 	if (ac > 1)
 		return (0);
-	data.in = 0;
-	data.out = 1;
-	data.err = 1;
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(env, &data, NULL, ac);

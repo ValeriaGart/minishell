@@ -57,11 +57,7 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	char		**comd;
-	int			nbr_comd;
-	int			in;
-	int			out;
-	int			err;
+	int			exit_st;
 	t_env		*env;
 	t_env		*env_orig;
 }		t_data;
@@ -69,18 +65,17 @@ typedef struct s_data
 typedef struct s_pipex
 {
 	pid_t			*pids;
-	int				this_pipe;
-	int				next_pipe;
-	int				n;
-	int				file1;
-	int				file2;
-	int				**pipes;
-	int				nb_pipe;
+	int				ac;
+	int				redir_in;
+	int				redir_out;
+	int				rem_fd;
+	int				pipes[2];
 	int				here_doc;
 	char			*paths;
 	char			*command;
-	char			**com_paths;
 	char			**args;
+	char			**com_paths;
+	char			**valid_env;
 	t_data			*data;
 }		t_pipex;
 
@@ -93,24 +88,24 @@ int		ft_env_init(t_data *data, char **env);
 int		ft_env(t_data *data, t_pipex *list);
 int		ft_pwd(t_data *data, t_pipex *list);
 
-/* pipex_utils.c */
-void	ft_bpfree(t_pipex *list, int i);
-void	ft_unlink(t_pipex *list, char **av, int perror);
-int		**ft_gimme_pipes(t_pipex *list, char **av);
-void	free_pipes(int i, t_pipex *list, char **av, int exitt);
-void	ft_check_child(int i, t_pipex *list);
-char	*ft_bcheck_paths(char **envp);
-void	perror_bmsg(char *error, int j, t_pipex *list, int i);
-char	*ft_gimme_command(char *command, t_pipex *list);
-
-/* pipex.c */
-int		ft_pipex(char **env, char **av, int ac);
-
 /* exec.c */
-void	ft_exec(char **env, int ac, char **av, t_data *data);
+int		ft_exec(int ac, char **av, t_data *data);
+
+/* exec_utils.c */
+char    *ft_bcheck_paths(t_data *data, t_env  *env);
+char    **ft_env_to_twod_arr(t_data *data, t_env *env_list);
+void    ft_check_kid(int i, t_pipex *list);
+char	*ft_gimme_com(char *command, t_pipex *list);
+
+/* utils.c */
+int		ft_error_msg(t_data *data, char *msg, int msg_len);
+void	ft_list_free(t_pipex *list);
+
+/* redirects.c */
+void	ft_redirects(t_pipex *list, char **args);
 
 /* input.c */
-int		ft_check_input(char	*read_cmd);
+int		ft_check_input(t_cmd *re);
 char	**create_path(t_dlist *c_path);
 
 /* builtins.c */
