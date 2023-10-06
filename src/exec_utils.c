@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 char	*ft_gimme_com(char *command, t_pipex *list)
 {

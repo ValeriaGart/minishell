@@ -13,28 +13,6 @@ int	ft_count_words(char **av)
 	return (i);
 }
 
-char	*ft_gimme_comm(char *command, char **paths)
-{
-	char	*temp;
-	char	*ret;
-	char	**iter;
-
-	if (!command)
-		return (NULL);
-	iter = paths;
-	while (*iter)
-	{
-		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, command);
-		free(temp);
-		if (access(ret, 0) == 0)
-			return (ret);
-		free(ret);
-		iter++;
-	}
-	return (NULL);
-}
-
 char	**malloc_input(char **av, int ac)
 {
 	char	**input;
