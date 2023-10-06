@@ -10,9 +10,9 @@ SRCS =	src/main.c						\
 		src/env.c						\
 		src/exec.c						\
 		src/exec_utils.c				\
+		src/redirects.c					\
+		src/utils.c						\
 		src/free.c						\
-		src/pipex.c						\
-		src/pipex_utils.c				\
 		src/quote.c						\
 		src/input_check.c				\
 		src/input_utils.c				\

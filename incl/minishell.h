@@ -4,7 +4,6 @@
 
 # include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
-# include "builtins.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -46,9 +45,8 @@ typedef struct s_tlist
 typedef struct s_env
 {
 	char			*str;
-	char			*input;
 	struct s_env	*next;
-}					t_env;
+}		t_env;
 
 typedef struct s_data
 {
@@ -61,15 +59,10 @@ typedef struct s_data
 	int				j;
 	int				at;
 	int				exit;
-	// valeria's
-	int				nbr_comd;
-	int				in;
-	int				out;
-	int				err;
 	pid_t			*pid;
-	char			*path;
-	struct s_tlist	*start;
-	struct s_dlist	*exp;
+	int				out;
+	// valeria's
+	int				exit_st;
 	t_env			*env;
 	t_env			*env_orig;
 }					t_data;
@@ -91,6 +84,7 @@ typedef struct s_pipex
 	t_data			*data;
 }					t_pipex;
 
+
 /* env.c */
 int					ft_store_env(t_data *data, char **env_orig, char structt);
 int					ft_free_env(t_env *env);
@@ -110,21 +104,15 @@ int					check_input(t_data *d, char *s);
 // input_utils.c
 int					ft_strcmp(char *s1, char *s2);
 
-/* pipex_utils.c */
-void				ft_bpfree(t_pipex *list, int i);
-void				ft_unlink(t_pipex *list, char **av, int perror);
-int					**ft_gimme_pipes(t_pipex *list, char **av);
-void				free_pipes(int i, t_pipex *list, char **av, int exitt);
-void				ft_check_child(int i, t_pipex *list);
-char				*ft_bcheck_paths(char **envp);
-void				perror_bmsg(char *error, int j, t_pipex *list, int i);
-char				*ft_gimme_command(char *command, t_pipex *list);
-
-/* pipex.c */
-int					ft_pipex(char **env, char **av, int ac);
-
 /* exec.c */
 int					ft_exec(int ac, char **av, t_data *data);
+
+/* utils.c */
+int		ft_error_msg(t_data *data, char *msg, int msg_len);
+void	ft_list_free(t_pipex *list);
+
+/* redirects.c */
+void	ft_redirects(t_pipex *list, char **args);
 
 /* builtins.c */
 void				ft_check_builtins(char **env, t_pipex *list);
@@ -139,15 +127,6 @@ void				get_sigint(int sig);
 
 /* main.c */
 int					ft_count_words(char **av);
-
-/* builtins.c */
-void				ft_check_builtins(char **env, t_pipex *list);
-
-/* main.c */
-int					ft_count_words(char **av);
-
-/* signal.c */
-void				get_sigint(int sig);
 
 // token.c
 t_dlist				*ft_create_dlist(char *s, int quote);
