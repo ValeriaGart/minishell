@@ -1,3 +1,0 @@
-[submodule "minishell"]
-	path = minishell
-	url = https://github.com/yenthing/minishell.git
