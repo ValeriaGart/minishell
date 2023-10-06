@@ -9,13 +9,13 @@ NAME = ./minishell
 SRCS =	src/main.c						\
 		src/env.c						\
 		src/exec.c						\
-		src/input.c						\
+		src/exec_utils.c				\
+		src/free.c						\
 		src/pipex.c						\
 		src/pipex_utils.c				\
 		src/quote.c						\
-		src/quote_utils.c				\
-		#src/yen_check_pipe.c			\#
-		src/execc.c						\
+		src/input_check.c				\
+		src/input_utils.c				\
 		src/signal.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
@@ -26,7 +26,7 @@ SRCS =	src/main.c						\
 
 CC = cc
 
-CFLAGS = -g -Wextra -Werror -Wall
+CFLAGS = -gdwarf-4 -Wextra -Werror -Wall
 
 CPPFLAGS = -I ./incl
 

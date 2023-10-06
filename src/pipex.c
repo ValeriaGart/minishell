@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:21:59 by vharkush          #+#    #+#             */
-/*   Updated: 2023/08/28 17:23:41 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/09/14 11:47:58 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_loop_children(t_pipex *list, int i, char **envp, char **av)
 	{
 		free_pipes(list->n, list, av, 0);
 		write(2, "Smth is wrong with the command\n", 32);
-		exit (1);
+		exit(1);
 	}
 	perror_bmsg(NULL, j, list, i);
 	if (list->here_doc)
@@ -114,7 +114,7 @@ void	ft_open_files(t_pipex *list, char **av, int ac, int file)
 		perror_bmsg("file2", 0, list, -1);
 }
 
-int ft_pipex(char **envp, char **av, int ac)
+int	ft_pipex(char **envp, char **av, int ac)
 {
 	t_pipex	list;
 	pid_t	*pids;
@@ -124,8 +124,8 @@ int ft_pipex(char **envp, char **av, int ac)
 		list.here_doc = 1;
 	ft_open_files(&list, av, ac, 0);
 	ft_open_files(&list, av, ac, 1);
-	list.paths = ft_bcheck_paths(envp);
-	list.com_paths = ft_split(list.paths, ':');
+	list.path = ft_bcheck_paths(envp);
+	list.com_paths = ft_split(list.path, ':');
 	if (!list.com_paths)
 		ft_unlink(&list, av, -1);
 	list.n = ac - (3 + list.here_doc);
