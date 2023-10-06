@@ -59,6 +59,7 @@ typedef struct s_data
 	char			*check_input;
 	int				i;
 	int				j;
+	int				at;
 	int				exit;
 	// valeria's
 	int				nbr_comd;
@@ -88,7 +89,7 @@ typedef struct s_pipex
 	char			**com_paths;
 	char			**valid_env;
 	t_data			*data;
-}		t_pipex;
+}					t_pipex;
 
 /* env.c */
 int					ft_store_env(t_data *data, char **env_orig, char structt);
@@ -123,13 +124,7 @@ char				*ft_gimme_command(char *command, t_pipex *list);
 int					ft_pipex(char **env, char **av, int ac);
 
 /* exec.c */
-int		ft_exec(int ac, char **av, t_data *data);
-
-/* exec_utils.c */
-char    *ft_bcheck_paths(t_data *data, t_env  *env);
-char    **ft_env_to_twod_arr(t_data *data, t_env *env_list);
-void    ft_check_kid(int i, t_pipex *list);
-char	*ft_gimme_com(char *command, t_pipex *list);
+int					ft_exec(int ac, char **av, t_data *data);
 
 /* builtins.c */
 void				ft_check_builtins(char **env, t_pipex *list);
@@ -138,16 +133,6 @@ void				ft_check_builtins(char **env, t_pipex *list);
 int					ft_is_space(char s, int space);
 int					quote_error_message(void);
 int					check_open_quote(t_data *d, char *s);
-
-// quote_utils.c
-/*
-int					quote_exist(char *s);
-int					ft_execute_symbols(char *str, int exc, int i);
-int					index_in_quote(char *s, int inx);
-void				no_quote_execute(char *s, int i, int j, int double_q);
-int					quote_n_pipe(char *s, int inx, int start, int end);
-
-*/
 
 // singal.c
 void				get_sigint(int sig);

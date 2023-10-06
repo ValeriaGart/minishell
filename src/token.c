@@ -31,7 +31,7 @@ void	ft_add_dlist_back(t_dlist **dl, char *str, int quote)
 	tmp->next->prev = tmp;
 }
 
-int	which_operator(char *s, int q)
+int	which_symbols(char *s, int q)
 {
 	if (q != 0)
 		return (0);
@@ -49,33 +49,32 @@ int	which_operator(char *s, int q)
 		return (0);
 }
 
-/*
-t_tlist	*ft_real_token(t_dlist *v, t_tlist *sing, t_data *j)
+t_tlist	*tokenize(t_dlist *v, t_tlist *sing, t_data *j)
 {
 	t_tlist			*p;
 	unsigned int	i;
 
-	if (j->id == 1)
+	if (j->at == 1)
 		sing = ft_create_tlist();
 	p = sing;
-	if (j->id == 2)
+	if (j->at == 2)
 	{
 		ft_add_tlist_back(&p);
-		while (t->next != NULL)
+		while (sing->next != 0)
 			sing = sing->next;
 	}
 	i = 0;
-	while (v != NULL)
-		ft_real_token_loop(&v, &sing, &i, p);
-	if (sing != NULL && sing->flargs != NULL)
-		sing->flargs[i] = NULL;
+	while (v != 0)
+		token_loop(&v, &sing, &i, p);
+	if (sing != 0 && sing->flargs != 0)
+		sing->flargs[i] = 0;
 	return (p);
 }
 
-void	ft_token_loop(char *s, int *q, int *i, int **sum_q)
+void	token_loop(char *s, int *q, int *i, int **sum_q)
 {
 	(*sum_q)[2] = 0;
-	while (s[*i] && (ft_is_space(s[*i], *q) == 1) && get_operator(&s[*i],
+	while (s[*i] && (ft_is_space(s[*i], *q) == 1) && which_symbols(&s[*i],
 			*q) == 0)
 	{
 		if ((*q == 0 && (s[*i] == S || s[*i] == D)) && (((*sum_q)[0] != 0
@@ -93,4 +92,17 @@ void	ft_token_loop(char *s, int *q, int *i, int **sum_q)
 	}
 }
 
-*/
+void get_tokens(char *s, t_dlist **doub, int quote[3])
+{
+	unsigned int i;
+	unsigned int	start;
+	int q;
+
+	start = 0;
+	i = 0;
+	q = 0;
+	while(s[i])
+	{
+		quote
+	}
+}

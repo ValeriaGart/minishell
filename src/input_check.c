@@ -4,29 +4,25 @@ int	syntax_errors(t_data *d, char c)
 {
 	if (c == PIPE)
 	{
-		ft_putendl_fd("parse error near `|'", 2);
+		ft_putendl_fd("Earse error near `|'", 2);
 		d->exit = 2;
-		return (2);
 	}
 	else if (c == '<' || c == '>')
 	{
-		ft_putendl_fd("error redirection", 2);
+		ft_putendl_fd("Error redirection", 2);
 		d->exit = 2;
-		return (2);
 	}
 	else if (c == D || c == S)
 	{
 		ft_putendl_fd("Quotes error", 2);
 		d->exit = 2;
-		return (2);
 	}
 	return (0);
 }
 
-/*I check:
-		1st position is PIPE->error
-		last position is PIPE->error
-		2 PIPE together -> error*/
+/*	1st position is PIPE->error
+	last position is PIPE->error
+	2 PIPE together -> error*/
 int	check_pipe(t_data *d, char *input)
 {
 	int	end_str;
@@ -45,8 +41,7 @@ int	check_pipe(t_data *d, char *input)
 	return (0);
 }
 /*	after redirection is NULL -> error
-	after 1st rediction is | or redirections -> error
-*/
+	after 1st rediction is | or redirections -> error*/
 
 int	check_redirect(t_data *d, char *s, char redirect)
 {
@@ -73,15 +68,15 @@ int	check_input(t_data *d, char *s)
 	{
 		if (ft_is_space(s[i], i))
 			i++;
+		else if (s[i] == PIPE)
+			return (check_pipe(d, s));
+		else if (s[i] == '>' || s[i] == '<')
+			return (check_redirect(d, s, s[i]));
 		else if (s[i] == S || s[i] == D)
 		{
 			printf("hello\n");
 			return (check_open_quote(d, s));
 		}
-		else if (s[i] == PIPE)
-			return (check_pipe(d, s));
-		else if (s[i] == '>' || s[i] == '<')
-			return (check_redirect(d, s, s[i]));
 		else
 			i++;
 	}

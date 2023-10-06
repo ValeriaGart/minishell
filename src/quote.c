@@ -1,11 +1,5 @@
 #include "../incl/minishell.h"
 
-int	quote_error_message(void)
-{
-	write(2, "Quotes error\n", 14);
-	return (1);
-}
-
 int	ft_is_space(char s, int space)
 {
 	if (space != 0)
@@ -36,9 +30,6 @@ int	check_open_quote(t_data *d, char *s)
 		i++;
 	}
 	if (q != 0)
-	{
 		syntax_errors(d, s[i]);
-		return (1);
-	}
 	return (0);
 }
