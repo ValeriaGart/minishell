@@ -1,4 +1,5 @@
 
+
 LIBFT = ./libft/libft.a
 
 LIB= -lreadline -lcurses
@@ -9,11 +10,12 @@ SRCS =	src/main.c						\
 		src/env.c						\
 		src/exec.c						\
 		src/exec_utils.c				\
-		src/utils.c						\
-		src/input.c						\
 		src/redirects.c					\
+		src/utils.c						\
+		src/free.c						\
 		src/quote.c						\
-		src/quote_utils.c				\
+		src/input_check.c				\
+		src/input_utils.c				\
 		src/signal.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
@@ -24,7 +26,7 @@ SRCS =	src/main.c						\
 
 CC = cc
 
-CFLAGS = -g -Wextra -Werror -Wall
+CFLAGS = -gdwarf-4 -Wextra -Werror -Wall
 
 CPPFLAGS = -I ./incl
 

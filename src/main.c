@@ -1,6 +1,7 @@
 
-
 #include "../incl/minishell.h"
+
+int		minishell_global;
 
 int	ft_count_words(char **av)
 {
@@ -10,28 +11,6 @@ int	ft_count_words(char **av)
 	while (av[i])
 		i++;
 	return (i);
-}
-
-char	*ft_gimme_comm(char *command, char **paths)
-{
-	char	*temp;
-	char	*ret;
-	char	**iter;
-
-	if (!command)
-		return (NULL);
-	iter = paths;
-	while (*iter)
-	{
-		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, command);
-		free(temp);
-		if (access(ret, 0) == 0)
-			return (ret);
-		free(ret);
-		iter++;
-	}
-	return (NULL);
 }
 
 char	**malloc_input(char **av, int ac)
@@ -55,42 +34,41 @@ char	**malloc_input(char **av, int ac)
 
 void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 {
-	(void)data;
 	char	*read_cmd;
 	char	**input;
 
 	read_cmd = NULL;
 	(void)env;
-	while(1)
+	while (1)
 	{
-	 	if (!read_cmd)
+		if (!read_cmd)
 			read_cmd = readline("minishell:§ ");
 		if (!read_cmd)
 			printf("Unable to make prompt\n");
-		if (ft_check_input(read_cmd))
-			break;							//free pls
+		if (check_input(data, read_cmd) != 0)
+			return ; // free pls
 		av = ft_split(read_cmd, '|');
 		if (!av)
 			printf("Unable to split commands and exec\n");
 		ac = ft_count_words(av); // " added ac = "
 		if (!ac)
-			return;
+			return ;
 		input = malloc_input(av, ac);
 		if (!input)
-			return;
+			return ;
 		free(read_cmd);
 		read_cmd = NULL;
 		ft_exec(ac, av, data);
-		//ft_pipex(env, av, ac);
-		//free(av);
+		// ft_pipex(env, av, ac);
+		// free(av);
 	}
 	if (read_cmd)
 		free(read_cmd);
 }
 
-int	main(int ac, char **av, char**env)
+int	main(int ac, char **av, char **env)
 {
-	t_data	data;
+	t_data data;
 
 	(void)av;
 	signal(SIGINT, get_sigint);

@@ -16,6 +16,7 @@ void    ft_loop_children(t_pipex *list, int i, char **av)
 //	ft_check_builtins(list);
     list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	list->command = ft_gimme_com(list->args[0], list);
+	//ft_putstr_fd(list->command, 1);
 	execve(list->command, list->args, list->valid_env);
     ft_error_msg(list->data, "Execve failed\n", 15);
     ft_list_free(list);
