@@ -1,9 +1,7 @@
 #include "../incl/minishell.h"
 
-int	ft_is_space(char s, int space)
+int	ft_is_space(char s)
 {
-	if (space != 0)
-		return (1);
 	if (s == 32)
 		return (0);
 	return (1);
@@ -16,9 +14,7 @@ int	check_open_quote(t_data *d, char *s)
 
 	q = 0;
 	i = 0;
-	while (ft_is_space(s[i], 0) == 0)
-		i++;
-	while (s[i] && ft_is_space(s[i], 1))
+	while (s[i])
 	{
 		if (s[i] == S || s[i] == D)
 		{
@@ -30,6 +26,6 @@ int	check_open_quote(t_data *d, char *s)
 		i++;
 	}
 	if (q != 0)
-		syntax_errors(d, s[i]);
+		return (syntax_errors(d, s[i]));
 	return (0);
 }

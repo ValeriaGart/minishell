@@ -4,7 +4,7 @@ int	syntax_errors(t_data *d, char c)
 {
 	if (c == PIPE)
 	{
-		ft_putendl_fd("Earse error near `|'", 2);
+		ft_putendl_fd("Parse error near `|'", 2);
 		d->exit = 2;
 	}
 	else if (c == '<' || c == '>')
@@ -17,7 +17,7 @@ int	syntax_errors(t_data *d, char c)
 		ft_putendl_fd("Quotes error", 2);
 		d->exit = 2;
 	}
-	return (0);
+	return (1);
 }
 
 /*	1st position is PIPE->error
@@ -33,8 +33,8 @@ int	check_pipe(t_data *d, char *input)
 	if (input[0] == PIPE)
 		return (syntax_errors(d, input[i]));
 	else if (input[end_str] == PIPE)
-		return (syntax_errors(d, input[i]));
-	while (ft_is_space(input[i], i))
+		return (syntax_errors(d, input[end_str]));
+	while (ft_is_space(input[i]) == 0)
 		i++;
 	if (input[i] == PIPE && input[i + 1] == PIPE)
 		return (syntax_errors(d, input[i]));
@@ -50,7 +50,7 @@ int	check_redirect(t_data *d, char *s, char redirect)
 	i = 0;
 	if (s[i] == redirect && s[i + 1] != redirect)
 		i++;
-	while (ft_is_space(s[i], i))
+	while (ft_is_space(s[i]))
 		i++;
 	if (s[i] == '\0')
 		return (syntax_errors(d, '\n'));
@@ -66,19 +66,24 @@ int	check_input(t_data *d, char *s)
 	i = 0;
 	while (s[i])
 	{
-		if (ft_is_space(s[i], i))
-			i++;
+		if (ft_is_space(s[i]) == 0)
+			;
 		else if (s[i] == PIPE)
-			return (check_pipe(d, s));
+		{
+			if (check_pipe(d, s) == 1)
+				return (1);
+		}
 		else if (s[i] == '>' || s[i] == '<')
-			return (check_redirect(d, s, s[i]));
+		{
+			if (check_redirect(d, s, s[i]) == 1)
+				return (1);
+		}
 		else if (s[i] == S || s[i] == D)
 		{
-			printf("hello\n");
-			return (check_open_quote(d, s));
+			if (check_open_quote(d, s) == 1)
+				return (1);
 		}
-		else
-			i++;
+		i++;
 	}
 	return (0);
 }

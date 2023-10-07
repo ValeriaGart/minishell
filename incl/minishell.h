@@ -46,7 +46,7 @@ typedef struct s_env
 {
 	char			*str;
 	struct s_env	*next;
-}		t_env;
+}					t_env;
 
 typedef struct s_data
 {
@@ -84,7 +84,6 @@ typedef struct s_pipex
 	t_data			*data;
 }					t_pipex;
 
-
 /* env.c */
 int					ft_store_env(t_data *data, char **env_orig, char structt);
 int					ft_free_env(t_env *env);
@@ -107,18 +106,24 @@ int					ft_strcmp(char *s1, char *s2);
 /* exec.c */
 int					ft_exec(int ac, char **av, t_data *data);
 
+/* exec_utils.c */
+char				*ft_bcheck_paths(t_data *data, t_env *env);
+char				**ft_env_to_twod_arr(t_data *data, t_env *env_list);
+void				ft_check_kid(int i, t_pipex *list);
+char				*ft_gimme_com(char *command, t_pipex *list);
+
 /* utils.c */
-int		ft_error_msg(t_data *data, char *msg, int msg_len);
-void	ft_list_free(t_pipex *list);
+int					ft_error_msg(t_data *data, char *msg, int msg_len);
+void				ft_list_free(t_pipex *list);
 
 /* redirects.c */
-void	ft_redirects(t_pipex *list, char **args);
+void				ft_redirects(t_pipex *list, char **args);
 
 /* builtins.c */
 void				ft_check_builtins(char **env, t_pipex *list);
 
 // quote.c
-int					ft_is_space(char s, int space);
+int					ft_is_space(char s);
 int					quote_error_message(void);
 int					check_open_quote(t_data *d, char *s);
 

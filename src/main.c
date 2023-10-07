@@ -46,7 +46,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 		if (!read_cmd)
 			printf("Unable to make prompt\n");
 		if (check_input(data, read_cmd) != 0)
-			return ; // free pls
+			; // free pls
 		av = ft_split(read_cmd, '|');
 		if (!av)
 			printf("Unable to split commands and exec\n");

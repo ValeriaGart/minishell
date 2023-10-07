@@ -74,8 +74,7 @@ t_tlist	*tokenize(t_dlist *v, t_tlist *sing, t_data *j)
 void	token_loop(char *s, int *q, int *i, int **sum_q)
 {
 	(*sum_q)[2] = 0;
-	while (s[*i] && (ft_is_space(s[*i], *q) == 1) && which_symbols(&s[*i],
-			*q) == 0)
+	while (s[*i] && (ft_is_space(s[*i]) == 1) && which_symbols(&s[*i], *q) == 0)
 	{
 		if ((*q == 0 && (s[*i] == S || s[*i] == D)) && (((*sum_q)[0] != 0
 					&& s[*i] == D) || ((*sum_q)[1] != 0 && s[*i] == S)))
@@ -92,16 +91,16 @@ void	token_loop(char *s, int *q, int *i, int **sum_q)
 	}
 }
 
-void get_tokens(char *s, t_dlist **doub, int quote[3])
+void	get_tokens(char *s, t_dlist **doub, int quote[3])
 {
 	unsigned int i;
-	unsigned int	start;
+	unsigned int start;
 	int q;
 
 	start = 0;
 	i = 0;
 	q = 0;
-	while(s[i])
+	while (s[i])
 	{
 		quote
 	}
