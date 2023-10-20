@@ -14,9 +14,12 @@ SRCS =	src/main.c						\
 		src/utils.c						\
 		src/free.c						\
 		src/quote.c						\
+		src/quotes_utils.c				\
 		src/input_check.c				\
 		src/input_utils.c				\
 		src/signal.c					\
+		src/ft_expander.c				\
+		src/token.c						\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
 		builtins/builtins.c				\

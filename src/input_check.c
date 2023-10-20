@@ -4,7 +4,7 @@ int	syntax_errors(t_data *d, char c)
 {
 	if (c == PIPE)
 	{
-		ft_putendl_fd("Parse error near `|'", 2);
+		ft_putendl_fd("Pipe can only be used in full comnand", 2);
 		d->exit = 2;
 	}
 	else if (c == '<' || c == '>')
@@ -21,15 +21,14 @@ int	syntax_errors(t_data *d, char c)
 }
 
 /*	1st position is PIPE->error
-	last position is PIPE->error
 	2 PIPE together -> error*/
 int	check_pipe(t_data *d, char *input)
 {
-	int	end_str;
+	int end_str;
 	int	i;
 
-	end_str = ft_strlen(input) - 1;
 	i = 0;
+	end_str = ft_strlen(input) - 1;
 	if (input[0] == PIPE)
 		return (syntax_errors(d, input[i]));
 	else if (input[end_str] == PIPE)

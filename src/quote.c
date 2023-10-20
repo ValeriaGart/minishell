@@ -26,6 +26,6 @@ int	check_open_quote(t_data *d, char *s)
 		i++;
 	}
 	if (q != 0)
-		return (syntax_errors(d, s[i]));
+		return (syntax_errors(d, D));
 	return (0);
 }

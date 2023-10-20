@@ -16,3 +16,17 @@ int	free_n_exit(t_data *d, int i)
 	exit(i);
 }
 
+void	*save_free(void *s1, void *s2)
+{
+	if (s1)
+	{
+		free(s1);
+		s1 = NULL;
+	}
+	if (s2)
+	{
+		free(s2);
+		s2 = NULL;
+	}
+	return (NULL);
+}
