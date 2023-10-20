@@ -65,16 +65,16 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			ft_exec(ac, av, data);
 			// ft_pipex(env, av, ac);
 			// free(av);
-		}
-	}
+	  }
+  }
 	if (read_cmd)
-		free(read_cmd);
-	rl_clear_history();
+   free(read_cmd);
+  rl_clear_history();
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_data	data;
+	t_data data;
 
 	(void)av;
 	signal(SIGINT, get_sigint);
