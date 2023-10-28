@@ -51,9 +51,10 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 		{
 			add_history(read_cmd);
 			read_cmd = ft_expander(read_cmd, data);
-			av = ft_split(read_cmd, '|');
+			av = ft_command_split(read_cmd);
 			if (!av)
 				printf("Unable to split commands and exec\n");
+			av = ft_remove_quotes(av);
 			ac = ft_count_words(av); // " added ac = "
 			if (!ac)
 				return ;
@@ -85,6 +86,6 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	ft_loop_minishell(env, &data, NULL, ac);
 	ft_free_env(data.env);
-	ft_free_env(data.env_orig);
+	// ft_free_env(data.env_orig);
 	return (0);
 }

@@ -17,12 +17,14 @@ int	after_dollar(char next)
 		return (1);
 	return (0);
 }
+
+/*we accept cases: after $ things can printable*/
 int	ft_strlen_var(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != 32 && !is_quote(str[i]))
+	while (str[i] && ft_isalnum(str[i]))
 		i++;
 	return (i);
 }
@@ -52,8 +54,8 @@ char	*ft_get_var(char *str, t_data *data)
 		return (NULL);
 	return (var);
 }
-/**/
 
+/*we get the letters after the '='*/
 char	*ft_name_var(char *s)
 {
 	char			*var;
@@ -71,34 +73,8 @@ char	*ft_name_var(char *s)
 	return (var);
 }
 
-// char	*ft_new_length(char *str, t_data *data)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*new;
-
-// 	i = 0;
-// 	j = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
-// 		{
-// 			j += ft_strlen(ft_get_var(data, ft_name_var(&str[++i])));
-// 			while (str[i] && str[i] != 32 && (str[i] != S && str[i] != D))
-// 			{
-// 				i++;
-// 				j--;
-// 			}
-// 		}
-// 		else
-// 			i++;
-// 	}
-// 	new = ft_calloc(sizeof(char), i + j + 1);
-// 	if (!new)
-// 		return (NULL);
-// 	return (new);
-// }
-
+/*We identify what type of quotes and then check after $ whether digit, alpha or ?
+*/
 char	*ft_expander(char *str, t_data *data)
 {
 	int		q;
@@ -106,24 +82,23 @@ char	*ft_expander(char *str, t_data *data)
 	char	*new;
 
 	q = 0;
-	i = 0;
-	// new = ft_new_length(str, data);
+	i = -1;
 	new = ft_strdup("");
-	while (str[i])
+	while (str[++i])
 	{
 		if (q == 0 && is_quote(str[i]))
 			q = str[i] % 2 + 1;
 		else if (is_quote(str[i]) && q == str[i] % 2 + 1)
 			q = 0;
-		else if (q != 2 && str[i] == '$')
+		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '?'))
 		{
 			new = ft_strjoin_free(new, ft_get_var(&str[++i], data));
-			while (str[i + 1] && str[i + 1] != 32 && !is_quote(str[i + 1]))
+			while (str[i + 1] && ft_isalnum(str[i + 1]))
 				i++;
 		}
 		else
 			new = ft_strjoin_char(new, str[i]);
-		i++;
 	}
 	return (new);
 }

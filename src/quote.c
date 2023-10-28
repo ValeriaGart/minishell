@@ -1,5 +1,12 @@
 #include "../incl/minishell.h"
 
+int	is_quote(int c)
+{
+	if (c == D || c == S)
+		return (1);
+	return (0);
+}
+
 int	ft_is_space(char s)
 {
 	if (s == 32)

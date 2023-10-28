@@ -20,11 +20,14 @@ int	syntax_errors(t_data *d, char c)
 	return (1);
 }
 
-/*	1st position is PIPE->error
-	2 PIPE together -> error*/
+/*
+	1st position is PIPE->error
+	2 PIPE together -> error
+*/
+
 int	check_pipe(t_data *d, char *input)
 {
-	int end_str;
+	int	end_str;
 	int	i;
 
 	i = 0;
