@@ -12,6 +12,11 @@ int	syntax_errors(t_data *d, char c)
 		ft_putendl_fd("Error redirection", 2);
 		d->exit = 2;
 	}
+	else if (c == '<' || c == '>')
+	{
+		ft_putendl_fd("error redirection", 2);
+		d->exit = 2;
+	}
 	else if (c == D || c == S)
 	{
 		ft_putendl_fd("Quotes error", 2);
@@ -20,23 +25,30 @@ int	syntax_errors(t_data *d, char c)
 	return (1);
 }
 
+<<<<<<< HEAD
 /*
 	1st position is PIPE->error
 	2 PIPE together -> error
 */
 
+=======
+/*I check:
+		1st position is PIPE->error
+		last position is PIPE->error
+		2 PIPE together -> error*/
+>>>>>>> 2ec8d41dc695fea01ff2b616619f2fb3b787baf7
 int	check_pipe(t_data *d, char *input)
 {
 	int	end_str;
 	int	i;
 
-	i = 0;
 	end_str = ft_strlen(input) - 1;
+	i = 0;
 	if (input[0] == PIPE)
 		return (syntax_errors(d, input[i]));
 	else if (input[end_str] == PIPE)
-		return (syntax_errors(d, input[end_str]));
-	while (ft_is_space(input[i]) == 0)
+		return (syntax_errors(d, input[i]));
+	while (ft_is_space(input[i], i))
 		i++;
 	if (input[i] == PIPE && input[i + 1] == PIPE)
 		return (syntax_errors(d, input[i]));
@@ -44,6 +56,8 @@ int	check_pipe(t_data *d, char *input)
 }
 /*	after redirection is NULL -> error
 	after 1st rediction is | or redirections -> error*/
+	after 1st rediction is | or redirections -> error
+*/
 
 int	check_redirect(t_data *d, char *s, char redirect)
 {
@@ -53,6 +67,7 @@ int	check_redirect(t_data *d, char *s, char redirect)
 	if (s[i] == redirect && s[i + 1] != redirect)
 		i++;
 	while (ft_is_space(s[i]))
+	while (ft_is_space(s[i], i))
 		i++;
 	if (s[i] == '\0')
 		return (syntax_errors(d, '\n'));

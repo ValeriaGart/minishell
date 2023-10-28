@@ -31,7 +31,7 @@ void	ft_add_dlist_back(t_dlist **dl, char *str, int quote)
 	tmp->next->prev = tmp;
 }
 
-int	which_symbols(char *s, int q)
+int	which_operator(char *s, int q)
 {
 	if (q != 0)
 		return (0);
@@ -43,7 +43,7 @@ int	which_symbols(char *s, int q)
 		return (1);
 	else if (ft_strncmp(s, ">", 1) == 0)
 		return (1);
-	else if (ft_strncmp(s, (char *)PIPE, 1) == 0)
+	else if (ft_strncmp(s, PIPE, 1) == 0)
 		return (1);
 	else
 		return (0);

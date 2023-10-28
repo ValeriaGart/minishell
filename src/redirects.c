@@ -76,6 +76,36 @@ void	ft_newoutfd(t_pipex *list, char **args, int i)
 	free(file);
 }
 
+void	ft_heredoc(t_pipex *list, char **args, int i)
+{
+	int		y;
+	char	*file;
+	char	*buf;
+
+	y = ft_strnstr(args[i], ">", ft_strlen(args[i]));
+	y++;
+	if (args[i][y + 1] != '\0')
+		file = ft_strdup(args[i] + y + 1);
+	else
+		file = ft_strdup(args[i + 1]);
+	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	if (list->redir_in < 0)
+		perror("heredoc");
+	while (1)
+	{
+		write(1, "heredoc> ", 9);
+		buf = get_next_line(STDIN_FILENO, 0);
+		if (!ft_strncmp(file, buf, ft_strlen(file)))
+			break ;
+		write(list->redir_in, buf, ft_strlen(buf));
+		free(buf);
+	}
+	free(buf);
+	get_next_line(-1, 1);
+	close(list->redir_in);
+	list->redir_in = open(".heredoc", O_RDONLY);
+}
+
 // wc -l <test>>new
 void	ft_redirects(t_pipex *list, char **args)
 {
@@ -88,5 +118,7 @@ void	ft_redirects(t_pipex *list, char **args)
 			ft_newoutfd(list, args, i);
 		if (ft_strnstr(args[i], "<", ft_strlen(args[i])))
 			ft_newinfd(list, args, i);
+		if (list->redir_in == -3)
+			ft_heredoc(list, args, i);
 	}
 }
