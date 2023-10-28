@@ -7,6 +7,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -14,9 +15,16 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# define PIPE 124
-# define D 34
-# define S 39
+
+# ifndef PIPE
+#  define PIPE 124
+# endif
+# ifndef D
+#  define D 34
+# endif
+# ifndef S
+#  define S 39
+# endif
 
 extern int			minishell_global;
 
@@ -46,7 +54,7 @@ typedef struct s_env
 {
 	char			*str;
 	struct s_env	*next;
-}		t_env;
+}					t_env;
 
 typedef struct s_data
 {
@@ -57,6 +65,7 @@ typedef struct s_data
 	char			*check_input;
 	int				i;
 	int				j;
+	int				at;
 	int				exit;
 	pid_t			*pid;
 	int				out;
@@ -81,8 +90,7 @@ typedef struct s_pipex
 	char			**com_paths;
 	char			**valid_env;
 	t_data			*data;
-}		t_pipex;
-
+}					t_pipex;
 
 /* env.c */
 int					ft_store_env(t_data *data, char **env_orig, char structt);
@@ -95,6 +103,11 @@ int					ft_pwd(t_data *data, t_pipex *list);
 
 // free.c
 int					free_n_exit(t_data *d, int i);
+void				*save_free(void *s1, void *s2);
+char				*ft_strjoin_free(char const *s1, char const *s2);
+
+// expander.c
+char				*ft_expander(char *str, t_data *data);
 
 // input_check.c
 int					syntax_errors(t_data *d, char c);
@@ -104,48 +117,43 @@ int					check_input(t_data *d, char *s);
 int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
-int		ft_exec(int ac, char **av, t_data *data);
+int					ft_exec(int ac, char **av, t_data *data);
 
 /* exec_utils.c */
-char    *ft_bcheck_paths(t_data *data, t_env  *env);
-char    **ft_env_to_twod_arr(t_data *data, t_env *env_list);
-void    ft_check_kid(int i, t_pipex *list);
-char	*ft_gimme_com(char *command, t_pipex *list);
-
-/* utils.c */
-int		ft_error_msg(t_data *data, char *msg, int msg_len);
-void	ft_list_free(t_pipex *list);
+char				*ft_bcheck_paths(t_data *data, t_env *env);
+char				**ft_env_to_twod_arr(t_data *data, t_env *env_list);
+void				ft_check_kid(int i, t_pipex *list);
+char				*ft_gimme_com(char *command, t_pipex *list);
 
 /* redirects.c */
-void	ft_redirects(t_pipex *list, char **args);
+void				ft_redirects(t_pipex *list, char **args);
 
 /* builtins.c */
 void				ft_check_builtins(char **env, t_pipex *list);
 
+/* main.c */
+int					ft_count_words(char **av);
+
 // quote.c
-int					ft_is_space(char s, int space);
-int					quote_error_message(void);
+int					is_quote(int c);
+int					ft_is_space(char s);
 int					check_open_quote(t_data *d, char *s);
-
-// quote_utils.c
-/*
-int					quote_exist(char *s);
-int					ft_execute_symbols(char *str, int exc, int i);
-int					index_in_quote(char *s, int inx);
-void				no_quote_execute(char *s, int i, int j, int double_q);
-int					quote_n_pipe(char *s, int inx, int start, int end);
-
-*/
 
 // singal.c
 void				get_sigint(int sig);
-
-/* main.c */
-int					ft_count_words(char **av);
+void				get_sigint_child(int sig);
 
 // token.c
 t_dlist				*ft_create_dlist(char *s, int quote);
 void				ft_add_dlist_back(t_dlist **dl, char *str, int quote);
 void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
+
+/* utils.c */
+void				ft_list_free(t_pipex *list);
+int					ft_error_msg(t_data *data, char *msg, int msg_len);
+char				*ft_strjoin_char(char *str, char c);
+
+char				**ft_command_split(char *s);
+char				**ft_remove_quotes(char **av);
 
 #endif

@@ -17,6 +17,9 @@ SRCS =	src/main.c						\
 		src/input_check.c				\
 		src/input_utils.c				\
 		src/signal.c					\
+		src/ft_expander.c				\
+		src/token.c						\
+		src/ft_command_split.c			\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
 		builtins/builtins.c				\
@@ -26,7 +29,7 @@ SRCS =	src/main.c						\
 
 CC = cc
 
-CFLAGS = -gdwarf-4 -Wextra -Werror -Wall
+CFLAGS = -g -gdwarf-4 -Wextra -Werror -Wall
 
 CPPFLAGS = -I ./incl
 
