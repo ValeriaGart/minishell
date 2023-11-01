@@ -149,7 +149,7 @@ void				ft_redirects(t_pipex *list, char **args);
 t_tokens    		*ft_gimme_tokens(char **strs);
 
 /* builtins.c */
-void				ft_check_builtins(char **env, t_pipex *list);
+void				ft_check_builtins(t_pipex *list);
 
 /* main.c */
 int					ft_count_words(char **av);

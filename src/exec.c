@@ -14,7 +14,7 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 	}
 	ft_redirects(list, list->args);
 	ft_check_kid(i, list);
-	//	ft_check_builtins(list);
+	ft_check_builtins(list);
 	list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	list->command = ft_gimme_com(list->args[0], list);
 	// ft_putstr_fd(list->command, 1);
@@ -41,6 +41,13 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		list->pids[i] = fork();
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
+		waitpid(list->pids[i], &status, 0);
+		if ( WIFEXITED(status) )
+    	{
+    		int exit_status = WEXITSTATUS(status);        
+        	if (exit_status == 3)
+				exit(0);
+    	}
 		if (list->rem_fd != -1)
 			close(list->rem_fd);
 		if (i < list->ac - 1)
@@ -50,15 +57,23 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 	}
 	i = -1;
 	status = 0;
-	//	signal(SIGINT, SIG_IGN);
-	//	signal(SIGQUIT, SIG_IGN);
+//	signal(SIGINT, SIG_IGN);
+//	signal(SIGQUIT, SIG_IGN);
 	while (++i < list->ac - 1)
 		wait(NULL);
-	waitpid(0, &status, 0);
+	//waitpid(list->pids[0], &status, 0);
+	/*if ( WIFEXITED(status) )
+    {
+        int exit_status = WEXITSTATUS(status);        
+        printf("Exit status of the child was %d\n", 
+                                     exit_status);
+    }
+	*/
+
 	if (WIFSIGNALED(status))
 	{
-		//		printf("status:%d\n", WTERMSIG(status));
-		get_sigint_child(WTERMSIG(status));
+		
+		get_sigint_child(WEXITSTATUS(status));
 	}
 	return (0);
 }

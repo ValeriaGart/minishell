@@ -20,21 +20,26 @@ void	ft_print_error(int builtin, char *cmd, t_pipex *list)
 		printf("too many arguments\n");
 }
 
-void	ft_check_builtins(char **env, t_pipex *list)
+void	ft_exit()
+{
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	exit(3);
+}
+
+void	ft_check_builtins(t_pipex *list)
 // builins: cd echo env exit export pwd unset
 {
 	int builtin;
 
 	builtin = ft_strlen(list->args[0]);
-	printf("<%s>\n", list->args[0]);
-	(void)env;
+/*	printf("<%s>\n", list->args[0]);
 	if (builtin >= 3 && !ft_strncmp(list->args[0], "env", 4))
 		builtin = ft_env(list->data, list);
 	if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
-		builtin = 0;
+		builtin = 0;*/
 	if (builtin >= 4 && !ft_strncmp(list->args[0], "exit", 5))
-		builtin = 0;
-	if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
+		ft_exit();
+/*	if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
 		builtin = 0;
 	if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
 		builtin = 0;
@@ -45,6 +50,6 @@ void	ft_check_builtins(char **env, t_pipex *list)
 	if (builtin < 0)
 		ft_print_error(builtin, list->args[0], list);
 	if (builtin <= 0)
-		list->args = NULL;
+		list->args = NULL;*/
 	
 }
