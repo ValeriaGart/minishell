@@ -1,5 +1,5 @@
 #include "minishell.h"
-// add heredoc, check redirects
+
 void	ft_change_args(t_pipex *list, int i)
 {
 	int		y;
@@ -105,6 +105,7 @@ void	ft_heredoc(t_pipex *list, char **args, int i)
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
 }
+
 
 // wc -l <test>>new
 void	ft_redirects(t_pipex *list, char **args)

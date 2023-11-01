@@ -13,11 +13,14 @@ SRCS =	src/main.c						\
 		src/redirects.c					\
 		src/utils.c						\
 		src/free.c						\
-		src/tokenizing.c				\
 		src/quote.c						\
 		src/input_check.c				\
+		src/tokenizing.c				\
 		src/input_utils.c				\
 		src/signal.c					\
+		src/ft_expander.c				\
+		src/token.c						\
+		src/ft_command_split.c			\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
 		builtins/builtins.c				\
@@ -27,7 +30,7 @@ SRCS =	src/main.c						\
 
 CC = cc
 
-CFLAGS = -gdwarf-4 -Wextra -Werror -Wall
+CFLAGS = -g -gdwarf-4 -Wextra -Werror -Wall
 
 CPPFLAGS = -I ./incl
 

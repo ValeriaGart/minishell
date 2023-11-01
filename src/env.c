@@ -7,6 +7,8 @@ int	ft_free_env(t_env *env)
 	t_env	*head;
 
 	head = env;
+	if (!env && !env->next)
+		return (1);
 	while (env && env->next)
 	{
 		while (env->next->next)
@@ -19,9 +21,9 @@ int	ft_free_env(t_env *env)
 	}
 	if (env)
 	{
-		if (env->str)
+		if (env->str && *env->str)
 			free(env->str);
-		free(env);
+		// free(env);
 	}
 	return (1);
 }
@@ -29,8 +31,8 @@ int	ft_free_env(t_env *env)
 int	ft_store_env(t_data *data, char **env_orig, char structt)
 // n - new, o - orig
 {
-	t_env	*env;
-	int		i;
+	t_env *env;
+	int i;
 
 	i = -1;
 	env = malloc(sizeof(t_env));
@@ -41,6 +43,7 @@ int	ft_store_env(t_data *data, char **env_orig, char structt)
 	if (!env)
 		return (1);
 	env->next = NULL;
+	env->str = NULL;
 	while (env_orig && env_orig[++i])
 	{
 		env->str = ft_strdup(env_orig[i]);
@@ -61,10 +64,10 @@ int	ft_env_init(t_data *data, char **env)
 {
 	if (ft_store_env(data, env, 'n'))
 		return (ft_free_env(data->env));
-	if (ft_store_env(data, env, 'o'))
-	{
-		ft_free_env(data->env);
-		return (ft_free_env(data->env_orig));
-	}
+	// if (ft_store_env(data, env, 'o'))
+	// {
+	// 	ft_free_env(data->env);
+	// 	return (ft_free_env(data->env_orig));
+	// }
 	return (0);
 }

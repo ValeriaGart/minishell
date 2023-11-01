@@ -42,42 +42,50 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 	while (1)
 	{
 		if (!read_cmd)
-			read_cmd = readline("minishell:§ ");
+			read_cmd = readline("minishell: ");
 		if (!read_cmd)
-			printf("Unable to make prompt\n");
+			return ((void)printf("Unable to make prompt\n"));
 		if (check_input(data, read_cmd) != 0)
-			return ; // free pls
-		av = ft_split(read_cmd, '|');
-		if (!av)
-			printf("Unable to split commands and exec\n");
-		ac = ft_count_words(av); // " added ac = "
-		if (!ac)
-			return ;
-		input = malloc_input(av, ac);
-		if (!input)
-			return ;
-		free(read_cmd);
-		read_cmd = NULL;
-		ft_exec(ac, av, data);
-		// ft_pipex(env, av, ac);
-		// free(av);
+			free(read_cmd); // free pls
+		else
+		{
+			add_history(read_cmd);
+			read_cmd = ft_expander(read_cmd, data);
+			av = ft_command_split(read_cmd);
+			if (!av)
+				printf("Unable to split commands and exec\n");
+			av = ft_remove_quotes(av);
+			ac = ft_count_words(av); // " added ac = "
+			if (!ac)
+				return ;
+			input = malloc_input(av, ac);
+			if (!input)
+				return ;
+			free(read_cmd);
+			read_cmd = NULL;
+			ft_exec(ac, av, data);
+			// ft_pipex(env, av, ac);
+			// free(av);
+		}
 	}
 	if (read_cmd)
 		free(read_cmd);
+	rl_clear_history();
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_data data;
+	t_data	data;
 
 	(void)av;
 	signal(SIGINT, get_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	if (ac > 1)
 		return (0);
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(env, &data, NULL, ac);
 	ft_free_env(data.env);
-	ft_free_env(data.env_orig);
+	// ft_free_env(data.env_orig);
 	return (0);
 }

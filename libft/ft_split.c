@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynguyen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 16:25:26 by ynguyen           #+#    #+#             */
-/*   Updated: 2022/11/03 13:12:53 by ynguyen          ###   ########.fr       */
+/*   Updated: 2023/10/27 16:57:15 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static unsigned int	ft_wordcount(char const *s, char c)
 
 	count = 0;
 	index = 0;
+	if (!s)
+		return (0);
 	while (s[index] != '\0')
 	{
 		while (s[index] == c)
