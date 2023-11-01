@@ -1,4 +1,5 @@
-#include "minishell.h"
+
+#include "../incl/minishell.h"
 
 void	ft_loop_children(t_pipex *list, int i, char **av)
 {
@@ -17,6 +18,7 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 	list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	list->command = ft_gimme_com(list->args[0], list);
 	// ft_putstr_fd(list->command, 1);
+	printf ("%s\n", list->command);
 	execve(list->command, list->args, list->valid_env);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
@@ -66,7 +68,7 @@ int	ft_exec(int ac, char **av, t_data *data)
 	t_pipex	list;
 
 	list.data = data;
-	list.tokens = ft_gimme_tokens(av);
+	//list.tokens = ft_gimme_tokens(av);
 	list.here_doc = -1;
 	list.paths = ft_bcheck_paths(data, data->env);
 	if (!list.paths)

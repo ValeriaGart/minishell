@@ -146,5 +146,6 @@ char	**ft_remove_quotes(char **av)
 			return (ft_free_command(new));
 		i++;
 	}
+	new[i] = NULL;
 	return (new);
 }

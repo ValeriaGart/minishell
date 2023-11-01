@@ -55,7 +55,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			if (!av)
 				printf("Unable to split commands and exec\n");
 			av = ft_remove_quotes(av);
-			ac = ft_count_words(av); // " added ac = "
+			ac = ft_count_words(av); // TODO " added ac = " MAYBE RETHINK THAT
 			if (!ac)
 				return ;
 			input = malloc_input(av, ac);
@@ -64,8 +64,9 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			free(read_cmd);
 			read_cmd = NULL;
 			ft_exec(ac, av, data);
-			// ft_pipex(env, av, ac);
-			// free(av);
+			printf("hi\n");
+			//ft_pipex(env, av, ac);
+			free(av);
 		}
 	}
 	if (read_cmd)
