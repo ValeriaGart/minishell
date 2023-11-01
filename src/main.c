@@ -64,8 +64,6 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			free(read_cmd);
 			read_cmd = NULL;
 			ft_exec(ac, av, data);
-			printf("hi\n");
-			//ft_pipex(env, av, ac);
 			free(av);
 		}
 	}
