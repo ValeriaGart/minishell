@@ -54,6 +54,7 @@ int	ft_exec(int ac, char **av, t_data *data)
     t_pipex	list;
 
 	list.data = data;
+    list.tokens = ft_gimme_tokens(av);
 	list.here_doc = -1;
     list.paths = ft_bcheck_paths(data, data->env);
     if (!list.paths)

@@ -13,6 +13,7 @@ SRCS =	src/main.c						\
 		src/redirects.c					\
 		src/utils.c						\
 		src/free.c						\
+		src/tokenizing.c				\
 		src/quote.c						\
 		src/input_check.c				\
 		src/input_utils.c				\

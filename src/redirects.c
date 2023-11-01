@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+// add heredoc, check redirects
 void	ft_change_args(t_pipex *list, int i)
 {
 	int		y;
@@ -82,7 +82,7 @@ void	ft_heredoc(t_pipex *list, char **args, int i)
 	char	*file;
 	char	*buf;
 
-	y = ft_strnstr(args[i], ">", ft_strlen(args[i]));
+	y = ft_find_index(args[i], '<');
 	y++;
 	if (args[i][y + 1] != '\0')
 		file = ft_strdup(args[i] + y + 1);

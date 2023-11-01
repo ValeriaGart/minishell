@@ -14,9 +14,14 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# define PIPE 124
-# define D 34
-# define S 39
+# define PIPE		124
+# define D			34
+# define S			39
+# define SEP		1
+# define COM		2
+# define REDIR_OUT	3
+# define REDIR_IN	4
+# define HERE_DOC	5
 
 extern int			minishell_global;
 
@@ -47,6 +52,16 @@ typedef struct s_env
 	char			*str;
 	struct s_env	*next;
 }		t_env;
+
+typedef struct s_tokens
+{
+	char			*val;
+	int				type;
+	int				ind_command;
+	int				ind_word;
+	struct s_tokens	*next;
+	struct s_tokens	*prev;
+}		t_tokens;
 
 typedef struct s_data
 {
@@ -80,6 +95,7 @@ typedef struct s_pipex
 	char			**args;
 	char			**com_paths;
 	char			**valid_env;
+	t_tokens		*tokens;
 	t_data			*data;
 }		t_pipex;
 
@@ -115,12 +131,16 @@ char	*ft_gimme_com(char *command, t_pipex *list);
 /* utils.c */
 int		ft_error_msg(t_data *data, char *msg, int msg_len);
 void	ft_list_free(t_pipex *list);
+int		ft_find_index(char *s, char c);
 
 /* redirects.c */
 void	ft_redirects(t_pipex *list, char **args);
 
 /* builtins.c */
 void				ft_check_builtins(char **env, t_pipex *list);
+
+/* tokenizing.c */
+t_tokens    *ft_gimme_tokens(char **strs);
 
 // quote.c
 int					ft_is_space(char s, int space);

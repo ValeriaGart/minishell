@@ -1,5 +1,4 @@
 
-
 #include "minishell.h"
 
 void	ft_print_error(int	builtin, char *cmd, t_pipex *list)
