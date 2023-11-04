@@ -1,18 +1,47 @@
 #include "../incl/minishell.h"
 
-char	*ft_gimme_com(char *command, t_pipex *list)
+char	**ft_tok_to_args(t_tokens *toks, int i)
+{
+	int			y;
+	char		**args;
+	t_tokens	*rem_tok;
+
+	y = 0;
+	while (toks->ind_command != i)
+		toks = toks->next;
+	rem_tok = toks;
+	while (toks && toks->ind_command == i)
+	{
+		if (toks->type != SEP)
+			++y;
+		toks = toks->next;
+	}
+	args = ft_calloc(sizeof(char *), y + 1);
+	if (!args)
+		return (0);
+	i = -1;
+	while (++i < y)
+	{
+		while (rem_tok->type == SEP)
+			rem_tok = rem_tok->next;
+		args[i] = rem_tok->val;
+		rem_tok = rem_tok->next;
+	}
+	
+	return (args);
+}
+
+char	*ft_gimme_com(char *str, t_pipex *list)
 {
 	char	*temp;
 	char	*ret;
 	char	**iter;
 
-	if (!command)
-		return (NULL);
 	iter = list->com_paths;
 	while (*iter)
 	{
 		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, command);
+		ret = ft_strjoin(temp, str);
 		free(temp);
 		if (access(ret, 0) == 0)
 			return (ret);

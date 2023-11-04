@@ -1,12 +1,13 @@
 #include "minishell.h"
 
-void	ft_assign_prev_cur_tok(t_tokens *toks)
+void	ft_assign_prev_cur_tok(t_tokens **toks)
 {
 	t_tokens	*prev;
 
-	prev = toks;
-	toks = toks->next;
-	toks->prev = prev;
+	prev = *toks;
+	*toks = (*toks)->next;
+	(*toks)->next = NULL;
+	(*toks)->prev = prev;
 }
 
 char	*ft_val_is_not_a_word(char *str, int *y)
@@ -50,12 +51,12 @@ char	*ft_tok_val(char *str, int *y)
 			&& str[i] != '>')
 		i++;
 	i = i - *y;
-	value = ft_calloc(sizeof(char), i);
+	value = ft_calloc(sizeof(char), i + 1);
 	i = -1;
 	if (!value)
 		return (NULL);
 	while (str[*y] && str[*y] != ' ' && str[*y] != '<'
-		&& str[*y] != '>')
+			&& str[*y] != '>')
 	{
 		value[++i] = str[*y];
 		++(*y);
@@ -124,15 +125,18 @@ t_tokens	*ft_gimme_tokens(char **strs)
 	int			y;
 	int			ind;
 	t_tokens	*toks;
+	t_tokens	*head;
 
-	i = 0;
 	y = 0;
 	ind = 0;
-	toks = ft_new_token(i, ind, &y, strs);
+	toks = ft_new_token(0, ind, &y, strs);
 	if (!toks)
 		return (ft_free_toks(toks));
 	toks->prev = NULL;
+	toks->next = NULL;
 	ind++;
+	i = 0;
+	head = toks;
 	while (strs[i])
 	{
 		if (i)
@@ -142,12 +146,11 @@ t_tokens	*ft_gimme_tokens(char **strs)
 			toks->next = ft_new_token(i, ind, &y, strs);
 			if (!toks)
 				return (ft_free_toks(toks));
-			ft_assign_prev_cur_tok(toks);
-			//printf("word index: %d\ncommand index: %d\ntoken value: %s\ntoken type: %d\n\n",toks->ind_word, toks->ind_command,toks->val, toks->type);
+			ft_assign_prev_cur_tok(&toks);
 			ind++;
 		}
 		y = 0;
 		i++;
 	}
-	return (toks);
+	return (head);
 }

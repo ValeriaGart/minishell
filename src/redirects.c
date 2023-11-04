@@ -1,93 +1,76 @@
 #include "minishell.h"
 
-void	ft_change_args(t_pipex *list, int i)
+void	ft_change_args(t_tokens **toks)
 {
-	int		y;
+	t_tokens	*prev;
+	t_tokens	*next;
 
-	y = -1;
-	while (list->args[i][++y])
-		if (list->args[i][y] == '>' || list->args[i][y] == '<')
-			break;
-	if (y == 0)
-		list->args[i] = NULL;
-	else
+	next = (*toks)->next;
+	prev = (*toks)->prev;
+	if ((*toks)->val)
+		free((*toks)->val);
+	free(*toks);
+	if (prev)
 	{
-		list->args[i][y] = '\0';
-		while (list->args[i][++y])
-			list->args[i][y] = '\0';
-	}
-	if (list->args[++i])
-	{
-		list->args[i] = NULL;
-		--(list->ac);
-	}
-}
-
-void	ft_newinfd(t_pipex *list, char **args, int i)
-{
-	int		y;
-	char	*file;
-
-	y = -1;
-	while (args[i][++y])
-		if (args[i][y] == '<')
-			break;
-	if (args[i][y + 1] == '<')
-	{
-		list->redir_in = -3;
+		*toks = prev;
+		(*toks)->next = next;
 		return;
 	}
-	if (args[i][y + 1] != '\0')
-		file = ft_strdup(args[i] + y + 1);
-	else
-		file = ft_strdup(args[i + 1]);
+	*toks = next;
+	(*toks)->prev = prev;
+}
+
+void	ft_newinfd(t_tokens **toks, t_pipex *list)
+{
+	int			y;
+	char		*file;
+
+	y = 3;
+	while ((*toks)->type != COM)
+		*toks = (*toks)->next;
+	file = (*toks)->val;
 	list->redir_in = open(file, O_RDONLY);
 	if (list->redir_in < 0)
 		perror(file);
-	ft_change_args(list, i);
-	free(file);
+	if ((*toks)->prev->type == SEP)
+		++y;
+	while (--y)
+		ft_change_args(toks);
 }
 
-void	ft_newoutfd(t_pipex *list, char **args, int i)
+void	ft_newoutfd(t_tokens **toks, t_pipex *list)
 {
-	int		y;
-	char	*file;
+	t_tokens	*rem_tok;
+	int			y;
+	char		*file;
 
-	y = -1;
-	while (args[i][++y])
-		if (args[i][y] == '>')
-			break;
-	if (args[i][y + 1] == '>')
-	{
-		++y;
-		list->redir_out = -3;
-	}
-	if (args[i][y + 1] != '\0')
-		file = ft_strdup(args[i] + y + 1);
-	else
-		file = ft_strdup(args[i + 1]);
-	if (list->redir_out == -3)
+	y = 3;
+	rem_tok = *toks;
+	while ((*toks)->type != COM)
+		*toks = (*toks)->next;
+	file = (*toks)->val;
+	if (rem_tok->val[1] != '\0')
 		list->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
 	else
 		list->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	if (list->redir_out < 0)
 		perror(file);
-	ft_change_args(list, i);
-	free(file);
+	if ((*toks)->prev->type == SEP)
+		++y;
+	while (--y)
+		ft_change_args(toks);
 }
 
-void	ft_heredoc(t_pipex *list, char **args, int i)
+void	ft_heredoc(t_tokens **toks, t_pipex *list)
 {
-	int		y;
-	char	*file;
-	char	*buf;
+	int			y;
+	char		*delim;
+	char		*buf;
 
-	y = ft_find_index(args[i], '<');
-	y++;
-	if (args[i][y + 1] != '\0')
-		file = ft_strdup(args[i] + y + 1);
-	else
-		file = ft_strdup(args[i + 1]);
+	y = 3;
+	while ((*toks)->type != COM)
+		*toks = (*toks)->next;
+	delim = (*toks)->val;
 	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (list->redir_in < 0)
 		perror("heredoc");
@@ -95,7 +78,7 @@ void	ft_heredoc(t_pipex *list, char **args, int i)
 	{
 		write(1, "heredoc> ", 9);
 		buf = get_next_line(STDIN_FILENO, 0);
-		if (!ft_strncmp(file, buf, ft_strlen(file)))
+		if (!ft_strncmp(delim, buf, ft_strlen(delim)))
 			break ;
 		write(list->redir_in, buf, ft_strlen(buf));
 		free(buf);
@@ -104,22 +87,29 @@ void	ft_heredoc(t_pipex *list, char **args, int i)
 	get_next_line(-1, 1);
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
+	if ((*toks)->prev->type == SEP)
+		++y;
+	while (--y)
+		ft_change_args(toks);
 }
 
 
 // wc -l <test>>new
-void	ft_redirects(t_pipex *list, char **args)
+void	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 {
-	int	i;
+	t_tokens *toks;
 
-	i = -1;
-	while (args[++i])
+	toks = *toks_orig;  
+	while (toks->ind_command != i)
+		toks = toks->next;
+	while (toks && toks->ind_command == i)
 	{
-		if (ft_strnstr(args[i], ">", ft_strlen(args[i])))
-			ft_newoutfd(list, args, i);
-		if (ft_strnstr(args[i], "<", ft_strlen(args[i])))
-			ft_newinfd(list, args, i);
-		if (list->redir_in == -3)
-			ft_heredoc(list, args, i);
+		if (toks->type == REDIR_OUT)
+			ft_newoutfd(&toks, list);
+		if (toks->type == REDIR_IN)
+			ft_newinfd(&toks, list);
+		if (toks->type == HERE_DOC)
+			ft_heredoc(&toks, list);
+		toks = toks->next;
 	}
 }

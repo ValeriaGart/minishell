@@ -3,7 +3,9 @@
 
 void	ft_loop_children(t_pipex *list, int i, char **av)
 {
-	list->args = ft_split(av[i], ' ');
+	(void)av;
+	ft_redirects(i, &(list->tokens), list);
+	list->args = ft_tok_to_args(list->tokens, i);
 	if (!list->args)
 	{
 		ft_error_msg(list->data, "Malloc failed\n", 15);
@@ -12,13 +14,10 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 		close(list->pipes[1]);
 		exit(1);
 	}
-	ft_redirects(list, list->args);
 	ft_check_kid(i, list);
 	ft_check_builtins(list);
 	list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	list->command = ft_gimme_com(list->args[0], list);
-	// ft_putstr_fd(list->command, 1);
-	printf ("%s\n", list->command);
 	execve(list->command, list->args, list->valid_env);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
@@ -41,7 +40,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		list->pids[i] = fork();
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
-		waitpid(list->pids[i], &status, 0);
+ 		waitpid(list->pids[i], &status, 0);
 		if ( WIFEXITED(status) )
     	{
     		int exit_status = WEXITSTATUS(status);        

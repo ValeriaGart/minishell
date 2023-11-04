@@ -140,10 +140,11 @@ int					ft_exec(int ac, char **av, t_data *data);
 char				*ft_bcheck_paths(t_data *data, t_env *env);
 char				**ft_env_to_twod_arr(t_data *data, t_env *env_list);
 void				ft_check_kid(int i, t_pipex *list);
-char				*ft_gimme_com(char *command, t_pipex *list);
+char				*ft_gimme_com(char *str, t_pipex *list);
+char				**ft_tok_to_args(t_tokens *toks, int i);
 
 /* redirects.c */
-void				ft_redirects(t_pipex *list, char **args);
+void				ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 
 /* tokenizing.c */
 t_tokens    		*ft_gimme_tokens(char **strs);
