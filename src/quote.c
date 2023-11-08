@@ -10,8 +10,8 @@ int	is_quote(int c)
 int	ft_is_space(char s)
 {
 	if (s == 32)
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
 int	check_open_quote(t_data *d, char *s)

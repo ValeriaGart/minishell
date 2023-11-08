@@ -27,7 +27,6 @@ char	**ft_tok_to_args(t_tokens *toks, int i)
 		args[i] = rem_tok->val;
 		rem_tok = rem_tok->next;
 	}
-	
 	return (args);
 }
 
@@ -55,14 +54,22 @@ char    **ft_env_to_twod_arr(t_data *data, t_env *env_list)
 {
     char    **env_twod;
     int     i;
+	t_env	*rem_env;
 
     i = -1;
-    env_twod = malloc(sizeof(char *));
+	rem_env = env_list;
+	while (rem_env)
+	{
+		rem_env = rem_env->next;
+		i++;
+	}
+    env_twod = malloc(sizeof(char *) * (i + 1));
     if (!env_twod)
     {
         ft_error_msg(data, "Malloc failed\n", 15);
         return (NULL);
     }
+	i = -1;
     while (env_list->next)
     {
         env_twod[++i] = ft_strdup(env_list->str);

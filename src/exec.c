@@ -19,8 +19,6 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 	list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	list->command = ft_gimme_com(list->args[0], list);
 	execve(list->command, list->args, list->valid_env);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	ft_error_msg(list->data, "Execve failed\n", 15);
 	ft_list_free(list);
 	exit(1);
@@ -41,12 +39,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
  		waitpid(list->pids[i], &status, 0);
-		if ( WIFEXITED(status) )
-    	{
-    		int exit_status = WEXITSTATUS(status);        
-        	if (exit_status == 3)
-				exit(0);
-    	}
+		ft_builtins_p(i, list->tokens);
 		if (list->rem_fd != -1)
 			close(list->rem_fd);
 		if (i < list->ac - 1)
@@ -82,11 +75,11 @@ int	ft_exec(int ac, char **av, t_data *data)
 	t_pipex	list;
 
 	list.data = data;
-	list.tokens = ft_gimme_tokens(av);
 	list.here_doc = -1;
 	list.paths = ft_bcheck_paths(data, data->env);
 	if (!list.paths)
 		return (1);
+	list.tokens = ft_gimme_tokens(av);
 	list.com_paths = ft_split(list.paths, ':');
 	if (!list.com_paths)
 		return (ft_error_msg(data, "Malloc failed\n", 15));

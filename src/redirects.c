@@ -20,12 +20,15 @@ void	ft_change_args(t_tokens **toks)
 	(*toks)->prev = prev;
 }
 
+// check "wc -l <test >>test <etst >>test"
 void	ft_newinfd(t_tokens **toks, t_pipex *list)
 {
 	int			y;
 	char		*file;
 
 	y = 3;
+	if (list->redir_in != -1)
+		close(list->redir_in);
 	while ((*toks)->type != COM)
 		*toks = (*toks)->next;
 	file = (*toks)->val;
@@ -46,6 +49,8 @@ void	ft_newoutfd(t_tokens **toks, t_pipex *list)
 
 	y = 3;
 	rem_tok = *toks;
+	if (list->redir_out != -1)
+		close(list->redir_out);
 	while ((*toks)->type != COM)
 		*toks = (*toks)->next;
 	file = (*toks)->val;
@@ -112,4 +117,5 @@ void	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 			ft_heredoc(&toks, list);
 		toks = toks->next;
 	}
+	toks = *toks_orig;
 }

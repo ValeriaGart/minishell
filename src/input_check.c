@@ -45,14 +45,14 @@ int	check_pipe(t_data *d, char *input)
 /*	after redirection is NULL -> error
 	after 1st rediction is | or redirections -> error*/
 
-int	check_redirect(t_data *d, char *s, char redirect)
+int	check_redirect(t_data *d, char *s, char redirect, int i)
 {
-	int	i;
-
-	i = 0;
+	if (!s)
+		return (1);
+	i++;
 	if (s[i] == redirect && s[i + 1] != redirect)
 		i++;
-	while (ft_is_space(s[i]))
+	while (ft_is_space(s[i]) == 1)
 		i++;
 	if (s[i] == '\0')
 		return (syntax_errors(d, '\n'));
@@ -68,7 +68,7 @@ int	check_input(t_data *d, char *s)
 	i = 0;
 	while (s[i])
 	{
-		if (ft_is_space(s[i]) == 0)
+		if (ft_is_space(s[i]) == 1)
 			;
 		else if (s[i] == PIPE)
 		{
@@ -77,7 +77,7 @@ int	check_input(t_data *d, char *s)
 		}
 		else if (s[i] == '>' || s[i] == '<')
 		{
-			if (check_redirect(d, s, s[i]) == 1)
+			if (check_redirect(d, s, s[i], i) == 1)
 				return (1);
 		}
 		else if (s[i] == S || s[i] == D)

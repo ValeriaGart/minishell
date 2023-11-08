@@ -2,6 +2,19 @@
 
 #include "minishell.h"
 
+void	ft_builtins_p(int i, t_tokens *toks)
+{
+	int builtin;
+
+	while (toks->ind_command != i)
+		toks = toks->next;
+	while (toks->type != COM)
+		toks = toks->next;
+	builtin = ft_strlen(toks->val);
+	if (builtin >= 4 && !ft_strncmp(toks->val, "exit", 5))
+		exit(0);
+}
+
 void	ft_print_error(int builtin, char *cmd, t_pipex *list)
 /*
 -1: failed malloc
@@ -23,7 +36,7 @@ void	ft_print_error(int builtin, char *cmd, t_pipex *list)
 void	ft_exit()
 {
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	exit(3);
+	exit(0);
 }
 
 void	ft_check_builtins(t_pipex *list)

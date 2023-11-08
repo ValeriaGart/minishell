@@ -151,6 +151,7 @@ t_tokens    		*ft_gimme_tokens(char **strs);
 
 /* builtins.c */
 void				ft_check_builtins(t_pipex *list);
+void				ft_builtins_p(int i, t_tokens *toks);
 
 /* main.c */
 int					ft_count_words(char **av);
