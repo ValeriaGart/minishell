@@ -75,7 +75,8 @@ int	ft_exec(int ac, char **av, t_data *data)
 	t_pipex	list;
 
 	list.data = data;
-	list.here_doc = -1;
+	list.here_doc = 0;
+	list.here_doc_delim = NULL;
 	list.paths = ft_bcheck_paths(data, data->env);
 	if (!list.paths)
 		return (1);

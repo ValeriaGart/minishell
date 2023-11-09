@@ -66,22 +66,43 @@ void	ft_newoutfd(t_tokens **toks, t_pipex *list)
 		ft_change_args(toks);
 }
 
-void	ft_heredoc(t_tokens **toks, t_pipex *list)
+int		ft_heredoc_set(t_tokens **toks, t_pipex *list)
 {
 	int			y;
 	char		*delim;
-	char		*buf;
 
 	y = 3;
+	if (list->here_doc)
+	{
+		free(list->here_doc_delim);
+		list->here_doc = 0;
+	}
 	while ((*toks)->type != COM)
 		*toks = (*toks)->next;
+	list->here_doc = 1;
 	delim = (*toks)->val;
+	if ((*toks)->prev->type == SEP)
+		++y;
+	list->here_doc_delim = ft_strdup(delim);
+	if (!list->here_doc_delim)
+		return (1);
+	while (--y)
+		ft_change_args(toks);
+	return (0);
+}
+
+void	ft_heredoc_exec(t_pipex *list)
+{
+	char		*delim;
+	char		*buf;
+
+	delim = list->here_doc_delim;
 	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (list->redir_in < 0)
 		perror("heredoc");
 	while (1)
 	{
-		write(1, "heredoc> ", 9);
+		write(1, "> ", 2);
 		buf = get_next_line(STDIN_FILENO, 0);
 		if (!ft_strncmp(delim, buf, ft_strlen(delim)))
 			break ;
@@ -92,10 +113,7 @@ void	ft_heredoc(t_tokens **toks, t_pipex *list)
 	get_next_line(-1, 1);
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
-	if ((*toks)->prev->type == SEP)
-		++y;
-	while (--y)
-		ft_change_args(toks);
+	unlink(".heredoc");
 }
 
 
@@ -114,8 +132,9 @@ void	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 		if (toks->type == REDIR_IN)
 			ft_newinfd(&toks, list);
 		if (toks->type == HERE_DOC)
-			ft_heredoc(&toks, list);
+			ft_heredoc_set(&toks, list);
 		toks = toks->next;
 	}
-	toks = *toks_orig;
+	if (list->here_doc)
+		ft_heredoc_exec(list);
 }

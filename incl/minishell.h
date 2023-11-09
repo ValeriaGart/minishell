@@ -100,6 +100,7 @@ typedef struct s_pipex
 	int				rem_fd;
 	int				pipes[2];
 	int				here_doc;
+	char			*here_doc_delim;
 	char			*paths;
 	char			*command;
 	char			**args;
