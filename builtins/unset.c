@@ -17,6 +17,25 @@ t_env		*ft_is_env(t_env *env, char *val, int i)
 	return (NULL);
 }
 
+void	ft_unset_env(t_env **env, t_env *env_to_unset)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	if (*env == env_to_unset)
+	{
+		*env = (*env)->next;
+		free(env_to_unset->str);
+		free(env_to_unset);
+		return ;
+	}
+	while (tmp->next != env_to_unset)
+		tmp = tmp->next;
+	tmp->next = env_to_unset->next;
+	free(env_to_unset->str);
+	free(env_to_unset);
+}
+
 void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 {
 	t_env	*env;
@@ -30,6 +49,6 @@ void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 	if (!toks || toks->ind_command != i)
 		return ;
 	env = ft_is_env(env, toks->val, ft_strlen(toks->val));
-	//if (env)
-	//	ft_unset_env();
+	if (env)
+		ft_unset_env(&(list->data->env), env);
 }
