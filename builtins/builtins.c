@@ -1,8 +1,30 @@
-
-
 #include "minishell.h"
 
-void	ft_builtins_p(int i, t_tokens *toks)
+int		is_builtin(t_pipex *list)
+{
+	int builtin;
+
+	builtin = ft_strlen(list->args[0]);
+	if (builtin >= 3 && !ft_strncmp(list->args[0], "env", 4))
+		builtin = 1;
+	else if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
+		builtin = 1;
+	else if (builtin >= 4 && !ft_strncmp(list->args[0], "exit", 5))
+		builtin = 1;
+	else if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
+		builtin = 1;
+	else if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
+		builtin = 1;
+	else if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
+		builtin = 1;
+	else if (builtin >= 3 && !ft_strncmp(list->args[0], "pwd", 4))
+		builtin = 1;
+	else
+		builtin = 0;
+	return (builtin);
+}
+
+void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {
 	int builtin;
 
@@ -13,6 +35,10 @@ void	ft_builtins_p(int i, t_tokens *toks)
 	builtin = ft_strlen(toks->val);
 	if (builtin >= 4 && !ft_strncmp(toks->val, "exit", 5))
 		exit(0);
+	if (builtin >= 6 && !ft_strncmp(toks->val, "export", 7))
+		ft_export(list, toks, i);
+	if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
+		ft_unset_p(list, toks, i);
 }
 
 void	ft_print_error(int builtin, char *cmd, t_pipex *list)
@@ -20,7 +46,7 @@ void	ft_print_error(int builtin, char *cmd, t_pipex *list)
 -1: failed malloc
 -2: too many args env
 -3: too many args pwd
-=======
+=====================
 -3: too many args pwd
 */
 {
@@ -45,18 +71,20 @@ void	ft_check_builtins(t_pipex *list)
 	int builtin;
 
 	builtin = ft_strlen(list->args[0]);
-/*	printf("<%s>\n", list->args[0]);
 	if (builtin >= 3 && !ft_strncmp(list->args[0], "env", 4))
+	{
 		builtin = ft_env(list->data, list);
-	if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
+		exit(0);
+	}
+/*	if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
 		builtin = 0;*/
 	if (builtin >= 4 && !ft_strncmp(list->args[0], "exit", 5))
 		ft_exit();
-/*	if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
-		builtin = 0;
+	if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
+		exit(0);
 	if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
-		builtin = 0;
-	if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
+		exit(0);
+/*	if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
 		builtin = 0;
 	if (builtin >= 3 && !ft_strncmp(list->args[0], "pwd", 4))
 		builtin = ft_pwd(list->data, list);
@@ -64,5 +92,4 @@ void	ft_check_builtins(t_pipex *list)
 		ft_print_error(builtin, list->args[0], list);
 	if (builtin <= 0)
 		list->args = NULL;*/
-	
 }

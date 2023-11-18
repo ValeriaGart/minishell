@@ -35,8 +35,8 @@ char	**malloc_input(char **av, int ac)
 void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 {
 	char	*read_cmd;
-	char	**input;
 
+	// char	**input;
 	read_cmd = NULL;
 	(void)env;
 	while (1)
@@ -45,9 +45,9 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			read_cmd = readline("minishell: ");
 		if (!read_cmd)
 			return ((void)printf("Unable to make prompt\n"));
-		if (check_input(data, read_cmd) != 0)
+		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			free(read_cmd); // free pls
-		else
+		else if (read_cmd[0] != '\0')
 		{
 			add_history(read_cmd);
 			read_cmd = ft_expander(read_cmd, data);
@@ -58,13 +58,18 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			ac = ft_count_words(av); // TODO " added ac = " MAYBE RETHINK THAT
 			if (!ac)
 				return ;
-			input = malloc_input(av, ac);
-			if (!input)
-				return ;
+			// input = malloc_input(av, ac);
+			// if (!input)
+			//	return ;
 			free(read_cmd);
 			read_cmd = NULL;
 			ft_exec(ac, av, data);
 			free(av);
+		}
+		if (read_cmd)
+		{
+			free(read_cmd);
+			read_cmd = NULL;
 		}
 	}
 	if (read_cmd)

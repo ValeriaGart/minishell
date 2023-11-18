@@ -135,7 +135,7 @@ char	**ft_remove_quotes(char **av)
 	i = 0;
 	while (av[i])
 		i++;
-	new = ft_calloc(sizeof(char *), i);
+	new = ft_calloc(sizeof(char *), i + 1);
 	if (!new)
 		return (NULL);
 	i = 0;
@@ -147,5 +147,6 @@ char	**ft_remove_quotes(char **av)
 		i++;
 	}
 	new[i] = NULL;
+	ft_free_array(av);
 	return (new);
 }

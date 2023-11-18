@@ -23,6 +23,8 @@ SRCS =	src/main.c						\
 		src/ft_command_split.c			\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
+		builtins/export.c				\
+		builtins/unset.c				\
 		builtins/builtins.c				\
 		get_next_line/get_next_line.c	\
 		get_next_line/get_next_line_utils.c

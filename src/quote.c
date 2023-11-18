@@ -14,7 +14,7 @@ int	ft_is_space(char s)
 	return (0);
 }
 
-int	check_open_quote(t_data *d, char *s)
+int	check_open_quote(char *s)
 {
 	int	q;
 	int	i;
@@ -33,6 +33,6 @@ int	check_open_quote(t_data *d, char *s)
 		i++;
 	}
 	if (q != 0)
-		return (syntax_errors(d, D));
+		return (syntax_errors(D));
 	return (0);
 }

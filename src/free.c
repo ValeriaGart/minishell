@@ -54,3 +54,18 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	save_free((void *)s1, (void *)s2);
 	return (new);
 }
+
+void	*ft_free_array(char **array)
+{
+	int i = 0;
+	if (!array)
+		return (NULL);
+	while (array[i])
+	{
+		save_free((void *)array[i], NULL);
+		i++;
+	}
+	free(array);
+	array = NULL;
+	return (NULL);
+}

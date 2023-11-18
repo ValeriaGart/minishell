@@ -115,21 +115,36 @@ int					ft_store_env(t_data *data, char **env_orig, char structt);
 int					ft_free_env(t_env *env);
 int					ft_env_init(t_data *data, char **env);
 
-/* built ins */
+/* builtin env.c */
+int					ft_print_env_declare_x(t_env *env, int out);
 int					ft_env(t_data *data, t_pipex *list);
+
+/* builtin pwd.c */
 int					ft_pwd(t_data *data, t_pipex *list);
+
+/* builtin export.c */
+int					ft_export(t_pipex *list, t_tokens *toks, int i);
+
+/* builtin unset.c */
+void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
+t_env				*ft_is_env(t_env *env, char *val, int i);
 
 // free.c
 int					free_n_exit(t_data *d, int i);
 void				*save_free(void *s1, void *s2);
 char				*ft_strjoin_free(char const *s1, char const *s2);
+void				*ft_free_array(char **array);
+
+//ft_command_split.c
+char				**ft_command_split(char *s);
+char				**ft_remove_quotes(char **av);
 
 // expander.c
 char				*ft_expander(char *str, t_data *data);
 
 // input_check.c
-int					syntax_errors(t_data *d, char c);
-int					check_input(t_data *d, char *s);
+int					syntax_errors(char c);
+int					check_input(char *s);
 
 // input_utils.c
 int					ft_strcmp(char *s1, char *s2);
@@ -152,15 +167,16 @@ t_tokens    		*ft_gimme_tokens(char **strs);
 
 /* builtins.c */
 void				ft_check_builtins(t_pipex *list);
-void				ft_builtins_p(int i, t_tokens *toks);
+void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
+int					is_builtin(t_pipex *list);
 
 /* main.c */
 int					ft_count_words(char **av);
 
 // quote.c
-int					is_quote(int c);
+int					is_quote(int c); 
 int					ft_is_space(char s);
-int					check_open_quote(t_data *d, char *s);
+int					check_open_quote(char *s);
 
 // singal.c
 void				get_sigint(int sig);
@@ -176,8 +192,5 @@ int					ft_find_index(char *s, char c);
 void				ft_list_free(t_pipex *list);
 int					ft_error_msg(t_data *data, char *msg, int msg_len);
 char				*ft_strjoin_char(char *str, char c);
-
-char				**ft_command_split(char *s);
-char				**ft_remove_quotes(char **av);
 
 #endif
