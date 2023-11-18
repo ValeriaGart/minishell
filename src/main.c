@@ -32,11 +32,26 @@ char	**malloc_input(char **av, int ac)
 	return (input);
 }
 
+void    part_loop_shell(t_data *data, char **av, int ac, char *read_cmd)
+{
+    read_cmd = ft_expander(read_cmd, data);
+    av = ft_command_split(read_cmd);
+    if (!av)
+        printf("Unable to split commands and exec\n");
+    av = ft_remove_quotes(av);
+    ac = ft_count_words(av); // TODO " added ac = " MAYBE RETHINK THAT
+    if (!ac)
+        return ;
+    free(read_cmd);
+    read_cmd = NULL;
+    ft_exec(ac, av, data);
+    free(av);
+}
+
 void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 {
 	char	*read_cmd;
 
-	// char	**input;
 	read_cmd = NULL;
 	(void)env;
 	while (1)
@@ -50,21 +65,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 		else if (read_cmd[0] != '\0')
 		{
 			add_history(read_cmd);
-			read_cmd = ft_expander(read_cmd, data);
-			av = ft_command_split(read_cmd);
-			if (!av)
-				printf("Unable to split commands and exec\n");
-			av = ft_remove_quotes(av);
-			ac = ft_count_words(av); // TODO " added ac = " MAYBE RETHINK THAT
-			if (!ac)
-				return ;
-			// input = malloc_input(av, ac);
-			// if (!input)
-			//	return ;
-			free(read_cmd);
-			read_cmd = NULL;
-			ft_exec(ac, av, data);
-			free(av);
+			part_loop_shell(data, av, ac, read_cmd);
 		}
 		if (read_cmd)
 		{
@@ -72,8 +73,6 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			read_cmd = NULL;
 		}
 	}
-	if (read_cmd)
-		free(read_cmd);
 	rl_clear_history();
 }
 

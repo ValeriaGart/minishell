@@ -111,7 +111,7 @@ typedef struct s_pipex
 }					t_pipex;
 
 /* env.c */
-int					ft_store_env(t_data *data, char **env_orig, char structt);
+int					ft_store_env(t_data *data, char **env_orig);
 int					ft_free_env(t_env *env);
 int					ft_env_init(t_data *data, char **env);
 
@@ -124,6 +124,7 @@ int					ft_pwd(t_data *data, t_pipex *list);
 
 /* builtin export.c */
 int					ft_export(t_pipex *list, t_tokens *toks, int i);
+void				ft_repoint_env(t_env *tmp, t_env **new);
 
 /* builtin unset.c */
 void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
