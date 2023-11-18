@@ -15,8 +15,8 @@ int		is_builtin(t_pipex *list)
 		builtin = 1;
 	else if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
 		builtin = 1;
-	else if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
-		builtin = 1;
+//	else if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
+//		builtin = 1;
 	else if (builtin >= 3 && !ft_strncmp(list->args[0], "pwd", 4))
 		builtin = 1;
 	else
@@ -59,10 +59,10 @@ void	ft_print_error(int builtin, char *cmd, t_pipex *list)
 		printf("too many arguments\n");
 }
 
-void	ft_exit()
+void	ft_exit(char *str)
 {
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	exit(0);
+	exit(ft_atoi(str));
 }
 
 void	ft_check_builtins(t_pipex *list)
@@ -79,7 +79,7 @@ void	ft_check_builtins(t_pipex *list)
 /*	if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
 		builtin = 0;*/
 	if (builtin >= 4 && !ft_strncmp(list->args[0], "exit", 5))
-		ft_exit();
+		ft_exit(list->args[1]);
 	if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
 		exit(0);
 	if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))

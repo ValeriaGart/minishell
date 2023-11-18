@@ -166,6 +166,7 @@ void				ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 t_tokens    		*ft_gimme_tokens(char **strs);
 
 /* builtins.c */
+void				ft_exit(char *str);
 void				ft_check_builtins(t_pipex *list);
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_pipex *list);
