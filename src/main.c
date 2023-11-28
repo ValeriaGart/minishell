@@ -34,17 +34,18 @@ char	**malloc_input(char **av, int ac)
 
 void    part_loop_shell(t_data *data, char **av, int ac, char *read_cmd)
 {
+	t_tokens	*toks;
     read_cmd = ft_expander(read_cmd, data);
     av = ft_command_split(read_cmd);
-    if (!av)
-        printf("Unable to split commands and exec\n");
-    av = ft_remove_quotes(av);
-    ac = ft_count_words(av); // TODO " added ac = " MAYBE RETHINK THAT
+	if (!av)
+		printf("Unable to split commands and exec\n");
+	toks = ft_gimme_tokens(av);
+    ac = ft_count_words(av);
     if (!ac)
         return ;
     free(read_cmd);
     read_cmd = NULL;
-    ft_exec(ac, av, data);
+    ft_exec(ac, av, data, toks);
     free(av);
 }
 
@@ -60,13 +61,11 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 			read_cmd = readline("minishell: ");
 		if (!read_cmd)
 			return ((void)printf("Unable to make prompt\n"));
+		add_history(read_cmd);
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
-			free(read_cmd); // free pls
+			;
 		else if (read_cmd[0] != '\0')
-		{
-			add_history(read_cmd);
 			part_loop_shell(data, av, ac, read_cmd);
-		}
 		if (read_cmd)
 		{
 			free(read_cmd);
@@ -89,6 +88,5 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	ft_loop_minishell(env, &data, NULL, ac);
 	ft_free_env(data.env);
-	// ft_free_env(data.env_orig);
 	return (0);
 }

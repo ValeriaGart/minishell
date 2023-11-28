@@ -5,7 +5,7 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 {
 	(void)av;
 	ft_check_kid(i, list);
-	ft_check_builtins(list);
+	ft_check_builtins(list, i, list->tokens);
 	list->valid_env = ft_env_to_twod_arr(list->data, list->data->env);
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg(list->data, "Execve failed\n", 15);
@@ -61,7 +61,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 	return (0);
 }
 
-int	ft_exec(int ac, char **av, t_data *data)
+int	ft_exec(int ac, char **av, t_data *data, t_tokens *toks)
 {
 	t_pipex	list;
 
@@ -70,7 +70,7 @@ int	ft_exec(int ac, char **av, t_data *data)
 	list.paths = ft_bcheck_paths(data, data->env);
 	if (!list.paths)
 		return (1);
-	list.tokens = ft_gimme_tokens(av);
+	list.tokens = toks;
 	list.com_paths = ft_split(list.paths, ':');
 	if (!list.com_paths)
 		return (ft_error_msg(data, "Malloc failed\n", 15));

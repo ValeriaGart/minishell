@@ -38,6 +38,29 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 	return (value);
 }
 
+char	*ft_tok_quote(char *str, int i, int *y)
+{
+	char *ret;
+
+	++i;
+	while (str[i] && str[i] != D && str[i] != S)
+		++i;
+	i = i - *y;
+	++(*y);
+	ret = ft_calloc(sizeof(char), i);
+	if (!ret)
+		return (NULL);
+	i = -1;
+	while (str[*y] && str[*y] != D && str[*y] != S)
+	{
+		ret[++i] = str[*y];
+		++(*y);
+	}
+	if (str[*y])
+		++(*y);
+	return (ret);
+}
+
 char	*ft_tok_val(char *str, int *y)
 {
 	char	*value;
@@ -47,9 +70,12 @@ char	*ft_tok_val(char *str, int *y)
 	if (str[i] && (str[i] == ' ' || str[i] == '<'
 		|| str[i] == '>'))
 		return (ft_val_is_not_a_word(str, y));
-	while (str[i] && str[i] != ' ' && str[i] != '<'
-			&& str[i] != '>')
-		i++;
+	if (str[i] == D || str[i] == S)
+		return (ft_tok_quote(str, i, y));
+	else
+		while (str[i] && str[i] != ' ' && str[i] != '<'
+				&& str[i] != '>' && str[i] != D && str[i] != S)
+			i++;
 	i = i - *y;
 	value = ft_calloc(sizeof(char), i + 1);
 	i = -1;

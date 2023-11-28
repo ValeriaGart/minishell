@@ -90,19 +90,6 @@ int		ft_add_to_env(t_env **env, char *val)
 	return (0);
 }
 
-int		ft_excl_mark_err(char *val,int  i)
-{
-	write(2, "minishell: ", 11);
-	while (val[i])
-	{
-		if (val[i] == ';')
-			break;
-		write(2, &val[i], 1);
-		i++;
-	}
-	write(2, ": event not found\n", 18);
-	return (1);
-}
 
 int		ft_check_after_equal(t_env *env, char *val)
 {
@@ -119,7 +106,7 @@ int		ft_check_after_equal(t_env *env, char *val)
 	while (val[i])
 	{
 		if (val[i] == '!' && val[i + 1])
-			return (ft_excl_mark_err(val, i));
+			return (ft_error(val, ": event not found\n", i));
 		i++;
 	}
 	return (0);
@@ -143,7 +130,9 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i)
 	if (ret)
 		return (ft_export_error(toks, toks->val, i));
 	ret = ft_check_after_equal(env, toks->val);
-	if (!ret)
+	if (!ret && !ft_strncmp(toks->val, "SHLVL=", 6))
+		ft_export_shlvl(&(list->data->env), toks->val);
+	else if (!ret)
 		ft_add_to_env(&(list->data->env), toks->val);
 	return (ret);
 }

@@ -1,7 +1,7 @@
 
 #include "../incl/minishell.h"
 
-char	*implement_after_dollar(char c)
+/*char	*implement_after_dollar(char c)
 {
 	if (c == '0')
 		return (ft_strdup("minishell"));
@@ -9,7 +9,7 @@ char	*implement_after_dollar(char c)
 		return (ft_itoa(minishell_global));
 	else
 		return (NULL);
-}
+}*/
 
 int	after_dollar(char next)
 {
@@ -38,13 +38,8 @@ char	*ft_get_var(char *str, t_data *data)
 	i = 0;
 	env = data->env;
 	if (after_dollar(*str))
-		return (implement_after_dollar(*str));
-	while (env && env->str)
-	{
-		if (!ft_strncmp((char *)env->str, str, ft_strlen_var(str)))
-			break ;
-		env = env->next;
-	}
+		return (NULL);//(implement_after_dollar(*str));
+	env = ft_is_env(env, str, ft_strlen_var(str));
 	if (env == NULL || !env->str)
 		return (NULL);
 	while (env->str[i] == str[i])
@@ -88,8 +83,8 @@ char	*ft_expander(char *str, t_data *data)
 			q = str[i] % 2 + 1;
 		else if (is_quote(str[i]) && q == str[i] % 2 + 1)
 			q = 0;
-		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '?'))
+		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
+					&& str[i + 1] != '0')
 		{
 			new = ft_strjoin_free(new, ft_get_var(&str[++i], data));
 			while (str[i + 1] && ft_isalnum(str[i + 1]))

@@ -110,17 +110,34 @@ typedef struct s_pipex
 	t_data			*data;
 }					t_pipex;
 
+/* shlvl.c */
+int					ft_shlvl(t_env **env);
+void				ft_export_shlvl(t_env **env, char *tok_val);
+
 /* env.c */
 int					ft_store_env(t_data *data, char **env_orig);
 int					ft_free_env(t_env *env);
 int					ft_env_init(t_data *data, char **env);
 
+/* error.c */
+int					ft_error(char *val, char *error, int  i);
+
+/* builtin exit.c */
+void				ft_exit(t_tokens *toks, int i);
+void				ft_exit_p(t_tokens *toks, int  i);
+
+/* builtin cd.c */
+void				ft_cd(t_env *env, t_tokens *toks, int i);
+
 /* builtin env.c */
 int					ft_print_env_declare_x(t_env *env, int out);
 int					ft_env(t_data *data, t_pipex *list);
 
+/* builtin echo.c */
+void				ft_echo(t_pipex *list, t_tokens *toks, int i);
+
 /* builtin pwd.c */
-int					ft_pwd(t_data *data, t_pipex *list);
+int					ft_pwd(t_pipex *list);
 
 /* builtin export.c */
 int					ft_export(t_pipex *list, t_tokens *toks, int i);
@@ -151,7 +168,7 @@ int					check_input(char *s);
 int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
-int					ft_exec(int ac, char **av, t_data *data);
+int					ft_exec(int ac, char **av, t_data *data, t_tokens *toks);
 
 /* exec_utils.c */
 char				*ft_bcheck_paths(t_data *data, t_env *env);
@@ -167,8 +184,7 @@ void				ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 t_tokens    		*ft_gimme_tokens(char **strs);
 
 /* builtins.c */
-void				ft_exit(char *str);
-void				ft_check_builtins(t_pipex *list);
+void				ft_check_builtins(t_pipex *list, int i, t_tokens *toks);
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_pipex *list);
 

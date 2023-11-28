@@ -105,6 +105,32 @@ char	**ft_command_split(char *s)
 	return (new);
 }
 
+/*char	ft_echo_case(char *s, int *i)
+{
+	int		n;
+	char	*ret;
+
+	n = 0;
+	while (s && s[n] && s[n] == ' ')
+		n++;
+	if (ft_strncmp(s + n, "echo", 4))
+	{
+		ret = ft_strdup(s);
+		if (!ret)
+			*i = 1;
+		return (ret);
+	}
+	if (s[n] && s[n] == '"')
+	{
+		n++;
+		if (ft_strncmp(s + n, "echo", 4))
+		{
+
+		}
+	}
+	return (NULL);
+}*/
+
 char	*remove_quote(char *s)
 {
 	char	*new;
@@ -112,6 +138,11 @@ char	*remove_quote(char *s)
 	int		q;
 
 	i = 0;
+/*	new = ft_echo_case(s, &i);
+	if (i != 0)
+		return (NULL);
+	if (new)
+		return (new);*/
 	new = ft_strdup("");
 	q = 0;
 	while (s[i])

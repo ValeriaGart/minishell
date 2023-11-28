@@ -83,7 +83,7 @@ int	check_input(char *s)
 		}
 		else if (s[i] == S || s[i] == D)
 		{
-			if (check_open_quote(s) == 1)
+			if (check_open_quote(s))
 				return (1);
 		}
 		i++;

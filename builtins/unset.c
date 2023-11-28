@@ -39,6 +39,7 @@ void	ft_unset_env(t_env **env, t_env *env_to_unset)
 void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 {
 	t_env	*env;
+	int		shlvl;
 
 	env = list->data->env;
 	toks = toks->next;
@@ -49,6 +50,11 @@ void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 	if (!toks || toks->ind_command != i)
 		return ;
 	env = ft_is_env(env, toks->val, ft_strlen(toks->val));
+	shlvl = ft_strncmp(toks->val, "SHLVL", 5);
+	if (ft_strlen(toks->val) != 5)
+		shlvl = 1;
 	if (env)
 		ft_unset_env(&(list->data->env), env);
+	if (!shlvl)
+		ft_shlvl(&(list->data->env));
 }
