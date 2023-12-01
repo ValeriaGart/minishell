@@ -34,7 +34,7 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 		toks = toks->next;
 	builtin = ft_strlen(toks->val);
 	if (builtin >= 4 && !ft_strncmp(toks->val, "exit", 5))
-		ft_exit_p(toks, i);
+		ft_exit_p(list, toks, i);
 	else if (builtin >= 6 && !ft_strncmp(toks->val, "export", 7))
 		ft_export(list, toks, i);
 	else if (builtin >= 5 && !ft_strncmp(toks->val, "unset", 6))
@@ -42,7 +42,7 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	else if (builtin >= 3 && !ft_strncmp(toks->val, "pwd", 4))
 		ft_pwd(list);
 	else if (builtin >= 4 && !ft_strncmp(toks->val, "echo", 5))
-		ft_echo(list, toks, i);
+		return ;
 	else if (builtin >= 2 && !ft_strncmp(toks->val, "cd", 3))
 		ft_cd(list->data->env, toks, i);
 }
@@ -90,7 +90,7 @@ void	ft_check_builtins(t_pipex *list, int i, t_tokens *toks)
 	if (builtin >= 3 && !ft_strncmp(toks->val, "pwd", 4))
 		exit(0);
 	if (builtin >= 4 && !ft_strncmp(toks->val, "echo", 5))
-		exit(0);
+		exit(ft_echo(list, toks, i));
 /*	if (builtin < 0)
 		ft_print_error(builtin, list->args[0], list);
 	if (builtin <= 0)

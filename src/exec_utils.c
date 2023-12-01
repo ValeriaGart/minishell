@@ -49,6 +49,7 @@ char	*ft_gimme_com(char *str, t_pipex *list)
 	}
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": command not found\n", 2);
+	g_minishell = 127;
 	return (NULL);
 }
 

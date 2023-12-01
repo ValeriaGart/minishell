@@ -1,19 +1,36 @@
 #include "../incl/minishell.h"
 
-int	free_n_exit(t_data *d, int i)
+void	ft_list_loop_free(t_pipex *list)
 {
-	// ft_free_prompt(d);
-	// ft_freelist(d->exp);
-	// if (d->start != NULL)
-	// 	ft_freetoken(d->start);
-	// free_stuff(d->path);
-	if (d->pid != NULL)
-		free(d->pid);
-	free(d);
-	if (i == 127)
-		ft_putstr_fd(": Change other commands, mate\n", 2);
-	rl_clear_history();
-	exit(i);
+	int	i;
+
+	i = 0;
+	if (list->command)
+		free(list->command);
+	list->command = NULL;
+	if (list->args)
+	{
+		while (list->args[i])
+		{
+			free(list->args[i]);
+			i++;
+		}
+		free(list->args);
+	}
+	list->args = NULL;
+}
+
+void	ft_free_av(char **av)
+{
+	int	i;
+
+	i = 0;
+	while(av[i])
+	{
+		free(av[i]);
+		i++;
+	}
+	free(av);
 }
 
 void	*save_free(void *s1, void *s2)

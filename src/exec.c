@@ -10,7 +10,7 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg(list->data, "Execve failed\n", 15);
 	ft_list_free(list);
-	exit(1);
+	exit(127);
 }
 
 int	ft_do_all_to_exec(t_pipex *list, char **av)
@@ -46,7 +46,10 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		list->pids[i] = fork();
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
+		ft_list_loop_free(list);
  		waitpid(list->pids[i], &status, 0);
+		if (WIFEXITED(status))
+			g_minishell = WEXITSTATUS(status);
 		ft_builtins_p(list, i, list->tokens);
 		if (list->rem_fd != -1)
 			close(list->rem_fd);
@@ -65,22 +68,8 @@ int	ft_exec(int ac, char **av, t_data *data, t_tokens *toks)
 {
 	t_pipex	list;
 
-	list.data = data;
-	list.here_doc_delim = NULL;
-	list.paths = ft_bcheck_paths(data, data->env);
-	if (!list.paths)
+	if (init_pipex(&list, data, ac, toks))
 		return (1);
-	list.tokens = toks;
-	list.com_paths = ft_split(list.paths, ':');
-	if (!list.com_paths)
-		return (ft_error_msg(data, "Malloc failed\n", 15));
-	list.ac = ac;
-	list.pids = malloc(list.ac * sizeof(pid_t));
-	if (!list.pids)
-	{
-		free(list.com_paths);
-		return (ft_error_msg(data, "Malloc failed\n", 15));
-	}
 	ft_do_all_to_exec(&list, av);
 	ft_list_free(&list);
 	return (data->exit_st);

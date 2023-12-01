@@ -18,7 +18,7 @@ void	ft_cdhome(t_env *env)
 	home_path = ft_is_env(env, "HOME", 4);
 	if (!home_path)
 	{
-		minishell_global = 1;
+		g_minishell = 1;
 		ft_error_cd("HOME", 1);
 		return ;
 	}

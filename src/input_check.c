@@ -4,17 +4,17 @@ int	syntax_errors(char c)
 {
 	if (c == PIPE)
 	{
-		minishell_global = 2;
+		g_minishell = 2;
 		ft_putendl_fd("Pipe can only be used in full comnand", 2);
 	}
 	else if (c == '<' || c == '>')
 	{
-		minishell_global = 2;
+		g_minishell = 2;
 		ft_putendl_fd("Error redirection", 2);
 	}
 	else if (c == D || c == S)
 	{
-		minishell_global = 2;
+		g_minishell = 2;
 		ft_putendl_fd("Quotes error", 2);
 	}
 	return (2);

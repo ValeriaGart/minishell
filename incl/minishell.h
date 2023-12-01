@@ -31,7 +31,7 @@
 # define REDIR_IN	4
 # define HERE_DOC	5
 
-extern int			minishell_global;
+extern int			g_minishell;
 
 typedef struct s_dlist
 {
@@ -74,17 +74,7 @@ typedef struct s_tokens
 
 typedef struct s_data
 {
-	char			**comd;
-	char			*comd_line;
-	char			end_of_cmd;
-	int				index;
-	char			*check_input;
-	int				i;
-	int				j;
-	int				at;
 	int				exit;
-	pid_t			*pid;
-	int				out;
 	// valeria's
 	int				exit_st;
 	t_env			*env;
@@ -124,7 +114,7 @@ int					ft_error(char *val, char *error, int  i);
 
 /* builtin exit.c */
 void				ft_exit(t_tokens *toks, int i);
-void				ft_exit_p(t_tokens *toks, int  i);
+void				ft_exit_p(t_pipex *list, t_tokens *toks, int  i);
 
 /* builtin cd.c */
 void				ft_cd(t_env *env, t_tokens *toks, int i);
@@ -134,7 +124,7 @@ int					ft_print_env_declare_x(t_env *env, int out);
 int					ft_env(t_data *data, t_pipex *list);
 
 /* builtin echo.c */
-void				ft_echo(t_pipex *list, t_tokens *toks, int i);
+int					ft_echo(t_pipex *list, t_tokens *toks, int i);
 
 /* builtin pwd.c */
 int					ft_pwd(t_pipex *list);
@@ -148,7 +138,8 @@ void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
 t_env				*ft_is_env(t_env *env, char *val, int i);
 
 // free.c
-int					free_n_exit(t_data *d, int i);
+void				ft_list_loop_free(t_pipex *list);
+void				ft_free_av(char **av);
 void				*save_free(void *s1, void *s2);
 char				*ft_strjoin_free(char const *s1, char const *s2);
 void				*ft_free_array(char **array);
@@ -159,6 +150,9 @@ char				**ft_remove_quotes(char **av);
 
 // expander.c
 char				*ft_expander(char *str, t_data *data);
+
+/* init.c */
+int     			init_pipex(t_pipex *list, t_data *data, int ac, t_tokens *toks);
 
 // input_check.c
 int					syntax_errors(char c);

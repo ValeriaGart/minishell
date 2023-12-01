@@ -1,7 +1,7 @@
 
 #include "../incl/minishell.h"
 
-int		minishell_global;
+int		g_minishell;
 
 int	ft_count_words(char **av)
 {
@@ -46,7 +46,7 @@ void    part_loop_shell(t_data *data, char **av, int ac, char *read_cmd)
     free(read_cmd);
     read_cmd = NULL;
     ft_exec(ac, av, data, toks);
-    free(av);
+    ft_free_av(av);
 }
 
 void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)

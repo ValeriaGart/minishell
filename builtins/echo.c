@@ -14,7 +14,7 @@ void	ft_echo_env(t_env *env, char *str, int *i, int out)
 			if (str[n] == '0')
 				ft_putstr_fd("minishell", out);
 			else
-				ft_putnbr_fd(minishell_global, out);
+				ft_putnbr_fd(g_minishell, out);
 			*i = *i + 1;
 			return;
 		}
@@ -66,7 +66,7 @@ int		ft_echo_normal(t_env *env, char *str, int out)
 	return (0);
 }
 
-void	ft_echo(t_pipex *list, t_tokens *toks, int i)
+int		ft_echo(t_pipex *list, t_tokens *toks, int i)
 {
 	int	out;
 	int	err;
@@ -90,4 +90,5 @@ void	ft_echo(t_pipex *list, t_tokens *toks, int i)
 	}
 	if (!err)
 		write(1, "\n", out);
+	return (0);
 }
