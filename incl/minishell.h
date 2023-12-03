@@ -113,6 +113,10 @@ int					ft_env_init(t_data *data, char **env);
 
 /* error.c */
 int					ft_error(char *val, char *error, int  i);
+void				ft_error_cd(char *str, int i);
+
+/* builtin_utils.c */
+t_tokens	*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
 
 /* builtin exit.c */
 void				ft_exit(t_tokens *toks, int i);

@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-// if i == 1 -> "not set" , else -> "No such file or directory"
-void	ft_error_cd(char *str, int i)
-{
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(str, 2);
-	if (i == 1)
-		ft_putstr_fd(": not set\n", 2);
-	else
-		ft_putstr_fd(": No such file or directory\n", 2);
-}
-
 void	ft_cdhome(t_env *env)
 {
 	t_env	*home_path;
@@ -26,6 +15,25 @@ void	ft_cdhome(t_env *env)
 		write(1, "\n", 1);
 	else if (chdir(home_path->str + 5) == -1)
 		ft_error_cd(home_path->str + 5, 2);
+}
+
+int		ft_follow_oldpwd(t_env *env)
+{
+	t_env	*old_pwd;
+
+	old_pwd = ft_is_env(env, "OLDPWD=", 0);
+	if (!old_pwd)
+	{
+		ft_error_cd("OLDPWD", 1);
+		g_minishell = 1;
+		return (0);
+	}
+	if (chdir((old_pwd->str) + 7) == -1)
+	{
+		ft_error_cd((old_pwd->str) + 7, 2);
+		return (1);
+	}
+	return (0);
 }
 
 int		ft_cd_tilde(t_env *env,t_tokens *toks)
@@ -82,34 +90,6 @@ int		ft_update_pwd_env(t_pipex *list)
 	return (0);
 }
 
-t_tokens	*ft_too_many_args(t_tokens *toks, int i, int limit, char *com)
-{
-	t_tokens	*ret;
-
-	while (toks->ind_command != i)
-		toks = toks->next;
-	toks = toks->next;
-	while (toks && toks->ind_command == i && toks->type == SEP)
-		toks = toks->next;
-	ret = toks;
-	limit--;
-	if (toks->next)
-		toks = toks->next;
-	while (toks && toks->ind_command == i)
-	{
-		if (toks->type != SEP)
-			limit--;
-		if (limit)
-		{
-			g_minishell = 1;
-			ft_error(com, ": too many arguments\n", 0);
-			return (NULL);
-		}
-		toks = toks->next;
-	}
-	return (ret);
-}
-
 int		ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i)
 {
 	g_minishell = 0;
@@ -121,6 +101,11 @@ int		ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i)
 	else if (toks->val[0] == '~')
 	{
 		if (ft_cd_tilde(env, toks))
+			return (1);
+	}
+	else if (toks->val[0] == '-' && ft_strlen(toks->val) == 1)
+	{
+		if (ft_follow_oldpwd(env))
 			return (1);
 	}
 	else

@@ -24,6 +24,7 @@ SRCS =	src/main.c						\
 		src/ft_command_split.c			\
 		src/shlvl.c						\
 		src/error.c						\
+		builtins/builtin_utils.c		\
 		builtins/cd.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
