@@ -53,7 +53,7 @@ char	*ft_gimme_com(char *str, t_pipex *list)
 	return (NULL);
 }
 
-char    **ft_env_to_twod_arr(t_data *data, t_env *env_list)
+char    **ft_env_to_twod_arr(t_env *env_list)
 {
     char    **env_twod;
     int     i;
@@ -69,7 +69,7 @@ char    **ft_env_to_twod_arr(t_data *data, t_env *env_list)
     env_twod = malloc(sizeof(char *) * (i + 1));
     if (!env_twod)
     {
-        ft_error_msg(data, "Malloc failed\n", 15);
+        ft_error_msg("Malloc failed\n", 15);
         return (NULL);
     }
 	i = -1;
@@ -81,7 +81,7 @@ char    **ft_env_to_twod_arr(t_data *data, t_env *env_list)
             while (i >= 0)
                 free(env_twod[--i]);
             free(env_twod);
-            ft_error_msg(data, "Malloc failed\n", 15);
+            ft_error_msg("Malloc failed\n", 15);
             return (NULL);
         }
         env_list = env_list->next;
@@ -131,7 +131,7 @@ void    ft_check_kid(int i, t_pipex *list)
  	}
 }
 
-char    *ft_bcheck_paths(t_data *data, t_env  *env)
+char    *ft_bcheck_paths(t_env  *env)
 {
     while (env->next)
     {
@@ -139,6 +139,6 @@ char    *ft_bcheck_paths(t_data *data, t_env  *env)
 			return (env->str + 5);
         env = env->next;
     }
-    ft_error_msg(data, "Path not found in envs\n", 23);
+    ft_error_msg("Path not found in envs\n", 23);
     return (NULL);
 }

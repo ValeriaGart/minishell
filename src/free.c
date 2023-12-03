@@ -2,13 +2,10 @@
 
 void	ft_list_loop_free(t_pipex *list)
 {
-	int	i;
-
-	i = 0;
 	if (list->command)
 		free(list->command);
 	list->command = NULL;
-	if (list->args)
+/*	if (list->args)
 	{
 		while (list->args[i])
 		{
@@ -18,6 +15,7 @@ void	ft_list_loop_free(t_pipex *list)
 		free(list->args);
 	}
 	list->args = NULL;
+*/
 }
 
 void	ft_free_av(char **av)

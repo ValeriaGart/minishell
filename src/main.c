@@ -58,7 +58,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 	while (1)
 	{
 		if (!read_cmd)
-			read_cmd = readline("minishell: ");
+ 			read_cmd = readline("minishell: ");
 		if (!read_cmd)
 			return ((void)printf("Unable to make prompt\n"));
 		add_history(read_cmd);
@@ -88,5 +88,7 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	ft_loop_minishell(env, &data, NULL, ac);
 	ft_free_env(data.env);
+	if (data.pwd)
+		free(data.pwd);
 	return (0);
 }

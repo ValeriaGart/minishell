@@ -133,6 +133,10 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i)
 	if (!ret && !ft_strncmp(toks->val, "SHLVL=", 6))
 		ft_export_shlvl(&(list->data->env), toks->val);
 	else if (!ret)
+	{
+		if (!ft_strncmp(toks->val, "OLDPWD=", 7))
+			list->data->old_pwd = 1;
 		ft_add_to_env(&(list->data->env), toks->val);
+	}
 	return (ret);
 }

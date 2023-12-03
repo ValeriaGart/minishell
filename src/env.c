@@ -1,5 +1,49 @@
 #include "../incl/minishell.h"
 
+/* Needed to check OLDPWD in env and leave it as it is or delete at all as bash does*/
+void	ft_oldpwd_env_check(t_data *data, t_env **env)
+{
+	t_env	*old_pwd;
+	t_env	*env_point;
+	char	*oldpwd_str;
+	DIR 	*dir;
+
+	env_point = *env;
+	data->old_pwd = 1;
+	old_pwd = ft_is_env(*env, "OLDPWD=", 0);
+	if (!old_pwd)
+		return ;
+	oldpwd_str = old_pwd->str + 7;
+	if ((dir = opendir(oldpwd_str)) == NULL)
+		ft_repoint_env(env_point, &old_pwd);
+	closedir(dir);
+}
+
+/*	Needed to preset PWD in env as bash does
+	Just preset correct current pwd
+	add_env is for clearing if to add it to env or not*/
+int	ft_pwd_env_check(t_data *data, t_env **env, int add_env)
+{
+	char	*pwd_str;
+	char 	*val;
+	char	*tmp;
+
+	tmp = ft_calloc(sizeof(char), 10000);
+	if (tmp == NULL)
+		return (1);
+	pwd_str = getcwd(tmp, 9999);
+	if (pwd_str == NULL)
+		return (2);
+	val = ft_strjoin("PWD=", pwd_str);
+	free (pwd_str);
+	if (!val)
+		return (3);
+	if (add_env && ft_add_to_env(env, val))
+		return (4);
+	data->pwd = val;
+	return (0);
+}
+
 int	ft_free_env(t_env *env)
 {
 	t_env	*head;
@@ -58,6 +102,9 @@ int	ft_env_init(t_data *data, char **env)
 {
 	if (ft_store_env(data, env))
 		return (ft_free_env(data->env));
+	if (ft_pwd_env_check(data, &(data->env), 1))
+		return (ft_free_env(data->env));
+	ft_oldpwd_env_check(data, &(data->env));
 	if (ft_shlvl(&(data->env)))
 		return (ft_free_env(data->env));
 	return (0);

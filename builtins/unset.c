@@ -51,6 +51,9 @@ void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 		return ;
 	env = ft_is_env(env, toks->val, ft_strlen(toks->val));
 	shlvl = ft_strncmp(toks->val, "SHLVL", 5);
+	if (ft_strlen(toks->val) == 6
+		&& !ft_strncmp(toks->val, "OLDPWD", 6))
+		list->data->old_pwd = 0;
 	if (ft_strlen(toks->val) != 5)
 		shlvl = 1;
 	if (env)

@@ -44,7 +44,7 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	else if (builtin >= 4 && !ft_strncmp(toks->val, "echo", 5))
 		return ;
 	else if (builtin >= 2 && !ft_strncmp(toks->val, "cd", 3))
-		ft_cd(list->data->env, toks, i);
+		ft_cd(list, list->data->env, toks, i);
 }
 
 void	ft_print_error(int builtin, char *cmd, t_pipex *list)

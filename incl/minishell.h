@@ -15,6 +15,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <dirent.h>
+# include <libgen.h>
 
 # ifndef PIPE
 #  define PIPE 124
@@ -74,9 +76,8 @@ typedef struct s_tokens
 
 typedef struct s_data
 {
-	int				exit;
-	// valeria's
-	int				exit_st;
+	char			*pwd;
+	int				old_pwd;
 	t_env			*env;
 	t_env			*env_orig;
 }					t_data;
@@ -105,6 +106,7 @@ int					ft_shlvl(t_env **env);
 void				ft_export_shlvl(t_env **env, char *tok_val);
 
 /* env.c */
+int					ft_pwd_env_check(t_data *data, t_env **env, int add_env);
 int					ft_store_env(t_data *data, char **env_orig);
 int					ft_free_env(t_env *env);
 int					ft_env_init(t_data *data, char **env);
@@ -117,7 +119,7 @@ void				ft_exit(t_tokens *toks, int i);
 void				ft_exit_p(t_pipex *list, t_tokens *toks, int  i);
 
 /* builtin cd.c */
-void				ft_cd(t_env *env, t_tokens *toks, int i);
+int					ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i);
 
 /* builtin env.c */
 int					ft_print_env_declare_x(t_env *env, int out);
@@ -132,6 +134,7 @@ int					ft_pwd(t_pipex *list);
 /* builtin export.c */
 int					ft_export(t_pipex *list, t_tokens *toks, int i);
 void				ft_repoint_env(t_env *tmp, t_env **new);
+int					ft_add_to_env(t_env **env, char *val);
 
 /* builtin unset.c */
 void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
@@ -165,8 +168,8 @@ int					ft_strcmp(char *s1, char *s2);
 int					ft_exec(int ac, char **av, t_data *data, t_tokens *toks);
 
 /* exec_utils.c */
-char				*ft_bcheck_paths(t_data *data, t_env *env);
-char				**ft_env_to_twod_arr(t_data *data, t_env *env_list);
+char				*ft_bcheck_paths(t_env *env);
+char				**ft_env_to_twod_arr(t_env *env_list);
 void				ft_check_kid(int i, t_pipex *list);
 char				*ft_gimme_com(char *str, t_pipex *list);
 char				**ft_tok_to_args(t_tokens *toks, int i);
@@ -202,7 +205,7 @@ void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
 /* utils.c */
 int					ft_find_index(char *s, char c);
 void				ft_list_free(t_pipex *list);
-int					ft_error_msg(t_data *data, char *msg, int msg_len);
+int					ft_error_msg(char *msg, int msg_len);
 char				*ft_strjoin_char(char *str, char c);
 
 #endif

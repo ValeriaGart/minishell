@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:49:49 by vharkush          #+#    #+#             */
-/*   Updated: 2023/11/21 17:55:07 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/12/03 12:56:07 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ int	ft_pwd(t_pipex *list)
 		return (1);
 	pwd = getcwd(tmp, 9999);
 	if (pwd == NULL)
-	{
-		free (tmp);
 		return (1);
-	}
 	ft_putendl_fd(pwd, out);
 	free (pwd);
 	return (0);
