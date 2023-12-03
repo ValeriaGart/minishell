@@ -28,6 +28,8 @@ int		ft_follow_oldpwd(t_env *env)
 		g_minishell = 1;
 		return (0);
 	}
+	ft_putstr_fd((old_pwd->str) + 7, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
 	if (chdir((old_pwd->str) + 7) == -1)
 	{
 		ft_error_cd((old_pwd->str) + 7, 2);
