@@ -62,6 +62,30 @@ int	check_redirect(char *s, char redirect)
 	return (0);
 }
 
+int	check_open_quote(char *s)
+{
+	int		i;
+	char	rem;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == S || s[i] == D)
+		{
+			rem = s[i];
+			i++;
+			while (s[i] && s[i] != rem)
+				i++;
+			if (s[i] == '\0')
+				return (1);
+			i++;
+		}
+		else
+			i++;
+	}
+	return (0);
+}
+
 int	check_input(char *s)
 {
 	int	i;

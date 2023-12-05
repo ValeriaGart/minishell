@@ -14,7 +14,7 @@ int	ft_is_space(char s)
 	return (0);
 }
 
-int	check_open_quote(char *s)
+int	checkk_open_quote(char *s)
 {
 	int	q;
 	int	i;

@@ -38,44 +38,61 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 	return (value);
 }
 
-char	*ft_tok_quote(char *str, int i, int *y)
+int		ft_quote_condition(char **val, int y, char *str, int *i)
 {
-	char *ret;
+	char	*value;
+	char	meet_again;
 
-	++i;
-	while (str[i] && str[i] != D && str[i] != S)
-		++i;
-	i = i - *y;
-	++(*y);
-	ret = ft_calloc(sizeof(char), i);
-	if (!ret)
-		return (NULL);
-	i = -1;
-	while (str[*y] && str[*y] != D && str[*y] != S)
+	meet_again = str[y];
+	value = *val;
+	if (meet_again == S)
 	{
-		ret[++i] = str[*y];
-		++(*y);
+		*i = *i + 1;
+		value[*i] = str[y];
 	}
-	if (str[*y])
-		++(*y);
-	return (ret);
+	y++;
+	while (str[y] != meet_again)
+	{
+		if (str[y] == S || str[y] == D)
+			y = ft_quote_condition(&value, y, str, i);
+		else
+		{
+			*i = *i + 1;
+			value[*i] = str[y];
+			y++;
+		}
+	}
+	if (meet_again == S)
+	{
+		*i = *i + 1;
+		value[*i] = str[y];
+	}
+	y++;
+	return (y);
 }
 
 char	*ft_tok_val(char *str, int *y)
 {
 	char	*value;
 	int		i;
+	int		rem;
 
 	i = *y;
 	if (str[i] && (str[i] == ' ' || str[i] == '<'
 		|| str[i] == '>'))
 		return (ft_val_is_not_a_word(str, y));
-	if (str[i] == D || str[i] == S)
-		return (ft_tok_quote(str, i, y));
-	else
-		while (str[i] && str[i] != ' ' && str[i] != '<'
-				&& str[i] != '>' && str[i] != D && str[i] != S)
+	while (str[i] && str[i] != ' ' && str[i] != '<'
+			&& str[i] != '>')
+	{
+		if (str[i] == S || str[i] == D)
+		{
+			rem = str[i];
 			i++;
+			while (str[i] != rem)
+				i++;
+		}
+		i++;
+	}
 	i = i - *y;
 	value = ft_calloc(sizeof(char), i + 1);
 	i = -1;
@@ -84,8 +101,13 @@ char	*ft_tok_val(char *str, int *y)
 	while (str[*y] && str[*y] != ' ' && str[*y] != '<'
 			&& str[*y] != '>')
 	{
-		value[++i] = str[*y];
-		++(*y);
+		if (str[*y] == S || str[*y] == D)
+			*y = ft_quote_condition(&value, *y, str, &i);
+		else
+		{
+			value[++i] = str[*y];
+			++(*y);
+		}
 	}
 	return (value);
 }

@@ -54,10 +54,19 @@ int		ft_echo_normal(t_env *env, char *str, int out)
 		return (1);
 	while (str[i])
 	{
-		if (str[i] == '$')
-			break;
-		write(out, &str[i], 1);
-		i++;
+		if (str[i] == S)
+		{
+			while(str[++i] != S)
+				write(out, &str[i], 1);
+			i++;
+		}
+		else
+		{
+			if (str[i] == '$')
+				break;
+			write(out, &str[i], 1);
+			i++;
+		}
 	}
 	if (str[i])
 		ft_echo_env(env, str, &i, out);
