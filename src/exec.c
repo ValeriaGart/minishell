@@ -46,7 +46,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		list->pids[i] = fork();
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
-		ft_list_loop_free(list);
+ 		ft_list_loop_free(list);
  		waitpid(list->pids[i], &status, 0);
 		if (WIFEXITED(status))
 			g_minishell = WEXITSTATUS(status);

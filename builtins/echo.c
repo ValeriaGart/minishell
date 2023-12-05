@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../incl/minishell.h"
 
 void	ft_echo_env(t_env *env, char *str, int *i, int out)
 {
@@ -47,22 +47,34 @@ int		ft_error_screen(char *str)
 int		ft_echo_normal(t_env *env, char *str, int out)
 {
 	int	i;
+	int	meet_again;
 
 	i = 0;
+	meet_again = 0;
 	(void)env;
 	if (ft_error_screen(str))
 		return (1);
 	while (str[i])
 	{
-		if (str[i] == S)
+		if (str[i] == D || str[i] == S)
+		{
+			if (!meet_again)
+				meet_again = str[i];
+			else
+				meet_again = 0;
+		}
+		if (meet_again == S)
 		{
 			while(str[++i] != S)
 				write(out, &str[i], 1);
 			i++;
+			meet_again = 0;
 		}
+		else if (str[i] == D)
+			i++;
 		else
 		{
-			if (str[i] == '$')
+			if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '?'))
 				break;
 			write(out, &str[i], 1);
 			i++;
