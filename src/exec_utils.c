@@ -139,6 +139,5 @@ char    *ft_bcheck_paths(t_env  *env)
 			return (env->str + 5);
         env = env->next;
     }
-    ft_error_msg("Path not found in envs\n", 23);
     return (NULL);
 }

@@ -3,15 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yenng <yenng@student.42.fr>                +#+  +:+       +#+         #
+#    By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/17 21:17:54 by ynguyen           #+#    #+#              #
-#    Updated: 2023/08/02 11:50:35 by yenng            ###   ########.fr        #
+#    Updated: 2023/12/06 11:53:52 by vharkush         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 SOURCES	=		ft_isalpha.c	\
+			ft_atol.c		\
 			ft_isdigit.c	\
 			ft_isalnum.c	\
 			ft_isascii.c	\

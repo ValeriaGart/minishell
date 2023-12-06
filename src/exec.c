@@ -35,7 +35,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 			close(list->pipes[1]);
 			exit(1);
 		}
-		if (!is_builtin(list))
+		if (!is_builtin(list->tokens, i))
 		{
 			list->command = ft_gimme_com(list->args[0], list);	
 			if (!list->command)
@@ -59,8 +59,8 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 			close(list->pipes[1]);
 	}
 	i = -1;
-	while (++i < list->ac - 1)
-		wait(NULL);
+//	while (++i < list->ac - 1)
+//		wait(NULL);
 	return (0);
 }
 

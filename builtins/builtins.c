@@ -1,23 +1,27 @@
 #include "minishell.h"
 
-int		is_builtin(t_pipex *list)
+int		is_builtin(t_tokens *toks, int i)
 {
 	int builtin;
 
-	builtin = ft_strlen(list->args[0]);
-	if (builtin >= 3 && !ft_strncmp(list->args[0], "env", 4))
+	while (toks && toks->type != COM && toks->ind_command != i)
+		toks = toks->next;
+	if (!toks || toks->ind_command != i)
+		return (0);
+	builtin = ft_strlen(toks->val);
+	if (builtin >= 3 && !ft_strncmp(toks->val, "env", 4))
 		builtin = 1;
-	else if (builtin >= 2 && !ft_strncmp(list->args[0], "cd", 3))
+	else if (builtin >= 2 && !ft_strncmp(toks->val, "cd", 3))
 		builtin = 1;
-	else if (builtin >= 4 && !ft_strncmp(list->args[0], "exit", 5))
+	else if (builtin >= 4 && !ft_strncmp(toks->val, "exit", 5))
 		builtin = 1;
-	else if (builtin >= 6 && !ft_strncmp(list->args[0], "export", 7))
+	else if (builtin >= 6 && !ft_strncmp(toks->val, "export", 7))
 		builtin = 1;
-	else if (builtin >= 5 && !ft_strncmp(list->args[0], "unset", 6))
+	else if (builtin >= 5 && !ft_strncmp(toks->val, "unset", 6))
 		builtin = 1;
-	else if (builtin >= 4 && !ft_strncmp(list->args[0], "echo", 5))
+	else if (builtin >= 4 && !ft_strncmp(toks->val, "echo", 5))
 		builtin = 1;
-	else if (builtin >= 3 && !ft_strncmp(list->args[0], "pwd", 4))
+	else if (builtin >= 3 && !ft_strncmp(toks->val, "pwd", 4))
 		builtin = 1;
 	else
 		builtin = 0;

@@ -16,13 +16,16 @@ void	ft_exit_p(t_pipex *list, t_tokens *toks, int  i)
 	exit(g_minishell);
 }
 
+//TODO: check atoi overflow
 void	ft_exit_error_check(t_tokens *toks, int n, int i)
 {
-	while (toks->val[n] && ft_isdigit(toks->val[n]))
-	{
-		g_minishell = (g_minishell * 10) + (toks->val[n] - 48);
+	int	rem;
+
+	rem = n;
+	if (toks->val[n] && (toks->val[n] == '-' || toks->val[n] == '+'))
 		n++;
-	}
+	while (toks->val[n] && ft_isdigit(toks->val[n]))
+		n++;
 	if (toks->val[n])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
@@ -30,6 +33,8 @@ void	ft_exit_error_check(t_tokens *toks, int n, int i)
 		g_minishell = 2;
 		exit(g_minishell);
 	}
+	n = ft_atol(toks->val + rem);
+	g_minishell = n % 256;
 	toks = toks->next;
 	if (toks && toks->ind_command == i)
 		while (toks && toks->ind_command == i && toks->type == SEP)
@@ -38,11 +43,12 @@ void	ft_exit_error_check(t_tokens *toks, int n, int i)
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		ft_error(toks->val, ": too many arguments\n", 0);
-		g_minishell = 0;
-		exit (0);
+		g_minishell = 1;
+		exit (g_minishell);
 	}
 }
 
+//n%256
 void	ft_exit(t_tokens *toks, int i)
 {
 	int	n;

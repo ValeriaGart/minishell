@@ -116,7 +116,7 @@ int					ft_error(char *val, char *error, int  i);
 void				ft_error_cd(char *str, int i);
 
 /* builtin_utils.c */
-t_tokens	*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
+t_tokens			*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
 
 /* builtin exit.c */
 void				ft_exit(t_tokens *toks, int i);
@@ -187,7 +187,7 @@ t_tokens    		*ft_gimme_tokens(char **strs);
 /* builtins.c */
 void				ft_check_builtins(t_pipex *list, int i, t_tokens *toks);
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
-int					is_builtin(t_pipex *list);
+int					is_builtin(t_tokens *toks, int i);
 
 /* main.c */
 int					ft_count_words(char **av);
