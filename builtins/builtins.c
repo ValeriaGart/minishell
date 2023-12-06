@@ -91,8 +91,4 @@ void	ft_check_builtins(t_pipex *list, int i, t_tokens *toks)
 		exit(0);
 	if (builtin >= 4 && !ft_strncmp(toks->val, "echo", 5))
 		exit(ft_echo(list, toks, i));
-/*	if (builtin < 0)
-		ft_print_error(builtin, list->args[0], list);
-	if (builtin <= 0)
-		list->args = NULL;*/
 }

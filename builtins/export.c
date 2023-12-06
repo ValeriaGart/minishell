@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../incl/minishell.h"
 
 int	ft_export_error(t_tokens *toks, char *val, int ind)
 {
@@ -17,6 +17,7 @@ int	ft_export_error(t_tokens *toks, char *val, int ind)
 					write(2, "minishell: export: `", 20);
 					ft_putstr_fd(val, 2);
 					write(2, "': not a valid identifier\n", 26);
+					g_minishell = 1;
 					break;
 				}
 				i++;
