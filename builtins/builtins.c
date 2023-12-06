@@ -51,23 +51,6 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 		ft_cd(list, list->data->env, toks, i);
 }
 
-void	ft_print_error(int builtin, char *cmd, t_pipex *list)
-/*
--1: failed malloc
--2: too many args env
--3: too many args pwd
-=====================
-*/
-{
-	printf("%s: ", cmd);
-	if (builtin == -1)
-		printf("malloc failed\n");
-	if (builtin == -2)
-		printf("'%s': No such file or directory\n", list->args[1]);
-	if (builtin == -3)
-		printf("too many arguments\n");
-}
-
 void	ft_check_builtins(t_pipex *list, int i, t_tokens *toks)
 // builins: cd echo env exit export pwd unset
 {
@@ -86,7 +69,7 @@ void	ft_check_builtins(t_pipex *list, int i, t_tokens *toks)
 	if (builtin >= 2 && !ft_strncmp(toks->val, "cd", 3))
 		exit(0);
 	if (builtin >= 4 && !ft_strncmp(toks->val, "exit", 5))
-		ft_exit(toks, i);
+		exit(0);
 	if (builtin >= 6 && !ft_strncmp(toks->val, "export", 7))
 		exit(0);
 	if (builtin >= 5 && !ft_strncmp(toks->val, "unset", 6))

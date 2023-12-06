@@ -13,15 +13,31 @@ void	ft_loop_children(t_pipex *list, int i, char **av)
 	exit(127);
 }
 
-int	ft_do_all_to_exec(t_pipex *list, char **av)
+void	ft_wait_for_my_babies(t_pipex *list)
 {
 	int	i;
 	int	status;
+
+	i = 0;
+	status = 0;
+	while (i < list->ac)
+	{
+ 		waitpid(list->pids[i], &status, 0);
+		if (WIFEXITED(status) && !list->builtin)
+			g_minishell = WEXITSTATUS(status);
+		i++;
+	}
+}
+
+int	ft_do_all_to_exec(t_pipex *list, char **av)
+{
+	int	i;
 
 	i = -1;
 	list->rem_fd = -1;
 	while (++i < list->ac)
 	{
+		list->builtin = 0;
 		list->here_doc = 0;
 		list->redir_in = -1;
 		list->redir_out = -1;
@@ -37,19 +53,18 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		}
 		if (!is_builtin(list->tokens, i))
 		{
-			list->command = ft_gimme_com(list->args[0], list);	
+			list->command = ft_gimme_com(list->tokens, list, i);	
 			if (!list->command)
 				return (1);
 		}
+		else
+			list->builtin = 1;
 		if (i < list->ac - 1)
 			pipe(list->pipes);
 		list->pids[i] = fork();
 		if (list->pids[i] == 0)
 			ft_loop_children(list, i, av);
  		ft_list_loop_free(list);
- 		waitpid(list->pids[i], &status, 0);
-		if (WIFEXITED(status))
-			g_minishell = WEXITSTATUS(status);
 		ft_builtins_p(list, i, list->tokens);
 		if (list->rem_fd != -1)
 			close(list->rem_fd);
@@ -58,9 +73,7 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		if (list->ac != 1)
 			close(list->pipes[1]);
 	}
-	i = -1;
-//	while (++i < list->ac - 1)
-//		wait(NULL);
+	ft_wait_for_my_babies(list);
 	return (0);
 }
 

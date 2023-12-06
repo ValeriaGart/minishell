@@ -12,6 +12,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/ioctl.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -85,6 +86,7 @@ typedef struct s_data
 typedef struct s_pipex
 {
 	pid_t			*pids;
+	int				builtin;
 	int				ac;
 	int				redir_in;
 	int				redir_out;
@@ -119,7 +121,7 @@ void				ft_error_cd(char *str, int i);
 t_tokens			*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
 
 /* builtin exit.c */
-void				ft_exit(t_tokens *toks, int i);
+//void				ft_exit(t_tokens *toks, int i);
 void				ft_exit_p(t_pipex *list, t_tokens *toks, int  i);
 
 /* builtin cd.c */
@@ -175,7 +177,7 @@ int					ft_exec(int ac, char **av, t_data *data, t_tokens *toks);
 char				*ft_bcheck_paths(t_env *env);
 char				**ft_env_to_twod_arr(t_env *env_list);
 void				ft_check_kid(int i, t_pipex *list);
-char				*ft_gimme_com(char *str, t_pipex *list);
+char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
 char				**ft_tok_to_args(t_tokens *toks, int i);
 
 /* redirects.c */

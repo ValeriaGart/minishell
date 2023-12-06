@@ -30,24 +30,57 @@ char	**ft_tok_to_args(t_tokens *toks, int i)
 	return (args);
 }
 
-char	*ft_gimme_com(char *str, t_pipex *list)
+int ft_check_if_path(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (str[i] && str[i] == '/')
+			break;
+		else if (str[i] && str[i] != '.')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+char	*ft_gimme_comm(t_tokens *toks, t_pipex *list, int i)
+{
+}
+
+char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 {
 	char	*temp;
 	char	*ret;
 	char	**iter;
 
+	while (toks && !(toks->ind_command == i && toks->type == COM))
+		toks = toks->next;
+	if (!toks)
+		return (NULL);
+	if (ft_check_if_path(toks->val))
+	{
+		if (access(toks->val, 0) == 0)
+			return (toks->val);
+		ft_putstr_fd(toks->val, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		g_minishell = 127;
+		return (NULL);
+	}
 	iter = list->com_paths;
 	while (*iter)
 	{
 		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, str);
+		ret = ft_strjoin(temp, toks->val);
 		free(temp);
 		if (access(ret, 0) == 0)
 			return (ret);
 		free(ret);
 		iter++;
 	}
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd(toks->val, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	g_minishell = 127;
 	return (NULL);

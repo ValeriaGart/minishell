@@ -60,7 +60,7 @@ void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
 		if (!read_cmd)
  			read_cmd = readline("minishell: ");
 		if (!read_cmd)
-			return ((void)printf("Unable to make prompt\n"));
+			return ;
 		add_history(read_cmd);
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			;
