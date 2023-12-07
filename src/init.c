@@ -4,6 +4,7 @@ int     init_pipex(t_pipex *list, t_data *data, int ac, t_tokens *toks)
 {
     list->command = NULL;
     list->data = data;
+	list->paths_exist = 1;
 	list->here_doc_delim = NULL;
     list->tokens = toks;
     list->ac = ac;

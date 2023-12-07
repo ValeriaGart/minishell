@@ -10,6 +10,7 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <string.h>
 # include <sys/ioctl.h>
 # include <sys/stat.h>
@@ -18,6 +19,7 @@
 # include <unistd.h>
 # include <dirent.h>
 # include <libgen.h>
+# include <errno.h>
 
 # ifndef PIPE
 #  define PIPE 124
@@ -88,6 +90,7 @@ typedef struct s_pipex
 	pid_t			*pids;
 	int				builtin;
 	int				ac;
+	int				paths_exist;
 	int				redir_in;
 	int				redir_out;
 	int				rem_fd;

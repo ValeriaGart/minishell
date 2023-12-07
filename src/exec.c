@@ -1,12 +1,65 @@
 
 #include "minishell.h"
 
+bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
+{
+	struct stat buf;
+
+	while (toks->ind_command != i)
+		toks = toks->next;
+	while (toks->type != COM)
+		toks = toks->next;
+	if (stat(list->command, &buf) == 0 && ft_strrchr(toks->val, '/'))
+	{
+		if (S_ISREG(buf.st_mode))
+		{
+       	    ft_error(toks->val, ": Permission denied", ft_strlen(toks->val));
+			g_minishell = 126;
+			return (false);
+		}
+		if (S_ISDIR(buf.st_mode))
+		{
+       	    ft_error(toks->val, ": Is a directory\n", 0);
+			g_minishell = 126;
+			return (false);
+		}
+	}
+	if (access(list->command, F_OK) != 0)
+	{
+		if (ft_strrchr(toks->val, '/'))
+			ft_error(toks->val, ": No such file or directory\n", 0);
+		else
+			ft_error(toks->val, ": command not found\n", 0);
+		g_minishell = 127;
+		return (false);
+	}
+	if (!list->paths_exist && !ft_strrchr(toks->val, '/'))
+	{
+		ft_error(toks->val, ": command not found\n", 0);
+		g_minishell = 127;
+		return (false);
+	}
+/*	if (stat(list->command, &buf) == 0)
+	{
+		if (S_ISDIR(buf.st_mode))
+			ft_error(toks->val, ": command not found\n", 0);
+		g_minishell = 127;
+		return (false);
+	}*/
+	return (true);
+}
+
 void	ft_loop_children(t_pipex *list, int i, char **av)
 {
 	(void)av;
 	ft_check_kid(i, list);
 	ft_check_builtins(list, i, list->tokens);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
+	if (!ft_command_check(list, list->tokens, i))
+	{
+		ft_list_free(list);
+		exit(g_minishell);
+	}
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
 	ft_list_free(list);

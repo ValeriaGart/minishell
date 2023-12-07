@@ -45,11 +45,6 @@ int ft_check_if_path(char *str)
 	}
 	return (1);
 }
-
-char	*ft_gimme_comm(t_tokens *toks, t_pipex *list, int i)
-{
-}
-
 char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 {
 	char	*temp;
@@ -60,15 +55,6 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 		toks = toks->next;
 	if (!toks)
 		return (NULL);
-	if (ft_check_if_path(toks->val))
-	{
-		if (access(toks->val, 0) == 0)
-			return (toks->val);
-		ft_putstr_fd(toks->val, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		g_minishell = 127;
-		return (NULL);
-	}
 	iter = list->com_paths;
 	while (*iter)
 	{
@@ -80,10 +66,8 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 		free(ret);
 		iter++;
 	}
-	ft_putstr_fd(toks->val, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	g_minishell = 127;
-	return (NULL);
+	list->paths_exist = 0; 
+	return (toks->val);
 }
 
 char    **ft_env_to_twod_arr(t_env *env_list)

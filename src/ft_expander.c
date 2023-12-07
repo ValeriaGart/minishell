@@ -84,7 +84,7 @@ char	*ft_expander(char *str, t_data *data)
 		else if (is_quote(str[i]) && q == str[i] % 2 + 1)
 			q = 0;
 		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
-					&& str[i + 1] != '0')
+					&& str[i + 1] != '\0')
 		{
 			new = ft_strjoin_free(new, ft_get_var(&str[++i], data));
 			while (str[i + 1] && ft_isalnum(str[i + 1]))

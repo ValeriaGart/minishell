@@ -35,17 +35,25 @@ char	**malloc_input(char **av, int ac)
 void    part_loop_shell(t_data *data, char **av, int ac, char *read_cmd)
 {
 	t_tokens	*toks;
+
     read_cmd = ft_expander(read_cmd, data);
-    av = ft_command_split(read_cmd);
-	if (!av)
-		printf("Unable to split commands and exec\n");
-	toks = ft_gimme_tokens(av);
-    ac = ft_count_words(av);
-    if (!ac)
-        return ;
-    free(read_cmd);
+	toks = NULL;
+	if (read_cmd && read_cmd[0] != '\0')
+	{
+	    av = ft_command_split(read_cmd);
+		if (!av)
+			printf("Unable to split commands and exec\n");
+		toks = ft_gimme_tokens(av);
+	    ac = ft_count_words(av);
+	    if (!ac)
+	        return ;
+	}
+	else
+		return ;
+	if (read_cmd)
+	    free(read_cmd);
     read_cmd = NULL;
-    ft_exec(ac, av, data, toks);
+	ft_exec(ac, av, data, toks);
     ft_free_av(av);
 }
 
