@@ -21,7 +21,7 @@ void	ft_change_args(t_tokens **toks)
 }
 
 // check "wc -l <test >>test <etst >>test"
-void	ft_newinfd(t_tokens **toks, t_pipex *list)
+int	ft_newinfd(t_tokens **toks, t_pipex *list)
 {
 	int			y;
 	char		*file;
@@ -34,14 +34,18 @@ void	ft_newinfd(t_tokens **toks, t_pipex *list)
 	file = (*toks)->val;
 	list->redir_in = open(file, O_RDONLY);
 	if (list->redir_in < 0)
+	{
 		perror(file);
+		return (1);
+	}
 	if ((*toks)->prev->type == SEP)
 		++y;
 	while (--y)
 		ft_change_args(toks);
+	return (0);
 }
 
-void	ft_newoutfd(t_tokens **toks, t_pipex *list)
+int	ft_newoutfd(t_tokens **toks, t_pipex *list)
 {
 	t_tokens	*rem_tok;
 	int			y;
@@ -59,11 +63,15 @@ void	ft_newoutfd(t_tokens **toks, t_pipex *list)
 	else
 		list->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	if (list->redir_out < 0)
+	{
 		perror(file);
+		return (1);
+	}
 	if ((*toks)->prev->type == SEP)
 		++y;
 	while (--y)
 		ft_change_args(toks);
+	return (0);
 }
 
 int		ft_heredoc_set(t_tokens **toks, t_pipex *list)
@@ -116,25 +124,31 @@ void	ft_heredoc_exec(t_pipex *list)
 	unlink(".heredoc");
 }
 
-
-// wc -l <test>>new
-void	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
+int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 {
-	t_tokens *toks;
+	t_tokens	*toks;
+	int			err;
 
-	toks = *toks_orig;  
+	toks = *toks_orig;
+	err = 0;
 	while (toks->ind_command != i)
 		toks = toks->next;
 	while (toks && toks->ind_command == i)
 	{
 		if (toks->type == REDIR_OUT)
-			ft_newoutfd(&toks, list);
+			err = ft_newoutfd(&toks, list);
 		if (toks->type == REDIR_IN)
-			ft_newinfd(&toks, list);
+			err = ft_newinfd(&toks, list);
 		if (toks->type == HERE_DOC)
 			ft_heredoc_set(&toks, list);
+		if (err)
+		{
+			g_minishell = 1;
+			return (1);
+		}
 		toks = toks->next;
 	}
 	if (list->here_doc)
 		ft_heredoc_exec(list);
+	return (0);
 }

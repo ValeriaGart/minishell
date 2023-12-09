@@ -113,14 +113,22 @@ int		ft_check_after_equal(t_env *env, char *val)
 	return (0);
 }
 
-int	ft_export(t_pipex *list, t_tokens *toks, int i)
+bool	ft_last_pipe(t_tokens *toks, int i)
 {
-	t_env	*env;
+	while (toks && toks->next)
+		toks = toks->next;
+	if (toks && toks->ind_command == i)
+		return (true);
+	return (false);
+}
+
+int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
+{
 	int		ret;
 
-	env = list->data->env;
 	toks = toks->next;
-	if (!toks)
+	ret = 0;
+	if (!toks || toks->ind_command != i)
 		return (ft_print_env_declare_x(env, list->redir_out));
 	while (toks && toks->ind_command == i
 				&& toks->type == SEP)
@@ -131,6 +139,8 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i)
 	if (ret)
 		return (ft_export_error(toks, toks->val, i));
 	ret = ft_check_after_equal(env, toks->val);
+	if (!ft_last_pipe(toks, i))
+		return (ret);
 	if (!ret && !ft_strncmp(toks->val, "SHLVL=", 6))
 		ft_export_shlvl(&(list->data->env), toks->val);
 	else if (!ret)

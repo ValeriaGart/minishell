@@ -49,7 +49,7 @@ int	ft_free_env(t_env *env)
 	t_env	*head;
 
 	head = env;
-	if (!env && !env->next)
+	if (!env)
 		return (1);
 	while (env && env->next)
 	{
@@ -63,9 +63,9 @@ int	ft_free_env(t_env *env)
 	}
 	if (env)
 	{
-		if (env->str && *env->str)
+		if (env->str)
 			free(env->str);
-		// free(env);
+		free(env);
 	}
 	return (1);
 }

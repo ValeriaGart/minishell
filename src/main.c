@@ -3,16 +3,6 @@
 
 int		g_minishell;
 
-int	ft_count_words(char **av)
-{
-	int	i;
-
-	i = 0;
-	while (av[i])
-		i++;
-	return (i);
-}
-
 char	**malloc_input(char **av, int ac)
 {
 	char	**input;
@@ -32,53 +22,70 @@ char	**malloc_input(char **av, int ac)
 	return (input);
 }
 
-void    part_loop_shell(t_data *data, char **av, int ac, char *read_cmd)
+// if input i == -1 -> return ac
+int		ft_find_tok(t_tokens *toks, int i)
 {
-	t_tokens	*toks;
-
-    read_cmd = ft_expander(read_cmd, data);
-	toks = NULL;
-	if (read_cmd && read_cmd[0] != '\0')
-	{
-	    av = ft_command_split(read_cmd);
-		if (!av)
-			printf("Unable to split commands and exec\n");
-		toks = ft_gimme_tokens(av);
-	    ac = ft_count_words(av);
-	    if (!ac)
-	        return ;
-	}
-	else
-		return ;
-	if (read_cmd)
-	    free(read_cmd);
-    read_cmd = NULL;
-	ft_exec(ac, av, data, toks);
-    ft_free_av(av);
+	while(toks && toks->next)
+		toks = toks->next;
+	if (i == -1)
+		return (toks->ind_command + 1);
+	return (0);
 }
 
-void	ft_loop_minishell(char **env, t_data *data, char **av, int ac)
+bool    part_loop_shell(t_data *data, char **av, char *read_cmd)
+{
+	t_tokens	*toks;
+	int			err;
+
+	err = 0;
+    read_cmd = ft_expander(read_cmd, data);
+	if (!read_cmd)
+		return (false);
+	toks = NULL;
+	if (read_cmd[0] != '\0')
+	{
+		av = ft_command_split(read_cmd);
+		if (!av)
+			return (false);
+		toks = ft_gimme_tokens(av);
+		if (!toks)
+			err = -1;
+	}
+	else
+		return (true);
+	if (ft_find_tok(toks, -1) && !err)
+		err = ft_exec(av, data, toks);
+	ft_free_av(av);
+	if (err < 0)
+		return (false);
+	return (true);
+}
+
+void	ft_loop_minishell(t_data *data, char **av)
 {
 	char	*read_cmd;
+	bool	exec_success;
 
+	exec_success = 0;
 	read_cmd = NULL;
-	(void)env;
 	while (1)
 	{
 		if (!read_cmd)
  			read_cmd = readline("minishell: ");
 		if (!read_cmd)
-			return ;
+			break ;
 		add_history(read_cmd);
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			;
 		else if (read_cmd[0] != '\0')
-			part_loop_shell(data, av, ac, read_cmd);
+			exec_success = part_loop_shell(data, av, read_cmd);
 		if (read_cmd)
 		{
 			free(read_cmd);
 			read_cmd = NULL;
 		}
+		if (exec_success != true)
+			break;
 	}
 	rl_clear_history();
 }
@@ -94,7 +101,7 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	if (ft_env_init(&data, env))
 		return (1);
-	ft_loop_minishell(env, &data, NULL, ac);
+	ft_loop_minishell(&data, NULL);
 	ft_free_env(data.env);
 	if (data.pwd)
 		free(data.pwd);

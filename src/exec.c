@@ -39,13 +39,6 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 		g_minishell = 127;
 		return (false);
 	}
-/*	if (stat(list->command, &buf) == 0)
-	{
-		if (S_ISDIR(buf.st_mode))
-			ft_error(toks->val, ": command not found\n", 0);
-		g_minishell = 127;
-		return (false);
-	}*/
 	return (true);
 }
 
@@ -85,33 +78,18 @@ void	ft_wait_for_my_babies(t_pipex *list)
 int	ft_do_all_to_exec(t_pipex *list, char **av)
 {
 	int	i;
+	int err;
 
 	i = -1;
+	err = 0;
 	list->rem_fd = -1;
 	while (++i < list->ac)
 	{
-		list->builtin = 0;
-		list->here_doc = 0;
-		list->redir_in = -1;
-		list->redir_out = -1;
-		ft_redirects(i, &(list->tokens), list);
-		list->args = ft_tok_to_args(list->tokens, i);
-		if (!list->args)
-		{
-			ft_error_msg("Malloc failed\n", 15);
-			ft_list_free(list);
-			close(list->pipes[0]);
-			close(list->pipes[1]);
-			exit(1);
-		}
-		if (!is_builtin(list->tokens, i))
-		{
-			list->command = ft_gimme_com(list->tokens, list, i);	
-			if (!list->command)
-				return (1);
-		}
-		else
-			list->builtin = 1;
+		err = ft_init_list_loop(list, i);
+		if (err == -1)
+			return (0);
+		if (err)
+			return (1);
 		if (i < list->ac - 1)
 			pipe(list->pipes);
 		list->pids[i] = fork();
@@ -130,13 +108,15 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 	return (0);
 }
 
-int	ft_exec(int ac, char **av, t_data *data, t_tokens *toks)
+int	ft_exec(char **av, t_data *data, t_tokens *toks)
 {
 	t_pipex	list;
+	int		ret;
 
-	if (init_pipex(&list, data, ac, toks))
-		return (1);
-	ft_do_all_to_exec(&list, av);
+	ret = 0;
+	if (init_pipex(&list, data, toks))
+		return (-1);
+	ret = ft_do_all_to_exec(&list, av);
 	ft_list_free(&list);
-	return (g_minishell);
+	return (ret);
 }

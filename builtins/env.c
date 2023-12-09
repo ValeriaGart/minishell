@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:40:04 by vharkush          #+#    #+#             */
-/*   Updated: 2023/11/17 15:46:30 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/12/08 12:09:51 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_print_env_declare_x(t_env *env, int out)
 	return (0);
 }
 
-int	ft_env(t_data *data, t_pipex *list)
+int	ft_env(t_data *data, t_pipex *list, int i)
 {
 	t_env	*env;
 	int		out;
@@ -33,7 +33,7 @@ int	ft_env(t_data *data, t_pipex *list)
 	out = list->redir_out;
 	if (out == -1)
 		out = 1;
-	if (ft_count_words(list->args) != 1)
+	if (ft_too_many_args(list->tokens, i, 1, "env") == NULL)
 		return (-2);
 	env = data->env;
 	while (env->next != NULL)

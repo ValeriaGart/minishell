@@ -36,6 +36,7 @@
 # define REDIR_IN	4
 # define HERE_DOC	5
 
+//TODO: track if global right everywhere
 extern int			g_minishell;
 
 typedef struct s_dlist
@@ -132,7 +133,7 @@ int					ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i);
 
 /* builtin env.c */
 int					ft_print_env_declare_x(t_env *env, int out);
-int					ft_env(t_data *data, t_pipex *list);
+int					ft_env(t_data *data, t_pipex *list, int i);
 
 /* builtin echo.c */
 int					ft_echo(t_pipex *list, t_tokens *toks, int i);
@@ -141,7 +142,7 @@ int					ft_echo(t_pipex *list, t_tokens *toks, int i);
 int					ft_pwd(t_pipex *list);
 
 /* builtin export.c */
-int					ft_export(t_pipex *list, t_tokens *toks, int i);
+int					ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
 void				ft_repoint_env(t_env *tmp, t_env **new);
 int					ft_add_to_env(t_env **env, char *val);
 
@@ -164,7 +165,8 @@ char				**ft_remove_quotes(char **av);
 char				*ft_expander(char *str, t_data *data);
 
 /* init.c */
-int     			init_pipex(t_pipex *list, t_data *data, int ac, t_tokens *toks);
+int					ft_init_list_loop(t_pipex *list, int i);
+int     			init_pipex(t_pipex *list, t_data *data, t_tokens *toks);
 
 // input_check.c
 int					syntax_errors(char c);
@@ -174,7 +176,7 @@ int					check_input(char *s);
 int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
-int					ft_exec(int ac, char **av, t_data *data, t_tokens *toks);
+int					ft_exec(char **av, t_data *data, t_tokens *toks);
 
 /* exec_utils.c */
 char				*ft_bcheck_paths(t_env *env);
@@ -184,7 +186,7 @@ char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
 char				**ft_tok_to_args(t_tokens *toks, int i);
 
 /* redirects.c */
-void				ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
+int					ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 
 /* tokenizing.c */
 t_tokens    		*ft_gimme_tokens(char **strs);
@@ -195,7 +197,7 @@ void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_tokens *toks, int i);
 
 /* main.c */
-int					ft_count_words(char **av);
+int					ft_find_tok(t_tokens *toks, int i);
 
 // quote.c
 int					is_quote(int c); 

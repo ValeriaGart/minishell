@@ -131,10 +131,10 @@ int		ft_tok_type(char *value)
 		type = REDIR_OUT;
 	else if (value[0] == '<')
 	{
-		if (value[1] == '\0')
-			type = REDIR_IN;
-		else
+		if (value[1] && value[1] == '<')
 			type = HERE_DOC;
+		else
+			type = REDIR_IN;
 	}
 	else
 		type = COM;

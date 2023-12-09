@@ -1,18 +1,49 @@
 #include "../incl/minishell.h"
 
-int     init_pipex(t_pipex *list, t_data *data, int ac, t_tokens *toks)
+int	ft_init_list_loop(t_pipex *list, int i)
+{
+	list->builtin = 0;
+	list->here_doc = 0;
+	list->redir_in = -1;
+	list->redir_out = -1;
+	if (ft_redirects(i, &(list->tokens), list))
+		return (-1);
+	list->args = ft_tok_to_args(list->tokens, i);
+	if (!list->args)
+	{
+		ft_error_msg("Malloc failed\n", 15);
+		close(list->pipes[0]);
+		close(list->pipes[1]);
+		return (1);
+	}
+	if (!is_builtin(list->tokens, i))
+	{
+		list->command = ft_gimme_com(list->tokens, list, i);	
+		if (!list->command)
+			return (1);
+	}
+	else
+		list->builtin = 1;
+	return (0);
+}
+
+int     init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
     list->command = NULL;
     list->data = data;
 	list->paths_exist = 1;
 	list->here_doc_delim = NULL;
     list->tokens = toks;
-    list->ac = ac;
+    list->ac = ft_find_tok(toks, -1);
 	list->paths = NULL;
 	list->paths = ft_bcheck_paths(data->env);
-    list->com_paths = ft_split(list->paths, ':');
-	if (!list->com_paths)
-		return (ft_error_msg("Malloc failed\n", 15));
+	list->com_paths = NULL;
+	if (list->paths)
+	{
+	    list->com_paths = ft_split(list->paths, ':');
+		if (!list->com_paths)
+			return (ft_error_msg("Malloc failed\n", 15));
+	}
 	list->pids = malloc(list->ac * sizeof(pid_t));
 	if (!list->pids)
 	{
