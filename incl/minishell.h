@@ -165,7 +165,7 @@ char				**ft_remove_quotes(char **av);
 char				*ft_expander(char *str, t_data *data);
 
 /* init.c */
-int					ft_init_list_loop(t_pipex *list, int i);
+int					ft_init_list_loop(t_pipex *list, int i, int reidir_err);
 int     			init_pipex(t_pipex *list, t_data *data, t_tokens *toks);
 
 // input_check.c

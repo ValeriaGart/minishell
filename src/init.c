@@ -1,13 +1,16 @@
 #include "../incl/minishell.h"
 
-int	ft_init_list_loop(t_pipex *list, int i)
+
+//TODO: check if after del unvalid redirect there is nothing saved in pipe before
+int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 {
 	list->builtin = 0;
 	list->here_doc = 0;
 	list->redir_in = -1;
 	list->redir_out = -1;
-	if (ft_redirects(i, &(list->tokens), list))
-		return (-1);
+	reidir_err = ft_redirects(i, &(list->tokens), list);
+	if (reidir_err)
+		return (reidir_err);
 	list->args = ft_tok_to_args(list->tokens, i);
 	if (!list->args)
 	{

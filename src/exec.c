@@ -85,18 +85,21 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 	list->rem_fd = -1;
 	while (++i < list->ac)
 	{
-		err = ft_init_list_loop(list, i);
-		if (err == -1)
+		err = ft_init_list_loop(list, i, 0);
+		if (err == -2)
 			return (0);
-		if (err)
+		if (err > 0)
 			return (1);
 		if (i < list->ac - 1)
 			pipe(list->pipes);
-		list->pids[i] = fork();
-		if (list->pids[i] == 0)
-			ft_loop_children(list, i, av);
- 		ft_list_loop_free(list);
-		ft_builtins_p(list, i, list->tokens);
+		if (!err)
+		{
+			list->pids[i] = fork();
+			if (list->pids[i] == 0)
+				ft_loop_children(list, i, av);
+ 			ft_list_loop_free(list);
+			ft_builtins_p(list, i, list->tokens);
+		}
 		if (list->rem_fd != -1)
 			close(list->rem_fd);
 		if (i < list->ac - 1)
