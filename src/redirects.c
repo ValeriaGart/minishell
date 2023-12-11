@@ -1,5 +1,25 @@
 #include "minishell.h"
 
+int		ft_is_echo_last(t_tokens *toks, int i)
+{
+	t_tokens	*if_last;
+
+	if_last = toks;
+	if_last = if_last->next;
+	while (if_last && if_last->type == SEP)
+		if_last = if_last->next;
+	if (!if_last || if_last->ind_command != i)
+		return (0);
+	if (toks)
+		toks = toks->prev;
+	while (toks && toks->prev && toks->type != COM)
+		toks = toks->prev;
+	if (toks && !ft_strncmp(toks->val, "echo", 4) && ft_strlen(toks->val) == 4)
+		return (1);
+	return (0);
+	
+}
+
 void	ft_change_args(t_tokens **toks)
 {
 	t_tokens	*prev;
@@ -16,12 +36,9 @@ void	ft_change_args(t_tokens **toks)
 	{
 		prev->next = next;
 		*toks = prev;
-		//(*toks)->next = next;
 		return;
 	}
 	*toks = next;
-	//if (*toks)
-	//	(*toks)->prev = prev;
 }
 
 void	ft_del_com(t_pipex *list, t_tokens **tokens, int i)
@@ -39,7 +56,6 @@ void	ft_del_com(t_pipex *list, t_tokens **tokens, int i)
 	*tokens = iter;
 }
 
-// check "wc -l <test >>test <etst >>test"
 int	ft_newinfd(t_tokens **toks, t_pipex *list, int i)
 {
 	int			y;
@@ -52,7 +68,7 @@ int	ft_newinfd(t_tokens **toks, t_pipex *list, int i)
 		*toks = (*toks)->next;
 	file = (*toks)->val;
 	list->redir_in = open(file, O_RDONLY);
-	if (list->redir_in < 0)
+	if (list->redir_in < 0 && !ft_is_echo_last(*toks, i))
 	{
 		perror(file);
 		ft_del_com(list, &(list->tokens), i);
@@ -84,7 +100,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex *list, int i)
 		list->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
 	else
 		list->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
-	if (list->redir_out < 0)
+	if (list->redir_out < 0 && !ft_is_echo_last(*toks, i))
 	{
 		perror(file);
 		ft_del_com(list, &(list->tokens), i);
