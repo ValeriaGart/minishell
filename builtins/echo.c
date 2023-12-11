@@ -119,11 +119,14 @@ int	ft_echo(t_pipex *list, t_tokens *toks, int i)
 	{
 		while (toks && toks->ind_command == i)
 		{
-			err = ft_echo_normal(list->data->env, toks->val, out);
+			if (toks->prev && toks->type == SEP && toks->prev->type == SEP)
+				;
+			else
+				err = ft_echo_normal(list->data->env, toks->val, out);
 			toks = toks->next;
 		}
 	}
 	if (!err)
-		write(1, "\n", out);
+		write(out, "\n", 1);
 	return (0);
 }

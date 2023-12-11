@@ -10,15 +10,18 @@ void	ft_change_args(t_tokens **toks)
 	if ((*toks)->val)
 		free((*toks)->val);
 	free(*toks);
+	if (next)
+		next->prev = prev;
 	if (prev)
 	{
+		prev->next = next;
 		*toks = prev;
-		(*toks)->next = next;
+		//(*toks)->next = next;
 		return;
 	}
 	*toks = next;
-	if (*toks)
-		(*toks)->prev = prev;
+	//if (*toks)
+	//	(*toks)->prev = prev;
 }
 
 void	ft_del_com(t_pipex *list, t_tokens **tokens, int i)
