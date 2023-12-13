@@ -1,5 +1,19 @@
 #include "../incl/minishell.h"
 
+int	ft_end_space(t_tokens *toks, int i)
+{
+	if (toks->type != SEP)
+		return (0);
+	toks = toks->next;
+	while (toks && toks->ind_command == i)
+	{
+		if (toks->type == COM)
+			return (0);
+		toks = toks->next;
+	}
+	return (1);
+}
+
 void	ft_echo_env(t_env *env, char *str, int *i)
 {
 	int		n;
@@ -117,7 +131,7 @@ int	ft_echo(t_pipex *list, t_tokens *toks, int i)
 		{
 			if (toks->prev && toks->type == SEP && toks->prev->type == SEP)
 				;
-			else
+			else if (!ft_end_space(toks, i))
 				err = ft_echo_normal(list->data->env, toks->val);
 			toks = toks->next;
 		}
