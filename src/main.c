@@ -1,44 +1,24 @@
-
 #include "../incl/minishell.h"
 
 int		g_minishell;
 
-char	**malloc_input(char **av, int ac)
-{
-	char	**input;
-	int		i;
-
-	i = 1;
-	input = NULL;
-	input = ft_calloc(ac + 2, sizeof(char *));
-	input[0] = malloc(12 * sizeof(char));
-	input[0] = "./minishell\0";
-	while (i <= ac)
-	{
-		input[i] = av[i - 1];
-		i++;
-	}
-	input[i] = NULL;
-	return (input);
-}
-
 // if input i == -1 -> return ac
-int		ft_find_tok(t_tokens *toks, int i)
+int	ft_find_tok(t_tokens *toks, int i)
 {
-	while(toks && toks->next)
+	while (toks && toks->next)
 		toks = toks->next;
 	if (i == -1)
 		return (toks->ind_command + 1);
 	return (0);
 }
 
-bool    part_loop_shell(t_data *data, char **av, char *read_cmd)
+bool	part_loop_shell(t_data *data, char **av, char *read_cmd)
 {
 	t_tokens	*toks;
 	int			err;
 
 	err = 0;
-    read_cmd = ft_expander(read_cmd, data);
+	read_cmd = ft_expander(read_cmd, data);
 	if (!read_cmd)
 		return (false);
 	toks = NULL;
@@ -71,7 +51,7 @@ void	ft_loop_minishell(t_data *data, char **av)
 	while (1)
 	{
 		if (!read_cmd)
- 			read_cmd = readline("minishell: ");
+			read_cmd = readline("minishell: ");
 		if (!read_cmd)
 			break ;
 		add_history(read_cmd);
@@ -85,7 +65,7 @@ void	ft_loop_minishell(t_data *data, char **av)
 			read_cmd = NULL;
 		}
 		if (exec_success != true)
-			break;
+			break ;
 	}
 	rl_clear_history();
 }
