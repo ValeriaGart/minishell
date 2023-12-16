@@ -239,7 +239,6 @@ t_tokens	*ft_gimme_tokens(char **strs)
 			return (ft_free_toks(toks));
 		y = 0;
 		i++;
-		toks = head;
 		while (toks->next)
 			toks = toks->next;
 	}

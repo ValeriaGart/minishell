@@ -83,7 +83,6 @@ typedef struct s_data
 	char			*pwd;
 	int				old_pwd;
 	t_env			*env;
-	t_env			*env_orig;
 }					t_data;
 
 typedef struct s_pipex
@@ -114,7 +113,7 @@ void				ft_export_shlvl(t_env **env, char *tok_val);
 /* env.c */
 int					ft_pwd_env_check(t_data *data, t_env **env, int add_env);
 int					ft_store_env(t_data *data, char **env_orig);
-int					ft_free_env(t_env *env);
+int					ft_free_env(t_env *env, t_data *data);
 int					ft_env_init(t_data *data, char **env);
 
 /* error.c */
@@ -125,7 +124,6 @@ void				ft_error_cd(char *str, int i);
 t_tokens			*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
 
 /* builtin exit.c */
-//void				ft_exit(t_tokens *toks, int i);
 void				ft_exit_p(t_pipex *list, t_tokens *toks, int  i);
 
 /* builtin cd.c */
@@ -151,7 +149,7 @@ void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
 t_env				*ft_is_env(t_env *env, char *val, int i);
 
 // free.c
-void				ft_list_loop_free(t_pipex *list);
+void				ft_list_loop_free(t_pipex *list, int i, int iter);
 void				ft_free_av(char **av);
 void				*save_free(void *s1, void *s2);
 char				*ft_strjoin_free(char const *s1, char const *s2);
@@ -218,5 +216,6 @@ int					ft_find_index(char *s, char c);
 void				ft_list_free(t_pipex *list);
 int					ft_error_msg(char *msg, int msg_len);
 char				*ft_strjoin_char(char *str, char c);
+char				*ft_free_new(char *new);
 
 #endif

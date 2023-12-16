@@ -45,12 +45,20 @@ char	*ft_strjoin_char(char *str, char c)
 		return (save_free((void *)str, NULL));
 	i = ft_strlen(str);
 	new = (char *)malloc(sizeof(char) * (i + 2));
-	if (!new)
-		return (NULL);
-	new[i + 1] = '\0';
-	new[i] = c;
-	while (i--)
-		new[i] = str[i];
+	if (new)
+	{
+		new[i + 1] = '\0';
+		new[i] = c;
+		while (i--)
+			new[i] = str[i];
+	}
 	free(str);
 	return (new);
+}
+
+char	*ft_free_new(char *new)
+{
+	if (new)
+		free(new);
+	return (NULL);
 }

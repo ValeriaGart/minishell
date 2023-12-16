@@ -18,7 +18,7 @@ char	**ft_tok_to_args(t_tokens *toks, int i)
 	}
 	args = ft_calloc(sizeof(char *), y + 1);
 	if (!args)
-		return (0);
+		return (NULL);
 	i = -1;
 	while (++i < y)
 	{

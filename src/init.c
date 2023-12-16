@@ -1,20 +1,5 @@
 #include "../incl/minishell.h"
 
-//frees in loop parent stuff that is dynamically allocated
-void	ft_free_in_loop(t_pipex *list)
-{
-	if (list->redir_out != -1)
-	{
-		close(list->redir_out);
-		list->redir_out = -1;
-	}
-	if (list->redir_in != -1)
-	{
-		close(list->redir_in);
-		list->redir_in = -1;
-	}
-}
-
 //TODO: check if close redir files everywhere when needed
 //TODO: check if after del unvalid redirect there is nothing saved in pipe before
 int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
@@ -47,6 +32,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 
 int     init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
+	list->rem_fd = -1;
 	list->redir_in = -1;
 	list->redir_out = -1;
     list->command = NULL;

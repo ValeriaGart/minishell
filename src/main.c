@@ -12,19 +12,19 @@ int	ft_find_tok(t_tokens *toks, int i)
 	return (0);
 }
 
-bool	part_loop_shell(t_data *data, char **av, char *read_cmd)
+bool	part_loop_shell(t_data *data, char **av, char **read_cmd)
 {
 	t_tokens	*toks;
 	int			err;
 
 	err = 0;
-	read_cmd = ft_expander(read_cmd, data);
+	*read_cmd = ft_expander(*read_cmd, data);
 	if (!read_cmd)
 		return (false);
 	toks = NULL;
-	if (read_cmd[0] != '\0')
+	if (*read_cmd[0] != '\0')
 	{
-		av = ft_command_split(read_cmd);
+		av = ft_command_split(*read_cmd);
 		if (!av)
 			return (false);
 		toks = ft_gimme_tokens(av);
@@ -46,7 +46,7 @@ void	ft_loop_minishell(t_data *data, char **av)
 	char	*read_cmd;
 	bool	exec_success;
 
-	exec_success = 0;
+	exec_success = 1;
 	read_cmd = NULL;
 	while (1)
 	{
@@ -58,7 +58,7 @@ void	ft_loop_minishell(t_data *data, char **av)
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			;
 		else if (read_cmd[0] != '\0')
-			exec_success = part_loop_shell(data, av, read_cmd);
+			exec_success = part_loop_shell(data, av, &read_cmd);
 		if (read_cmd)
 		{
 			free(read_cmd);
@@ -70,6 +70,8 @@ void	ft_loop_minishell(t_data *data, char **av)
 	rl_clear_history();
 }
 
+//TODO: check if signals work properly
+//TODO: SHLVL only till 9, after that don't open any new shells
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -82,8 +84,6 @@ int	main(int ac, char **av, char **env)
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(&data, NULL);
-	ft_free_env(data.env);
-	if (data.pwd)
-		free(data.pwd);
+	ft_free_env(data.env, &data);
 	return (0);
 }

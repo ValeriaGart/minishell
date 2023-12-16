@@ -77,7 +77,10 @@ int	check_open_quote(char *s)
 			while (s[i] && s[i] != rem)
 				i++;
 			if (s[i] == '\0')
+			{
+				syntax_errors(S);
 				return (1);
+			}
 			i++;
 		}
 		else

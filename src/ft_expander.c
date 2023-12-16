@@ -35,13 +35,17 @@ char	*ft_get_var(char *str, t_data *data)
 	t_env	*env;
 	char	*var;
 
-	i = 0;
 	env = data->env;
-	if (after_dollar(*str))
-		return (NULL);//(implement_after_dollar(*str));
+	i = after_dollar(*str);
+//	if (after_dollar(*str))
+//		return (NULL);
 	env = ft_is_env(env, str, ft_strlen_var(str));
-	if (env == NULL || !env->str)
-		return (NULL);
+	if (i || env == NULL || !env->str)
+	{
+		var = ft_strdup("");
+		return (var);
+	}
+	i = 0;
 	while (env->str[i] == str[i])
 		i++;
 	var = ft_strdup((char *)&env->str[++i]);
@@ -73,11 +77,13 @@ char	*ft_expander(char *str, t_data *data)
 	int		q;
 	int		i;
 	char	*new;
+	char	*get_var;
 
 	q = 0;
 	i = -1;
 	new = ft_strdup("");
-	while (str[++i])
+	get_var = NULL;
+	while (new && str[++i])
 	{
 		if (q == 0 && is_quote(str[i]))
 			q = str[i] % 2 + 1;
@@ -86,12 +92,16 @@ char	*ft_expander(char *str, t_data *data)
 		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
 					&& str[i + 1] != '\0')
 		{
-			new = ft_strjoin_free(new, ft_get_var(&str[++i], data));
-			while (str[i + 1] && ft_isalnum(str[i + 1]))
+			get_var = ft_get_var(&str[++i], data);
+			if (!get_var)
+				return (ft_free_new(new));
+			new = ft_strjoin_free(new, get_var);
+			while (new && str[i + 1] && ft_isalnum(str[i + 1]))
 				i++;
 		}
 		else
 			new = ft_strjoin_char(new, str[i]);
 	}
+	free(str);
 	return (new);
 }

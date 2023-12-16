@@ -42,9 +42,8 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 	return (true);
 }
 
-void	ft_loop_children(t_pipex *list, int i, char **av)
+void	ft_loop_children(t_pipex *list, int i)
 {
-	(void)av;
 	ft_check_kid(i, list);
 	ft_check_builtins(list, i, list->tokens);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
@@ -75,14 +74,13 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	}
 }
 
-int	ft_do_all_to_exec(t_pipex *list, char **av)
+int	ft_do_all_to_exec(t_pipex *list)
 {
 	int	i;
 	int err;
 
 	i = -1;
 	err = 0;
-	list->rem_fd = -1;
 	while (++i < list->ac)
 	{
 		err = ft_init_list_loop(list, i, 0);
@@ -96,16 +94,10 @@ int	ft_do_all_to_exec(t_pipex *list, char **av)
 		{
 			list->pids[i] = fork();
 			if (list->pids[i] == 0)
-				ft_loop_children(list, i, av);
- 			ft_list_loop_free(list);
+				ft_loop_children(list, i);
 			ft_builtins_p(list, i, list->tokens);
 		}
-		if (list->rem_fd != -1)
-			close(list->rem_fd);
-		if (i < list->ac - 1)
-			list->rem_fd = list->pipes[0];
-		if (list->ac != 1)
-			close(list->pipes[1]);
+		ft_list_loop_free(list, i, 0);
 	}
 	ft_wait_for_my_babies(list);
 	return (0);
@@ -117,9 +109,10 @@ int	ft_exec(char **av, t_data *data, t_tokens *toks)
 	int		ret;
 
 	ret = 0;
+	(void)av;
 	if (init_pipex(&list, data, toks))
 		return (-1);
-	ret = ft_do_all_to_exec(&list, av);
+	ret = ft_do_all_to_exec(&list);
 	ft_list_free(&list);
 	return (ret);
 }
