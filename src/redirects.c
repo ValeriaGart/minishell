@@ -66,8 +66,16 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	y = 3;
 	if ((*list)->redir_in != -1)
 		close((*list)->redir_in);
-	while ((*toks)->type != COM)
+	while ((*toks) && (*toks)->type != COM)
 		*toks = (*toks)->next;
+	if (!(*toks) || (*toks)->ind_command != i)
+	{
+		if (i == (*list)->ac - 1)
+			ft_error("parse error near ", "`\\n'\n", 0);
+		else
+			ft_error("parse error near ", "`|'\n", 0);
+		return (-5);
+	}
 	file = (*toks)->val;
 	(*list)->redir_in = open(file, O_RDONLY);
 	if ((*list)->redir_in < 0 && !ft_is_echo_last(*toks, i))
@@ -95,8 +103,16 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	rem_tok = *toks;
 	if ((*list)->redir_out != -1)
 		close((*list)->redir_out);
-	while ((*toks)->type != COM)
+	while ((*toks) && (*toks)->type != COM)
 		*toks = (*toks)->next;
+	if (!(*toks) || (*toks)->ind_command != i)
+	{
+		if (i == (*list)->ac - 1)
+			ft_error("parse error near ", "`\\n'\n", 0);
+		else
+			ft_error("parse error near ", "`|'\n", 0);
+		return (-5);
+	}
 	file = (*toks)->val;
 	if (rem_tok->val[1] != '\0')
 		(*list)->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
@@ -169,6 +185,7 @@ void	ft_heredoc_exec(t_pipex *list)
 }
 
 //TODO: check "pwd | wc -l >"
+//TODO: check "wc -l | "
 int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 {
 	t_tokens	*toks;
@@ -182,14 +199,14 @@ int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 	{
 		if (toks->type == REDIR_OUT)
 			err = ft_newoutfd(&toks, &list, i);
-		if (toks->type == REDIR_IN)
+		else if (toks->type == REDIR_IN)
 			err = ft_newinfd(&toks, &list, i);
-		if (toks->type == HERE_DOC)
+		else if (toks->type == HERE_DOC)
 			ft_heredoc_set(&toks, list);
 		if (err)
 		{
 			g_minishell = 1;
-			if (i == list->ac - 1)
+			if (err == -5 || i == list->ac - 1)
 				return (-2);
 			return (-1);
 		}

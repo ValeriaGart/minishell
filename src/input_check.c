@@ -5,12 +5,7 @@ int	syntax_errors(char c)
 	if (c == PIPE)
 	{
 		g_minishell = 2;
-		ft_putendl_fd("Pipe can only be used in full comnand", 2);
-	}
-	else if (c == '<' || c == '>')
-	{
-		g_minishell = 2;
-		ft_putendl_fd("Error redirection", 2);
+		ft_putendl_fd("Pipe can only be used in a full command", 2);
 	}
 	else if (c == D || c == S)
 	{
@@ -39,26 +34,6 @@ int	check_pipe(char *input)
 		i++;
 	if (input[i] == PIPE && input[i + 1] == PIPE)
 		return (syntax_errors(input[i]));
-	return (0);
-}
-
-/*	after redirection is NULL -> error
-	after 1st rediction is | or redirections -> error
-	i at 1st redirect position*/
-int	check_redirect(char *s, char redirect)
-{
-	int	i;
-
-	i = 0;
-	i++;
-	if (s[i] == redirect && s[i + 1] != redirect)
-		i++;
-	while (ft_is_space(s[i]) == 1)
-		i++;
-	if (s[i] == '\0')
-		return (syntax_errors('\n'));
-	if (s[i] == PIPE || s[i] == '<' || s[i] == '>')
-		return (syntax_errors(s[i]));
 	return (0);
 }
 
@@ -100,12 +75,7 @@ int	check_input(char *s)
 			;
 		else if (s[i] == PIPE)
 		{
-			if (check_pipe(s) == 1)
-				return (1);
-		}
-		else if (s[i] == '>' || s[i] == '<')
-		{
-			if (check_redirect(s, s[i]) == 1)
+			if (check_pipe(s))
 				return (1);
 		}
 		else if (s[i] == S || s[i] == D)
