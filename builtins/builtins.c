@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int		is_builtin(t_tokens *toks, int i)
+int	is_builtin(t_tokens *toks, int i)
 {
-	int builtin;
+	int	builtin;
 
 	while (toks && !(toks->type == COM && toks->ind_command == i))
 		toks = toks->next;
@@ -30,7 +30,7 @@ int		is_builtin(t_tokens *toks, int i)
 
 void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {
-	int builtin;
+	int	builtin;
 
 	list->out = ft_right_out(list, i);
 	while (toks->ind_command != i)

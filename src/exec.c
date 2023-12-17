@@ -11,9 +11,9 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 		toks = toks->next;
 	if (stat(list->command, &buf) == 0 && ft_strrchr(toks->val, '/'))
 	{
-		if (S_ISREG(buf.st_mode))
+		if (((buf.st_mode & S_IXUSR) == 0))
 		{
-       	    ft_error(toks->val, ": Permission denied", ft_strlen(toks->val));
+       	    ft_error(toks->val, ": Permission denied\n", ft_strlen(toks->val));
 			g_minishell = 126;
 			return (false);
 		}
