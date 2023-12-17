@@ -45,7 +45,6 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 void	ft_loop_children(t_pipex *list, int i)
 {
 	ft_check_kid(i, list);
-	ft_check_builtins(list, i, list->tokens);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
 	if (!ft_command_check(list, list->tokens, i))
 	{
@@ -92,9 +91,12 @@ int	ft_do_all_to_exec(t_pipex *list)
 			pipe(list->pipes);
 		if (!err)
 		{
-			list->pids[i] = fork();
-			if (list->pids[i] == 0)
-				ft_loop_children(list, i);
+			if (!is_builtin(list->tokens, i))
+			{
+				list->pids[i] = fork();
+				if (list->pids[i] == 0)
+					ft_loop_children(list, i);
+			}
 			ft_builtins_p(list, i, list->tokens);
 		}
 		ft_list_loop_free(list, i);

@@ -195,7 +195,6 @@ t_tokens    		*ft_gimme_tokens(char **strs);
 t_tokens			*ft_free_toks(t_tokens *toks);
 
 /* builtins.c */
-void				ft_check_builtins(t_pipex *list, int i, t_tokens *toks);
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_tokens *toks, int i);
 

@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:40:04 by vharkush          #+#    #+#             */
-/*   Updated: 2023/12/08 12:09:51 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/12/17 18:12:24 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ int	ft_env(t_data *data, t_pipex *list, int i)
 	t_env	*env;
 	int		out;
 
-	out = list->redir_out;
-	if (out == -1)
-		out = 1;
+	out = list->out;
 	if (ft_too_many_args(list->tokens, i, 1, "env") == NULL)
-		return (-2);
+		return (127);
 	env = data->env;
 	while (env->next != NULL)
 	{

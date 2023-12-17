@@ -14,7 +14,7 @@ int	ft_end_space(t_tokens *toks, int i)
 	return (1);
 }
 
-void	ft_echo_env(t_env *env, char *str, int *i)
+void	ft_echo_env(t_env *env, char *str, int *i, t_pipex *list)
 {
 	int		n;
 	t_env	*to_print;
@@ -26,9 +26,9 @@ void	ft_echo_env(t_env *env, char *str, int *i)
 		if (n == *i && (str[n] == '?' || str[n] == '0'))
 		{
 			if (str[n] == '0')
-				ft_putstr_fd("minishell", STDOUT_FILENO);
+				ft_putstr_fd("minishell", list->out);
 			else
-				ft_putnbr_fd(g_minishell, STDOUT_FILENO);
+				ft_putnbr_fd(g_minishell, list->out);
 			*i = *i + 1;
 			return ;
 		}
@@ -39,7 +39,7 @@ void	ft_echo_env(t_env *env, char *str, int *i)
 		return ;
 	to_print = ft_is_env(env, str + *i, n - *i);
 	if (to_print)
-		ft_putstr_fd(to_print->str, STDOUT_FILENO);
+		ft_putstr_fd(to_print->str, list->out);
 	*i = n;
 }
 
@@ -57,7 +57,7 @@ int	ft_error_screen(char *str)
 	return (0);
 }
 
-int	ft_quote_cond(char *str, int *i, int *meet_again)
+int	ft_quote_cond(char *str, int *i, int *meet_again, t_pipex *list)
 {
 	if (str[*i] == D || str[*i] == S)
 	{
@@ -71,7 +71,7 @@ int	ft_quote_cond(char *str, int *i, int *meet_again)
 		*i = *i + 1;
 		while (str[*i] != S)
 		{
-			write(STDOUT_FILENO, &str[*i], 1);
+			write(list->out, &str[*i], 1);
 			*i = *i + 1;
 		}
 		*i = *i + 1;
@@ -86,7 +86,7 @@ int	ft_quote_cond(char *str, int *i, int *meet_again)
 	return (0);
 }
 
-int	ft_echo_normal(t_env *env, char *str)
+int	ft_echo_normal(t_env *env, char *str, t_pipex *list)
 {
 	int	i;
 	int	meet_again;
@@ -97,21 +97,21 @@ int	ft_echo_normal(t_env *env, char *str)
 		return (1);
 	while (str[i])
 	{
-		if (ft_quote_cond(str, &i, &meet_again))
+		if (ft_quote_cond(str, &i, &meet_again, list))
 			;
 		else
 		{
 			if (str[i] == '$' && str[i + 1]
 				&& (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '?'))
 				break ;
-			write(STDOUT_FILENO, &str[i], 1);
+			write(list->out, &str[i], 1);
 			i++;
 		}
 	}
 	if (str[i])
-		ft_echo_env(env, str, &i);
+		ft_echo_env(env, str, &i, list);
 	if (str[i])
-		ft_echo_normal(env, str + i);
+		ft_echo_normal(env, str + i, list);
 	return (0);
 }
 
@@ -132,11 +132,11 @@ int	ft_echo(t_pipex *list, t_tokens *toks, int i)
 			if (toks->prev && toks->type == SEP && toks->prev->type == SEP)
 				;
 			else if (!ft_end_space(toks, i))
-				err = ft_echo_normal(list->data->env, toks->val);
+				err = ft_echo_normal(list->data->env, toks->val, list);
 			toks = toks->next;
 		}
 	}
 	if (!err)
-		write(STDOUT_FILENO, "\n", 1);
+		write(list->out, "\n", 1);
 	return (0);
 }
