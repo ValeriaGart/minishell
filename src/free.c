@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-void	ft_list_loop_free(t_pipex *list, int i, int iter)
+void	ft_list_loop_free(t_pipex *list, int i)
 {
 	if (list->command)
 		free(list->command);
@@ -9,16 +9,7 @@ void	ft_list_loop_free(t_pipex *list, int i, int iter)
 		close(list->redir_out);
 	if (list->redir_in != -1)
 		close(list->redir_in);
-	if (list->args)
-	{
-		while (list->args[iter])
-		{
-			list->args[iter] = NULL;
-			iter++;
-		}
-		free(list->args);
-	}
-	list->args = NULL;
+	list->args = ft_free_command(list->args);
 	if (list->rem_fd != -1)
 		close(list->rem_fd);
 	if (i < list->ac - 1)

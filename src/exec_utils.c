@@ -24,7 +24,9 @@ char	**ft_tok_to_args(t_tokens *toks, int i)
 	{
 		while (rem_tok->type == SEP)
 			rem_tok = rem_tok->next;
-		args[i] = rem_tok->val;
+		args[i] = ft_strdup(rem_tok->val);
+		if (!args[i])
+			return (ft_free_command(args));
 		rem_tok = rem_tok->next;
 	}
 	return (args);
@@ -145,7 +147,6 @@ void    ft_check_kid(int i, t_pipex *list)
 		if (list->redir_in < 0)
 			dup2(list->rem_fd, STDIN_FILENO);
 		close(list->rem_fd);
-		//dup2(1, STDOUT_FILENO);
  	}
 }
 

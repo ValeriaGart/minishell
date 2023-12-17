@@ -15,17 +15,15 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 		return (reidir_err);
 	list->args = ft_tok_to_args(list->tokens, i);
 	if (!list->args)
-	{
-		ft_error_msg("Malloc failed\n", 15);
-		close(list->pipes[0]);
-		close(list->pipes[1]);
 		return (1);
-	}
 	if (!is_builtin(list->tokens, i))
 	{
 		list->command = ft_gimme_com(list->tokens, list, i);	
 		if (!list->command)
+		{
+			list->args = ft_free_command(list->args);
 			return (1);
+		}
 	}
 	else
 		list->builtin = 1;

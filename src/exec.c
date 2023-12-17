@@ -97,7 +97,7 @@ int	ft_do_all_to_exec(t_pipex *list)
 				ft_loop_children(list, i);
 			ft_builtins_p(list, i, list->tokens);
 		}
-		ft_list_loop_free(list, i, 0);
+		ft_list_loop_free(list, i);
 	}
 	ft_wait_for_my_babies(list);
 	return (0);
@@ -114,5 +114,5 @@ int	ft_exec(t_data *data, t_tokens *toks)
 	ret = ft_do_all_to_exec(&list);
 	list.tokens = ft_free_toks(list.tokens);
 	ft_list_free(&list);
-	return (ret);
+	return (ret * -1);
 }

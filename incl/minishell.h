@@ -149,7 +149,7 @@ void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
 t_env				*ft_is_env(t_env *env, char *val, int i);
 
 // free.c
-void				ft_list_loop_free(t_pipex *list, int i, int iter);
+void				ft_list_loop_free(t_pipex *list, int i);
 void				ft_free_av(char **av);
 void				*save_free(void *s1, void *s2);
 char				*ft_strjoin_free(char const *s1, char const *s2);

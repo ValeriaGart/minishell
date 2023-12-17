@@ -18,8 +18,7 @@ int		ft_find_index(char *s, char c)
 
 void	ft_list_free(t_pipex *list)
 {
-	if (list->com_paths)
-		free(list->com_paths);
+	list->com_paths = ft_free_command(list->com_paths);
 	if (list->pids)
 		free(list->pids);
 	if (list->redir_out != -1)
