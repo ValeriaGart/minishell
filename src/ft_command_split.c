@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static int	ft_count_commands(char *s)
+int	ft_count_commands(char *s)
 {
 	int	count;
 	int	i;
@@ -30,11 +30,13 @@ void	*ft_free_command(char **new)
 	int	i;
 
 	i = 0;
-	while (new[i])
+	while (new && new[i])
 	{
 		free(new[i]);
 		i++;
 	}
+	if (new)
+		free(new);
 	return (NULL);
 }
 
@@ -76,10 +78,7 @@ char	*ft_get_command(char *s, int j, int *i)
 		(*i)++;
 	}
 	new = ft_substr(s, j, (*i) - (j - 1));
-	if (!new)
-		return (NULL);
-	else
-		return (new);
+	return (new);
 }
 
 char	**ft_command_split(char *s)
@@ -89,10 +88,11 @@ char	**ft_command_split(char *s)
 	int		j;
 	int		c;
 
-	c = 0;
-	new = ft_calloc(sizeof(char *), ft_count_commands(s) + 1);
+	c = ft_count_commands(s);
+	new = ft_calloc(sizeof(char *), c + 1);
 	if (!new)
 		return (NULL);
+	c = 0;
 	i = 0;
 	while (s[i])
 	{
@@ -102,34 +102,9 @@ char	**ft_command_split(char *s)
 			return (ft_free_command(new));
 		c++;
 	}
+	new[c] = NULL;
 	return (new);
 }
-
-/*char	ft_echo_case(char *s, int *i)
-{
-	int		n;
-	char	*ret;
-
-	n = 0;
-	while (s && s[n] && s[n] == ' ')
-		n++;
-	if (ft_strncmp(s + n, "echo", 4))
-	{
-		ret = ft_strdup(s);
-		if (!ret)
-			*i = 1;
-		return (ret);
-	}
-	if (s[n] && s[n] == '"')
-	{
-		n++;
-		if (ft_strncmp(s + n, "echo", 4))
-		{
-
-		}
-	}
-	return (NULL);
-}*/
 
 char	*remove_quote(char *s)
 {
@@ -138,11 +113,6 @@ char	*remove_quote(char *s)
 	int		q;
 
 	i = 0;
-/*	new = ft_echo_case(s, &i);
-	if (i != 0)
-		return (NULL);
-	if (new)
-		return (new);*/
 	new = ft_strdup("");
 	q = 0;
 	while (s[i])

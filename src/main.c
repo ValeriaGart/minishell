@@ -12,12 +12,14 @@ int	ft_find_tok(t_tokens *toks, int i)
 	return (0);
 }
 
-bool	part_loop_shell(t_data *data, char **av, char **read_cmd)
+bool	part_loop_shell(t_data *data, char **read_cmd)
 {
 	t_tokens	*toks;
 	int			err;
+	char		**av;
 
 	err = 0;
+	av = NULL;
 	*read_cmd = ft_expander(*read_cmd, data);
 	if (!read_cmd)
 		return (false);
@@ -28,20 +30,20 @@ bool	part_loop_shell(t_data *data, char **av, char **read_cmd)
 		if (!av)
 			return (false);
 		toks = ft_gimme_tokens(av);
+		av = ft_free_command(av);
 		if (!toks)
 			err = -1;
 	}
 	else
 		return (true);
-	if (ft_find_tok(toks, -1) && !err)
-		err = ft_exec(av, data, toks);
-	ft_free_av(av);
+	if (!err && ft_find_tok(toks, -1))
+		err = ft_exec(data, toks);
 	if (err < 0)
 		return (false);
 	return (true);
 }
 
-void	ft_loop_minishell(t_data *data, char **av)
+void	ft_loop_minishell(t_data *data)
 {
 	char	*read_cmd;
 	bool	exec_success;
@@ -58,7 +60,7 @@ void	ft_loop_minishell(t_data *data, char **av)
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			;
 		else if (read_cmd[0] != '\0')
-			exec_success = part_loop_shell(data, av, &read_cmd);
+			exec_success = part_loop_shell(data, &read_cmd);
 		if (read_cmd)
 		{
 			free(read_cmd);
@@ -83,7 +85,7 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	if (ft_env_init(&data, env))
 		return (1);
-	ft_loop_minishell(&data, NULL);
+	ft_loop_minishell(&data);
 	ft_free_env(data.env, &data);
 	return (0);
 }

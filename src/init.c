@@ -8,6 +8,8 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	list->here_doc = 0;
 	list->redir_in = -1;
 	list->redir_out = -1;
+	list->args = NULL;
+	list->command = NULL;
 	reidir_err = ft_redirects(i, &(list->tokens), list);
 	if (reidir_err)
 		return (reidir_err);

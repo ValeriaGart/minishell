@@ -32,12 +32,13 @@ void	ft_free_av(char **av)
 	int	i;
 
 	i = 0;
-	while(av[i])
+	while(av && av[i])
 	{
 		free(av[i]);
 		i++;
 	}
-	free(av);
+	if (av)
+		free(av);
 }
 
 void	*save_free(void *s1, void *s2)
@@ -80,7 +81,9 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 
 void	*ft_free_array(char **array)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	if (!array)
 		return (NULL);
 	while (array[i])

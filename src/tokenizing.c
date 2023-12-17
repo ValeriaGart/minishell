@@ -114,7 +114,7 @@ char	*ft_tok_val(char *str, int *y, int echo)
 		else
 		{
 			value[++i] = str[*y];
-			++(*y);
+			*y += 1;
 		}
 	}
 	return (value);
@@ -150,7 +150,10 @@ t_tokens	*ft_new_echo_token(int i, int ind, int *y, char **strs)
 		return (NULL);
 	new_tok->val = ft_tok_val(strs[i], y, 1);
 	if (!new_tok->val)
+	{
+		free(new_tok);
 		return (NULL);
+	}
 	new_tok->type = ft_tok_type(new_tok->val);
 	new_tok->ind_command = i;
 	new_tok->ind_word = ind;
@@ -166,7 +169,10 @@ t_tokens	*ft_new_token(int i, int ind, int *y, char **strs)
 		return (NULL);
 	new_tok->val = ft_tok_val(strs[i], y, 0);
 	if (!new_tok->val)
+	{
+		free(new_tok);
 		return (NULL);
+	}
 	new_tok->type = ft_tok_type(new_tok->val);
 	new_tok->ind_command = i;
 	new_tok->ind_word = ind;
@@ -179,7 +185,7 @@ t_tokens	*ft_free_toks(t_tokens *toks)
 		return (NULL);
 	while (toks && toks->next)
 		toks = toks->next;
-	while (toks->prev)
+	while (toks && toks->prev)
 	{
 		if (toks->val)
 			free(toks->val);
@@ -187,9 +193,10 @@ t_tokens	*ft_free_toks(t_tokens *toks)
 		free(toks->next);
 		toks->next = NULL;
 	}
-	if (toks->val)
+	if (toks && toks->val)
 		free(toks->val);
-	free(toks);
+	if (toks)
+		free(toks);
 	return (NULL);
 }
 

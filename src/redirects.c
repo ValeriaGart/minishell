@@ -41,11 +41,11 @@ void	ft_change_args(t_tokens **toks)
 	*toks = next;
 }
 
-void	ft_del_com(t_pipex *list, t_tokens **tokens, int i)
+void	ft_del_com(t_pipex **list, t_tokens **tokens, int i)
 {
 	t_tokens	*iter;
 
-	(void)list;
+	//(void)list;
 	iter = *tokens;
 	while (iter->ind_command != i)
 		iter = iter->next;
@@ -54,25 +54,27 @@ void	ft_del_com(t_pipex *list, t_tokens **tokens, int i)
 	while (iter && iter->prev)
 		iter = iter->prev;
 	*tokens = iter;
+	if (iter == NULL)
+		(*list)->tokens = iter;
 }
 
-int	ft_newinfd(t_tokens **toks, t_pipex *list, int i)
+int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 {
 	int			y;
 	char		*file;
 
 	y = 3;
-	if (list->redir_in != -1)
-		close(list->redir_in);
+	if ((*list)->redir_in != -1)
+		close((*list)->redir_in);
 	while ((*toks)->type != COM)
 		*toks = (*toks)->next;
 	file = (*toks)->val;
-	list->redir_in = open(file, O_RDONLY);
-	if (list->redir_in < 0 && !ft_is_echo_last(*toks, i))
+	(*list)->redir_in = open(file, O_RDONLY);
+	if ((*list)->redir_in < 0 && !ft_is_echo_last(*toks, i))
 	{
 		perror(file);
-		ft_del_com(list, &(list->tokens), i);
-		if (i == list->ac - 1)
+		ft_del_com(list, &((*list)->tokens), i);
+		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
 	}
@@ -83,7 +85,7 @@ int	ft_newinfd(t_tokens **toks, t_pipex *list, int i)
 	return (0);
 }
 
-int	ft_newoutfd(t_tokens **toks, t_pipex *list, int i)
+int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 {
 	t_tokens	*rem_tok;
 	int			y;
@@ -91,20 +93,20 @@ int	ft_newoutfd(t_tokens **toks, t_pipex *list, int i)
 
 	y = 3;
 	rem_tok = *toks;
-	if (list->redir_out != -1)
-		close(list->redir_out);
+	if ((*list)->redir_out != -1)
+		close((*list)->redir_out);
 	while ((*toks)->type != COM)
 		*toks = (*toks)->next;
 	file = (*toks)->val;
 	if (rem_tok->val[1] != '\0')
-		list->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
+		(*list)->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
 	else
-		list->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
-	if (list->redir_out < 0 && !ft_is_echo_last(*toks, i))
+		(*list)->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
+	if ((*list)->redir_out < 0 && !ft_is_echo_last(*toks, i))
 	{
 		perror(file);
-		ft_del_com(list, &(list->tokens), i);
-		if (i == list->ac - 1)
+		ft_del_com(list, &((*list)->tokens), i);
+		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
 	}
@@ -140,6 +142,7 @@ int		ft_heredoc_set(t_tokens **toks, t_pipex *list)
 	return (0);
 }
 
+//TODO: check if heredoc works and unlinks properly
 void	ft_heredoc_exec(t_pipex *list)
 {
 	char		*delim;
@@ -177,9 +180,9 @@ int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 	while (toks && toks->ind_command == i)
 	{
 		if (toks->type == REDIR_OUT)
-			err = ft_newoutfd(&toks, list, i);
+			err = ft_newoutfd(&toks, &list, i);
 		if (toks->type == REDIR_IN)
-			err = ft_newinfd(&toks, list, i);
+			err = ft_newinfd(&toks, &list, i);
 		if (toks->type == HERE_DOC)
 			ft_heredoc_set(&toks, list);
 		if (err)

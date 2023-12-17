@@ -103,16 +103,16 @@ int	ft_do_all_to_exec(t_pipex *list)
 	return (0);
 }
 
-int	ft_exec(char **av, t_data *data, t_tokens *toks)
+int	ft_exec(t_data *data, t_tokens *toks)
 {
 	t_pipex	list;
 	int		ret;
 
 	ret = 0;
-	(void)av;
 	if (init_pipex(&list, data, toks))
 		return (-1);
 	ret = ft_do_all_to_exec(&list);
+	list.tokens = ft_free_toks(list.tokens);
 	ft_list_free(&list);
 	return (ret);
 }

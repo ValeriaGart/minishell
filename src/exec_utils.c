@@ -67,7 +67,8 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 		iter++;
 	}
 	list->paths_exist = 0; 
-	return (toks->val);
+	ret = ft_strdup(toks->val);
+	return (ret);
 }
 
 char    **ft_env_to_twod_arr(t_env *env_list)

@@ -158,6 +158,8 @@ void				*ft_free_array(char **array);
 //ft_command_split.c
 char				**ft_command_split(char *s);
 char				**ft_remove_quotes(char **av);
+void				*ft_free_command(char **new);
+int					ft_count_commands(char *s);
 
 // expander.c
 char				*ft_expander(char *str, t_data *data);
@@ -174,7 +176,7 @@ int					check_input(char *s);
 int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
-int					ft_exec(char **av, t_data *data, t_tokens *toks);
+int					ft_exec(t_data *data, t_tokens *toks);
 
 /* exec_utils.c */
 char				*ft_bcheck_paths(t_env *env);
@@ -188,6 +190,7 @@ int					ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 
 /* tokenizing.c */
 t_tokens    		*ft_gimme_tokens(char **strs);
+t_tokens			*ft_free_toks(t_tokens *toks);
 
 /* builtins.c */
 void				ft_check_builtins(t_pipex *list, int i, t_tokens *toks);
