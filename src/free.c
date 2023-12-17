@@ -16,6 +16,7 @@ void	ft_list_loop_free(t_pipex *list, int i)
 		list->rem_fd = list->pipes[0];
 	if (list->ac != 1)
 		close(list->pipes[1]);
+	dup2(1, STDOUT_FILENO);
 }
 
 void	ft_free_av(char **av)

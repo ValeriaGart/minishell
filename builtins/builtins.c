@@ -32,6 +32,7 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {
 	int builtin;
 
+	list->out = ft_right_out(list, i);
 	while (toks->ind_command != i)
 		toks = toks->next;
 	while (toks->type != COM)

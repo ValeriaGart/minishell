@@ -96,6 +96,7 @@ typedef struct s_pipex
 	int				rem_fd;
 	int				pipes[2];
 	int				here_doc;
+	int				out;
 	char			*here_doc_delim;
 	char			*paths;
 	char			*command;
@@ -184,6 +185,7 @@ char				**ft_env_to_twod_arr(t_env *env_list);
 void				ft_check_kid(int i, t_pipex *list);
 char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
 char				**ft_tok_to_args(t_tokens *toks, int i);
+int					ft_right_out(t_pipex *list, int i);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);

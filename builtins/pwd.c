@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:49:49 by vharkush          #+#    #+#             */
-/*   Updated: 2023/12/05 14:49:27 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:31:47 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	ft_pwd(t_pipex *list)
 	int		out;
 
 	out = 1;
-	if (list->redir_out != -1)
-		out = list->redir_out;
+	out = list->out;
 	tmp = ft_calloc(sizeof(char), 10000);
 	if (tmp == NULL)
 		return (1);

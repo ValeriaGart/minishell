@@ -168,6 +168,7 @@ void	ft_heredoc_exec(t_pipex *list)
 	unlink(".heredoc");
 }
 
+//TODO: check "pwd | wc -l >"
 int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
 {
 	t_tokens	*toks;

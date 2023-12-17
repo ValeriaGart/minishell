@@ -110,6 +110,18 @@ char    **ft_env_to_twod_arr(t_env *env_list)
     return (env_twod);
 }
 
+int	ft_right_out(t_pipex *list, int i)
+{
+	if (list->redir_out > 0)
+		return (list->redir_out);
+    if (list->ac == 1)
+		return (1);
+	if (i == 0)
+		return (list->pipes[1]);
+	else if (i != list->ac - 1 && i != 0)
+		return (list->pipes[1]);
+	return (1);
+}
 
 void    ft_check_kid(int i, t_pipex *list)
 {
