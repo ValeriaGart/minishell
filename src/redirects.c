@@ -45,7 +45,6 @@ void	ft_del_com(t_pipex **list, t_tokens **tokens, int i)
 {
 	t_tokens	*iter;
 
-	//(void)list;
 	iter = *tokens;
 	while (iter->ind_command != i)
 		iter = iter->next;
@@ -78,7 +77,7 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	}
 	file = (*toks)->val;
 	(*list)->redir_in = open(file, O_RDONLY);
-	if ((*list)->redir_in < 0 && !ft_is_echo_last(*toks, i))
+	if ((*list)->redir_in < 0 )
 	{
 		perror(file);
 		ft_del_com(list, &((*list)->tokens), i);
@@ -118,7 +117,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 		(*list)->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
 	else
 		(*list)->redir_out = open(file, O_TRUNC | O_CREAT | O_RDWR, 0000644);
-	if ((*list)->redir_out < 0 && !ft_is_echo_last(*toks, i))
+	if ((*list)->redir_out < 0)
 	{
 		perror(file);
 		ft_del_com(list, &((*list)->tokens), i);

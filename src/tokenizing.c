@@ -77,7 +77,7 @@ int		ft_quote_condition(char **val, int y, char *str, int *i)
 	return (y);
 }
 
-char	*ft_tok_val(char *str, int *y, int echo)
+char	*ft_tok_val(char *str, int *y, int echo, int redir)
 {
 	char	*value;
 	int		i;
@@ -107,7 +107,7 @@ char	*ft_tok_val(char *str, int *y, int echo)
 	while (str[*y] && str[*y] != ' ' && str[*y] != '<'
 			&& str[*y] != '>')
 	{
-		if ((str[*y] == S || str[*y] == D) && echo)
+		if ((str[*y] == S || str[*y] == D) && echo && !redir)
 			*y = ft_quotecho_condition(&value, *y, str, &i);
 		else if (str[*y] == S || str[*y] == D)
 			*y = ft_quote_condition(&value, *y, str, &i);
@@ -141,14 +141,14 @@ int		ft_tok_type(char *value)
 	return (type);
 }
 
-t_tokens	*ft_new_echo_token(int i, int ind, int *y, char **strs)
+t_tokens	*ft_new_echo_token(int i, int ind, int *y, char **strs, int redir)
 {
 	t_tokens	*new_tok;
 
 	new_tok = malloc(sizeof(t_tokens));
 	if (!new_tok)
 		return (NULL);
-	new_tok->val = ft_tok_val(strs[i], y, 1);
+	new_tok->val = ft_tok_val(strs[i], y, 1, redir);
 	if (!new_tok->val)
 	{
 		free(new_tok);
@@ -167,7 +167,7 @@ t_tokens	*ft_new_token(int i, int ind, int *y, char **strs)
 	new_tok = malloc(sizeof(t_tokens));
 	if (!new_tok)
 		return (NULL);
-	new_tok->val = ft_tok_val(strs[i], y, 0);
+	new_tok->val = ft_tok_val(strs[i], y, 0, 0);
 	if (!new_tok->val)
 	{
 		free(new_tok);
@@ -204,17 +204,23 @@ int			ft_loop_new_com_tok(char **strs, t_tokens *toks, int i, int y)
 {
 	int	ind;
 	int echo;
+	int redir;
 
 	ind = 1;
 	if (i)
 		ind = 0;
 	echo = 0;
+	redir = 0;
 	while (strs[i][y])
 	{
 		if (toks->type == COM && !ft_strncmp(toks->val, "echo", 4) && ind < 2 && ft_strlen(toks->val) == 4)
 			echo++;
+		if (toks->type == REDIR_OUT || toks->type == REDIR_IN)
+			redir = 1;
+		if (redir && toks->type == COM)
+			redir = 0;
 		if (echo)
-			toks->next = ft_new_echo_token(i, ind, &y, strs);
+			toks->next = ft_new_echo_token(i, ind, &y, strs, redir);
 		else
 			toks->next = ft_new_token(i, ind, &y, strs);
 		if (!toks->next)
