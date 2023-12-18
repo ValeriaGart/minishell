@@ -48,12 +48,22 @@ void	ft_loop_children(t_pipex *list, int i)
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
 	if (!ft_command_check(list, list->tokens, i))
 	{
+		ft_free_command(list->valid_env);
+		ft_list_loop_free(list, i);
+		list->tokens = ft_free_toks(list->tokens);
 		ft_list_free(list);
+		rl_clear_history();
+		ft_free_env(list->data->env, list->data);
 		exit(g_minishell);
 	}
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
+	ft_free_command(list->valid_env);
+	ft_list_loop_free(list, i);
+	list->tokens = ft_free_toks(list->tokens);
 	ft_list_free(list);
+	rl_clear_history();
+	ft_free_env(list->data->env, list->data);
 	exit(127);
 }
 

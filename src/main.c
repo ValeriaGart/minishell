@@ -21,7 +21,7 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 	err = 0;
 	av = NULL;
 	*read_cmd = ft_expander(*read_cmd, data);
-	if (!read_cmd)
+	if (!(*read_cmd))
 		return (false);
 	toks = NULL;
 	if (*read_cmd[0] != '\0')
@@ -36,6 +36,9 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 	}
 	else
 		return (true);
+	if (*read_cmd)
+			free(*read_cmd);
+	*read_cmd = NULL;
 	if (!err && ft_find_tok(toks, -1))
 		err = ft_exec(data, toks);
 	if (err < 0)
@@ -61,11 +64,7 @@ void	ft_loop_minishell(t_data *data)
 			;
 		else if (read_cmd[0] != '\0')
 			exec_success = part_loop_shell(data, &read_cmd);
-		if (read_cmd)
-		{
-			free(read_cmd);
-			read_cmd = NULL;
-		}
+		read_cmd = NULL;
 		if (exec_success != true)
 			break ;
 	}

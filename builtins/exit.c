@@ -46,5 +46,10 @@ void	ft_exit_p(t_pipex *list, t_tokens *toks, int  i)
 			return;
 	}
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	ft_list_loop_free(list, i);
+	list->tokens = ft_free_toks(list->tokens);
+	ft_list_free(list);
+	rl_clear_history();
+	ft_free_env(list->data->env, list->data);
 	exit(g_minishell);
 }
