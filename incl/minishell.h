@@ -199,7 +199,7 @@ char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
 int					ft_right_out(t_pipex *list, int i);
 
 /* redirects.c */
-int					ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
+int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 
 /* tokenizing.c */
 t_tokens			*ft_gimme_tokens(char **strs);

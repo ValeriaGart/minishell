@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		ft_is_echo_last(t_tokens *toks, int i)
+int	ft_is_echo_last(t_tokens *toks, int i)
 {
 	t_tokens	*if_last;
 
@@ -17,7 +17,6 @@ int		ft_is_echo_last(t_tokens *toks, int i)
 	if (toks && !ft_strncmp(toks->val, "echo", 4) && ft_strlen(toks->val) == 4)
 		return (1);
 	return (0);
-	
 }
 
 void	ft_change_args(t_tokens **toks)
@@ -36,7 +35,7 @@ void	ft_change_args(t_tokens **toks)
 	{
 		prev->next = next;
 		*toks = prev;
-		return;
+		return ;
 	}
 	*toks = next;
 }
@@ -77,7 +76,7 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	}
 	file = (*toks)->val;
 	(*list)->redir_in = open(file, O_RDONLY);
-	if ((*list)->redir_in < 0 )
+	if ((*list)->redir_in < 0)
 	{
 		perror(file);
 		ft_del_com(list, &((*list)->tokens), i);
@@ -92,6 +91,23 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	return (0);
 }
 
+t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i)
+{
+	if (list->redir_out != -1)
+		close(list->redir_out);
+	while (toks && toks->type != COM)
+		toks = toks->next;
+	if (!toks || toks->ind_command != i)
+	{
+		if (i == list->ac - 1)
+			ft_error("parse error near ", "`\\n'\n", 0);
+		else
+			ft_error("parse error near ", "`|'\n", 0);
+		return (NULL);
+	}
+	return (toks);
+}
+
 int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 {
 	t_tokens	*rem_tok;
@@ -100,18 +116,9 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 
 	y = 3;
 	rem_tok = *toks;
-	if ((*list)->redir_out != -1)
-		close((*list)->redir_out);
-	while ((*toks) && (*toks)->type != COM)
-		*toks = (*toks)->next;
-	if (!(*toks) || (*toks)->ind_command != i)
-	{
-		if (i == (*list)->ac - 1)
-			ft_error("parse error near ", "`\\n'\n", 0);
-		else
-			ft_error("parse error near ", "`|'\n", 0);
+	*toks = ft_open_file(rem_tok, *list, i);
+	if (!*toks)
 		return (-5);
-	}
 	file = (*toks)->val;
 	if (rem_tok->val[1] != '\0')
 		(*list)->redir_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0000644);
@@ -132,7 +139,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	return (0);
 }
 
-int		ft_heredoc_set(t_tokens **toks, t_pipex *list)
+int	ft_heredoc_set(t_tokens **toks, t_pipex *list)
 {
 	int			y;
 	char		*delim;
@@ -185,15 +192,12 @@ void	ft_heredoc_exec(t_pipex *list)
 
 //TODO: check "pwd | wc -l >"
 //TODO: check "wc -l | "
-int	ft_redirects(int i, t_tokens **toks_orig, t_pipex *list)
+int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 {
-	t_tokens	*toks;
 	int			err;
 
-	toks = *toks_orig;
 	err = 0;
-	while (toks->ind_command != i)
-		toks = toks->next;
+	toks = ft_point_to_needed_tok(toks, i, 0, 0);
 	while (toks && toks->ind_command == i)
 	{
 		if (toks->type == REDIR_OUT)

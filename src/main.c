@@ -12,32 +12,39 @@ int	ft_find_tok(t_tokens *toks, int i)
 	return (0);
 }
 
+bool	ft_pre_work(t_tokens **toks, int *err, char *read_cmd)
+{
+	char	**av;
+
+	av = ft_command_split(read_cmd);
+	if (!av)
+		return (false);
+	*toks = ft_gimme_tokens(av);
+	av = ft_free_command(av);
+	if (!*toks)
+		*err = -1;
+	return (true);
+}
+
 bool	part_loop_shell(t_data *data, char **read_cmd)
 {
 	t_tokens	*toks;
 	int			err;
-	char		**av;
 
 	err = 0;
-	av = NULL;
 	*read_cmd = ft_expander(*read_cmd, data);
 	if (!(*read_cmd))
 		return (false);
 	toks = NULL;
 	if (*read_cmd[0] != '\0')
 	{
-		av = ft_command_split(*read_cmd);
-		if (!av)
+		if (ft_pre_work(&toks, &err, *read_cmd) == false)
 			return (false);
-		toks = ft_gimme_tokens(av);
-		av = ft_free_command(av);
-		if (!toks)
-			err = -1;
 	}
 	else
 		return (true);
 	if (*read_cmd)
-			free(*read_cmd);
+		free(*read_cmd);
 	*read_cmd = NULL;
 	if (!err && ft_find_tok(toks, -1))
 		err = ft_exec(data, toks);

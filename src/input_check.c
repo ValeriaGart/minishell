@@ -70,17 +70,14 @@ int	check_input(char *s)
 	int	i;
 	int	quote;
 
-	i = 0;
+	i = -1;
 	quote = 0;
-	while (s[i])
+	while (s[++i])
 	{
 		if (ft_is_space(s[i]) == 1)
 			;
-		else if (s[i] == PIPE)
-		{
-			if (check_pipe(s, i, quote))
-				return (1);
-		}
+		else if (s[i] == PIPE && check_pipe(s, i, quote))
+			return (1);
 		else if (s[i] == S || s[i] == D)
 		{
 			if (!quote)
@@ -90,7 +87,6 @@ int	check_input(char *s)
 			if (check_open_quote(s))
 				return (1);
 		}
-		i++;
 	}
 	return (0);
 }
