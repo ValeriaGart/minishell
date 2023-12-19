@@ -1,38 +1,6 @@
 #include "../incl/minishell.h"
 
-char	**ft_tok_to_args(t_tokens *toks, int i)
-{
-	int			y;
-	char		**args;
-	t_tokens	*rem_tok;
-
-	y = 0;
-	while (toks->ind_command != i)
-		toks = toks->next;
-	rem_tok = toks;
-	while (toks && toks->ind_command == i)
-	{
-		if (toks->type != SEP)
-			++y;
-		toks = toks->next;
-	}
-	args = ft_calloc(sizeof(char *), y + 1);
-	if (!args)
-		return (NULL);
-	i = -1;
-	while (++i < y)
-	{
-		while (rem_tok->type == SEP)
-			rem_tok = rem_tok->next;
-		args[i] = ft_strdup(rem_tok->val);
-		if (!args[i])
-			return (ft_free_command(args));
-		rem_tok = rem_tok->next;
-	}
-	return (args);
-}
-
-int ft_check_if_path(char *str)
+int	ft_check_if_path(char *str)
 {
 	int	i;
 
@@ -40,13 +8,14 @@ int ft_check_if_path(char *str)
 	while (i < 3)
 	{
 		if (str[i] && str[i] == '/')
-			break;
+			break ;
 		else if (str[i] && str[i] != '.')
 			return (0);
 		i++;
 	}
 	return (1);
 }
+
 char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 {
 	char	*temp;
@@ -68,53 +37,16 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 		free(ret);
 		iter++;
 	}
-	list->paths_exist = 0; 
+	list->paths_exist = 0;
 	ret = ft_strdup(toks->val);
 	return (ret);
-}
-
-char    **ft_env_to_twod_arr(t_env *env_list)
-{
-    char    **env_twod;
-    int     i;
-	t_env	*rem_env;
-
-    i = -1;
-	rem_env = env_list;
-	while (rem_env)
-	{
-		rem_env = rem_env->next;
-		i++;
-	}
-    env_twod = malloc(sizeof(char *) * (i + 1));
-    if (!env_twod)
-    {
-        ft_error_msg("Malloc failed\n", 15);
-        return (NULL);
-    }
-	i = -1;
-    while (env_list->next)
-    {
-        env_twod[++i] = ft_strdup(env_list->str);
-        if (!env_twod[i])
-        {
-            while (i >= 0)
-                free(env_twod[--i]);
-            free(env_twod);
-            ft_error_msg("Malloc failed\n", 15);
-            return (NULL);
-        }
-        env_list = env_list->next;
-    }
-    env_twod[++i] = NULL;
-    return (env_twod);
 }
 
 int	ft_right_out(t_pipex *list, int i)
 {
 	if (list->redir_out > 0)
 		return (list->redir_out);
-    if (list->ac == 1)
+	if (list->ac == 1)
 		return (1);
 	if (i == 0)
 		return (list->pipes[1]);
@@ -123,7 +55,7 @@ int	ft_right_out(t_pipex *list, int i)
 	return (1);
 }
 
-void    ft_check_kid(int i, t_pipex *list)
+void	ft_check_kid(int i, t_pipex *list)
 {
 	if (list->redir_out > 0)
 	{
@@ -135,14 +67,14 @@ void    ft_check_kid(int i, t_pipex *list)
 		dup2(list->redir_in, STDIN_FILENO);
 		close(list->redir_in);
 	}
-    if (list->ac == 1)
-		return;
+	if (list->ac == 1)
+		return ;
 	if (i == 0)
 	{
 		if (list->redir_out < 0)
 			dup2(list->pipes[1], STDOUT_FILENO);
 		close(list->pipes[1]);
-        close(list->pipes[0]);
+		close(list->pipes[0]);
 	}
 	else if (i != list->ac - 1 && i != 0)
 	{
@@ -159,16 +91,16 @@ void    ft_check_kid(int i, t_pipex *list)
 		if (list->redir_in < 0)
 			dup2(list->rem_fd, STDIN_FILENO);
 		close(list->rem_fd);
- 	}
+	}
 }
 
-char    *ft_bcheck_paths(t_env  *env)
+char	*ft_bcheck_paths(t_env	*env)
 {
-    while (env->next)
-    {
-        if (!ft_strncmp("PATH", env->str, 4))
+	while (env->next)
+	{
+		if (!ft_strncmp("PATH", env->str, 4))
 			return (env->str + 5);
-        env = env->next;
-    }
-    return (NULL);
+		env = env->next;
+	}
+	return (NULL);
 }

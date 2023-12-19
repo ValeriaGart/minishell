@@ -43,20 +43,6 @@ void	ft_echo_env(t_env *env, char *str, int *i, t_pipex *list)
 	*i = n;
 }
 
-int	ft_error_screen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '!' && str[i + 1])
-			return (ft_error(str, ": event not found\n", i));
-		i++;
-	}
-	return (0);
-}
-
 int	ft_quote_cond(char *str, int *i, int *meet_again, t_pipex *list)
 {
 	if (str[*i] == D || str[*i] == S)
@@ -123,8 +109,7 @@ int	ft_echo(t_pipex *list, t_tokens *toks, int i)
 	while (toks->ind_command != i)
 		toks = toks->next;
 	toks = toks->next;
-	while (toks && toks->ind_command == i && toks->type == SEP)
-		toks = toks->next;
+	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	if (toks && toks->ind_command == i && toks->type == COM)
 	{
 		while (toks && toks->ind_command == i)

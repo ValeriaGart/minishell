@@ -1,4 +1,3 @@
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -67,7 +66,6 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-
 typedef struct s_tokens
 {
 	char			*val;
@@ -118,14 +116,18 @@ int					ft_free_env(t_env *env, t_data *data);
 int					ft_env_init(t_data *data, char **env);
 
 /* error.c */
-int					ft_error(char *val, char *error, int  i);
+int					ft_error(char *val, char *error, int i);
 void				ft_error_cd(char *str, int i);
+int					ft_error_screen(char *str);
+int					ft_export_error(t_tokens *toks, char *val, int ind);
 
 /* builtin_utils.c */
 t_tokens			*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
+t_tokens			*ft_point_to_needed_tok(t_tokens *toks, int i, int next, int skip_char);
+bool				ft_last_pipe(t_tokens *toks, int i);
 
 /* builtin exit.c */
-void				ft_exit_p(t_pipex *list, t_tokens *toks, int  i);
+void				ft_exit_p(t_pipex *list, t_tokens *toks, int i);
 
 /* builtin cd.c */
 int					ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i);
@@ -149,6 +151,11 @@ int					ft_add_to_env(t_env **env, char *val);
 void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);
 t_env				*ft_is_env(t_env *env, char *val, int i);
 
+//free_more.c
+void				ft_list_free(t_pipex *list);
+char				*ft_free_new(char *new);
+char				*ft_strjoin_char(char *str, char c);
+
 // free.c
 void				ft_list_loop_free(t_pipex *list, int i);
 void				ft_free_av(char **av);
@@ -159,15 +166,17 @@ void				*ft_free_array(char **array);
 //ft_command_split.c
 char				**ft_command_split(char *s);
 char				**ft_remove_quotes(char **av);
-void				*ft_free_command(char **new);
+
+//ft_command_utils.c
 int					ft_count_commands(char *s);
+void				*ft_free_command(char **new);
 
 // expander.c
 char				*ft_expander(char *str, t_data *data);
 
 /* init.c */
 int					ft_init_list_loop(t_pipex *list, int i, int reidir_err);
-int     			init_pipex(t_pipex *list, t_data *data, t_tokens *toks);
+int					init_pipex(t_pipex *list, t_data *data, t_tokens *toks);
 
 // input_check.c
 int					syntax_errors(char c);
@@ -179,19 +188,21 @@ int					ft_strcmp(char *s1, char *s2);
 /* exec.c */
 int					ft_exec(t_data *data, t_tokens *toks);
 
+/* exec_utils_more.c */
+char				**ft_tok_to_args(t_tokens *toks, int i);
+char				**ft_env_to_twod_arr(t_env *env_list);
+
 /* exec_utils.c */
 char				*ft_bcheck_paths(t_env *env);
-char				**ft_env_to_twod_arr(t_env *env_list);
 void				ft_check_kid(int i, t_pipex *list);
 char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
-char				**ft_tok_to_args(t_tokens *toks, int i);
 int					ft_right_out(t_pipex *list, int i);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens **toks_orig, t_pipex *list);
 
 /* tokenizing.c */
-t_tokens    		*ft_gimme_tokens(char **strs);
+t_tokens			*ft_gimme_tokens(char **strs);
 t_tokens			*ft_free_toks(t_tokens *toks);
 
 /* builtins.c */
@@ -202,7 +213,7 @@ int					is_builtin(t_tokens *toks, int i);
 int					ft_find_tok(t_tokens *toks, int i);
 
 // quote.c
-int					is_quote(int c); 
+int					is_quote(int c);
 int					ft_is_space(char s);
 int					check_open_quote(char *s);
 
@@ -217,9 +228,7 @@ void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
 
 /* utils.c */
 int					ft_find_index(char *s, char c);
-void				ft_list_free(t_pipex *list);
 int					ft_error_msg(char *msg, int msg_len);
-char				*ft_strjoin_char(char *str, char c);
-char				*ft_free_new(char *new);
+int					ft_strlen_var(char *str);
 
 #endif

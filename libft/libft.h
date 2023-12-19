@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 15:15:54 by ynguyen           #+#    #+#             */
-/*   Updated: 2023/12/06 11:53:34 by vharkush         ###   ########.fr       */
+/*   Updated: 2023/12/19 12:23:41 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <unistd.h>
+
 typedef struct s_list
 {
 	void			*content;

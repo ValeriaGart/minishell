@@ -3,7 +3,7 @@
 
 bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 {
-	struct stat buf;
+	struct stat	buf;
 
 	while (toks->ind_command != i)
 		toks = toks->next;
@@ -13,13 +13,13 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 	{
 		if (((buf.st_mode & S_IXUSR) == 0))
 		{
-       	    ft_error(toks->val, ": Permission denied\n", ft_strlen(toks->val));
+			ft_error(toks->val, ": Permission denied\n", ft_strlen(toks->val));
 			g_minishell = 126;
 			return (false);
 		}
 		if (S_ISDIR(buf.st_mode))
 		{
-       	    ft_error(toks->val, ": Is a directory\n", 0);
+			ft_error(toks->val, ": Is a directory\n", 0);
 			g_minishell = 126;
 			return (false);
 		}
@@ -78,7 +78,7 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	while (i < list->ac)
 	{
 		if (!is_builtin(list->tokens, i))
- 			waitpid(list->pids[i], &status, 0);
+			waitpid(list->pids[i], &status, 0);
 		if (!is_builtin(list->tokens, i) && WIFEXITED(status))
 			g_minishell = WEXITSTATUS(status);
 		i++;
@@ -88,7 +88,7 @@ void	ft_wait_for_my_babies(t_pipex *list)
 int	ft_do_all_to_exec(t_pipex *list)
 {
 	int	i;
-	int err;
+	int	err;
 
 	i = -1;
 	err = 0;

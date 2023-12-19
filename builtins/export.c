@@ -1,33 +1,5 @@
 #include "../incl/minishell.h"
 
-int	ft_export_error(t_tokens *toks, char *val, int ind)
-{
-	int	i;
-
-	i = 0;
-	while (toks && toks->ind_command == ind)
-	{
-		if (toks->type == COM)
-		{
-			i = 0;
-			while (toks->val[i])
-			{
-				if (!ft_isalpha(toks->val[i]))
-				{
-					write(2, "minishell: export: `", 20);
-					ft_putstr_fd(val, 2);
-					write(2, "': not a valid identifier\n", 26);
-					g_minishell = 1;
-					break;
-				}
-				i++;
-			}
-		}
-		toks = toks->next;
-	}
-	return (1);
-}
-
 int	ft_check_before_equal(char *val)
 {
 	int	i;
@@ -65,7 +37,7 @@ void	ft_repoint_env(t_env *tmp, t_env **new)
 	}
 }
 
-int		ft_add_to_env(t_env **env, char *val)
+int	ft_add_to_env(t_env **env, char *val)
 {
 	t_env	*new;
 	t_env	*tmp;
@@ -91,8 +63,7 @@ int		ft_add_to_env(t_env **env, char *val)
 	return (0);
 }
 
-
-int		ft_check_after_equal(t_env *env, char *val)
+int	ft_check_after_equal(t_env *env, char *val)
 {
 	int	i;
 
@@ -101,7 +72,7 @@ int		ft_check_after_equal(t_env *env, char *val)
 	while (val[i])
 	{
 		if (val[i] == '=')
-			break;
+			break ;
 		i++;
 	}
 	while (val[i])
@@ -113,15 +84,6 @@ int		ft_check_after_equal(t_env *env, char *val)
 	return (0);
 }
 
-bool	ft_last_pipe(t_tokens *toks, int i)
-{
-	while (toks && toks->next)
-		toks = toks->next;
-	if (toks && toks->ind_command == i)
-		return (true);
-	return (false);
-}
-
 int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 {
 	int		ret;
@@ -130,9 +92,7 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 	ret = 0;
 	if (!toks || toks->ind_command != i)
 		return (ft_print_env_declare_x(env, list->redir_out));
-	while (toks && toks->ind_command == i
-				&& toks->type == SEP)
-		toks = toks->next;
+	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	if (!toks || toks->ind_command != i)
 		return (ft_print_env_declare_x(env, list->redir_out));
 	ret = ft_check_before_equal(toks->val);

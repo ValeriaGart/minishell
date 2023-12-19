@@ -9,9 +9,11 @@ NAME = ./minishell
 SRCS =	src/main.c						\
 		src/env.c						\
 		src/exec.c						\
+		src/exec_utils_more.c			\
 		src/exec_utils.c				\
 		src/redirects.c					\
 		src/utils.c						\
+		src/free_more.c					\
 		src/free.c						\
 		src/quote.c						\
 		src/input_check.c				\
@@ -22,6 +24,7 @@ SRCS =	src/main.c						\
 		src/init.c						\
 		src/token.c						\
 		src/ft_command_split.c			\
+		src/ft_command_utils.c			\
 		src/shlvl.c						\
 		src/error.c						\
 		builtins/builtin_utils.c		\

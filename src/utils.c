@@ -16,17 +16,6 @@ int		ft_find_index(char *s, char c)
 	return (-1);
 }
 
-void	ft_list_free(t_pipex *list)
-{
-	list->com_paths = ft_free_command(list->com_paths);
-	if (list->pids)
-		free(list->pids);
-	if (list->redir_out != -1)
-		close(list->redir_out);
-	if (list->redir_in != -1)
-		close(list->redir_in);
-}
-
 int	ft_error_msg(char *msg, int msg_len)
 {
 	g_minishell = 1;
@@ -34,30 +23,14 @@ int	ft_error_msg(char *msg, int msg_len)
 	return (1);
 }
 
-/*FOR EXPANDER*/
-char	*ft_strjoin_char(char *str, char c)
+/*FOR EXPANDER:
+we accept cases: after $ things can printable*/
+int	ft_strlen_var(char *str)
 {
-	unsigned int	i;
-	char			*new;
+	int	i;
 
-	if (!str)
-		return (save_free((void *)str, NULL));
-	i = ft_strlen(str);
-	new = (char *)malloc(sizeof(char) * (i + 2));
-	if (new)
-	{
-		new[i + 1] = '\0';
-		new[i] = c;
-		while (i--)
-			new[i] = str[i];
-	}
-	free(str);
-	return (new);
-}
-
-char	*ft_free_new(char *new)
-{
-	if (new)
-		free(new);
-	return (NULL);
+	i = 0;
+	while (str[i] && ft_isalnum(str[i]))
+		i++;
+	return (i);
 }

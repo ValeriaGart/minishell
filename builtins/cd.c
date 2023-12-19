@@ -17,7 +17,7 @@ void	ft_cdhome(t_env *env)
 		ft_error_cd(home_path->str + 5, 2);
 }
 
-int		ft_follow_oldpwd(t_env *env)
+int	ft_follow_oldpwd(t_env *env)
 {
 	t_env	*old_pwd;
 
@@ -38,7 +38,7 @@ int		ft_follow_oldpwd(t_env *env)
 	return (0);
 }
 
-int		ft_cd_tilde(t_env *env,t_tokens *toks)
+int	ft_cd_tilde(t_env *env, t_tokens *toks)
 {
 	t_env	*home_path;
 	char	*path_trim;
@@ -62,10 +62,10 @@ int		ft_cd_tilde(t_env *env,t_tokens *toks)
 		ft_error_cd(path, 2);
 	return (0);
 }
- 
+
 //if list->data->old_pwd - update, else don't touch
 //if PWD->update it, else don't touh 
-int		ft_update_pwd_env(t_pipex *list)
+int	ft_update_pwd_env(t_pipex *list)
 {
 	char	*old_pwd;
 	t_env	*pwd;
@@ -92,7 +92,7 @@ int		ft_update_pwd_env(t_pipex *list)
 	return (0);
 }
 
-int		ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i)
+int	ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i)
 {
 	g_minishell = 0;
 	toks = ft_too_many_args(toks, i, 2, "cd");

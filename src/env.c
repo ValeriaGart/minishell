@@ -1,12 +1,13 @@
 #include "../incl/minishell.h"
 
-/* Needed to check OLDPWD in env and leave it as it is or delete at all as bash does*/
+/* Needed to check OLDPWD in env and leave it as it is or delete at 
+all as bash does*/
 void	ft_oldpwd_env_check(t_data *data, t_env **env)
 {
 	t_env	*old_pwd;
 	t_env	*env_point;
 	char	*oldpwd_str;
-	DIR 	*dir;
+	DIR		*dir;
 
 	env_point = *env;
 	data->old_pwd = 1;
@@ -14,7 +15,8 @@ void	ft_oldpwd_env_check(t_data *data, t_env **env)
 	if (!old_pwd)
 		return ;
 	oldpwd_str = old_pwd->str + 7;
-	if ((dir = opendir(oldpwd_str)) == NULL)
+	dir = opendir(oldpwd_str);
+	if (dir == NULL)
 		ft_repoint_env(env_point, &old_pwd);
 	closedir(dir);
 }
@@ -25,7 +27,7 @@ void	ft_oldpwd_env_check(t_data *data, t_env **env)
 int	ft_pwd_env_check(t_data *data, t_env **env, int add_env)
 {
 	char	*pwd_str;
-	char 	*val;
+	char	*val;
 	char	*tmp;
 
 	tmp = ft_calloc(sizeof(char), 10000);
@@ -78,8 +80,8 @@ int	ft_free_env(t_env *env, t_data *data)
 
 int	ft_store_env(t_data *data, char **env_orig)
 {
-	t_env *env;
-	int i;
+	t_env	*env;
+	int		i;
 
 	i = -1;
 	env = malloc(sizeof(t_env));
