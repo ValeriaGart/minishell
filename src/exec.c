@@ -42,6 +42,7 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 	return (true);
 }
 
+//TODO: check if u close all the fds' properly
 void	ft_loop_children(t_pipex *list, int i)
 {
 	ft_check_kid(i, list);
@@ -76,8 +77,9 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	status = 0;
 	while (i < list->ac)
 	{
- 		waitpid(list->pids[i], &status, 0);
-		if (WIFEXITED(status) && !list->builtin)
+		if (!is_builtin(list->tokens, i))
+ 			waitpid(list->pids[i], &status, 0);
+		if (!is_builtin(list->tokens, i) && WIFEXITED(status))
 			g_minishell = WEXITSTATUS(status);
 		i++;
 	}
