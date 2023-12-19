@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		ft_find_index(char *s, char c)
+int	ft_find_index(char *s, char c)
 {
 	int	i;
 

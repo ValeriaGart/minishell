@@ -10,7 +10,7 @@ void	ft_export_shlvl(t_env **env, char *tok_val)
 	shlvl_pointer->str[6] = '0';
 	if (ft_isdigit(tok_val[6]))
 	{
-		while(tok_val[i])
+		while (tok_val[i])
 		{
 			if (!ft_isdigit(tok_val[i]))
 				return ;
@@ -55,7 +55,11 @@ int	ft_shlvl(t_env **env)
 	while (new->str[i] != '=')
 		i++;
 	if (new->str[i + 1] == '9' || new->str[i + 2] != '\0')
-		return (write(2, "You can only open minishell with 9 or less SHLVL value!👿\n", 60));//new->str[i + 1] = '9';
+	{
+		write(2, "You can only open minishell with 9 or less SHLVL value!👿\n",
+			60);
+		return (2);/*TODO new->str[i + 1] = '9';*/
+	}
 	else
 		new->str[i + 1] = new->str[i + 1] + 1;
 	new->str[i + 2] = '\0';

@@ -17,6 +17,7 @@ SRCS =	src/main.c						\
 		src/free.c						\
 		src/quote.c						\
 		src/input_check.c				\
+		src/tokenizing_utils.c			\
 		src/tokenizing.c				\
 		src/input_utils.c				\
 		src/signal.c					\

@@ -1,6 +1,7 @@
 
 #include "minishell.h"
 
+//TODO: overline
 bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 {
 	struct stat	buf;
@@ -85,6 +86,7 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	}
 }
 
+//TODO: overline
 int	ft_do_all_to_exec(t_pipex *list)
 {
 	int	i;

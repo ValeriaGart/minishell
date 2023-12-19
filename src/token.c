@@ -1,4 +1,3 @@
-
 #include "../incl/minishell.h"
 
 t_dlist	*ft_create_dlist(char *s, int quote)

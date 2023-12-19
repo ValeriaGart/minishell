@@ -1,4 +1,3 @@
-
 #include "../incl/minishell.h"
 
 void	get_sigint(int sig)

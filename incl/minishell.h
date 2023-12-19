@@ -155,6 +155,7 @@ t_env				*ft_is_env(t_env *env, char *val, int i);
 void				ft_list_free(t_pipex *list);
 char				*ft_free_new(char *new);
 char				*ft_strjoin_char(char *str, char c);
+t_tokens			*ft_free_toks(t_tokens *toks);
 
 // free.c
 void				ft_list_loop_free(t_pipex *list, int i);
@@ -201,9 +202,16 @@ int					ft_right_out(t_pipex *list, int i);
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 
+//tokenizing_utils.c
+char				*ft_tok_val(char *str, int *y, int echo, int redir);
+void				ft_assign_prev_cur_tok(t_tokens **toks);
+char				*ft_val_is_not_a_word(char *str, int *y);
+t_tokens			*ft_new_token(int i, int ind, int *y, char **strs);
+
 /* tokenizing.c */
+int					ft_quotecho_condition(char **val, int y, char *str, int *i);
+int					ft_tok_type(char *value);
 t_tokens			*ft_gimme_tokens(char **strs);
-t_tokens			*ft_free_toks(t_tokens *toks);
 
 /* builtins.c */
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
@@ -216,6 +224,7 @@ int					ft_find_tok(t_tokens *toks, int i);
 int					is_quote(int c);
 int					ft_is_space(char s);
 int					check_open_quote(char *s);
+int					ft_quote_condition(char **val, int y, char *str, int *i);
 
 // singal.c
 void				get_sigint(int sig);

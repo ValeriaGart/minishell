@@ -42,13 +42,13 @@ int	ft_error_screen(char *str)
 	return (0);
 }
 
-int		ft_error(char *val, char *error, int  i)
+int	ft_error(char *val, char *error, int i)
 {
 	write(2, "minishell: ", 11);
 	while (val[i])
 	{
 		if (val[i] == ';')
-			break;
+			break ;
 		write(2, &val[i], 1);
 		i++;
 	}
@@ -66,4 +66,3 @@ void	ft_error_cd(char *str, int i)
 	else
 		ft_putstr_fd(": No such file or directory\n", 2);
 }
-

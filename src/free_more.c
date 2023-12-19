@@ -37,3 +37,24 @@ char	*ft_free_new(char *new)
 		free(new);
 	return (NULL);
 }
+
+t_tokens	*ft_free_toks(t_tokens *toks)
+{
+	if (!toks)
+		return (NULL);
+	while (toks && toks->next)
+		toks = toks->next;
+	while (toks && toks->prev)
+	{
+		if (toks->val)
+			free(toks->val);
+		toks = toks->prev;
+		free(toks->next);
+		toks->next = NULL;
+	}
+	if (toks && toks->val)
+		free(toks->val);
+	if (toks)
+		free(toks);
+	return (NULL);
+}

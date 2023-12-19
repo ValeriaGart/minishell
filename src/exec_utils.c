@@ -55,6 +55,7 @@ int	ft_right_out(t_pipex *list, int i)
 	return (1);
 }
 
+//TODO: overline
 void	ft_check_kid(int i, t_pipex *list)
 {
 	if (list->redir_out > 0)
