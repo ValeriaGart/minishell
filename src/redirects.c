@@ -1,111 +1,26 @@
 #include "minishell.h"
 
-int	ft_is_echo_last(t_tokens *toks, int i)
-{
-	t_tokens	*if_last;
-
-	if_last = toks;
-	if_last = if_last->next;
-	while (if_last && if_last->type == SEP)
-		if_last = if_last->next;
-	if (!if_last || if_last->ind_command != i)
-		return (0);
-	if (toks)
-		toks = toks->prev;
-	while (toks && toks->prev && toks->type != COM)
-		toks = toks->prev;
-	if (toks && !ft_strncmp(toks->val, "echo", 4) && ft_strlen(toks->val) == 4)
-		return (1);
-	return (0);
-}
-
-void	ft_change_args(t_tokens **toks)
-{
-	t_tokens	*prev;
-	t_tokens	*next;
-
-	next = (*toks)->next;
-	prev = (*toks)->prev;
-	if ((*toks)->val)
-		free((*toks)->val);
-	free(*toks);
-	if (next)
-		next->prev = prev;
-	if (prev)
-	{
-		prev->next = next;
-		*toks = prev;
-		return ;
-	}
-	*toks = next;
-}
-
-void	ft_del_com(t_pipex **list, t_tokens **tokens, int i)
-{
-	t_tokens	*iter;
-
-	iter = *tokens;
-	while (iter->ind_command != i)
-		iter = iter->next;
-	while (iter && iter->ind_command == i)
-		ft_change_args(&iter);
-	while (iter && iter->prev)
-		iter = iter->prev;
-	*tokens = iter;
-	if (iter == NULL)
-		(*list)->tokens = iter;
-}
-
 int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 {
 	int			y;
 	char		*file;
 
 	y = 3;
-	if ((*list)->redir_in != -1)
-		close((*list)->redir_in);
-	while ((*toks) && (*toks)->type != COM)
-		*toks = (*toks)->next;
-	if (!(*toks) || (*toks)->ind_command != i)
-	{
-		if (i == (*list)->ac - 1)
-			ft_error("parse error near ", "`\\n'\n", 0);
-		else
-			ft_error("parse error near ", "`|'\n", 0);
+	*toks = ft_open_file(*toks, *list, i, 0);
+	if (!*toks)
 		return (-5);
-	}
 	file = (*toks)->val;
 	(*list)->redir_in = open(file, O_RDONLY);
 	if ((*list)->redir_in < 0)
 	{
 		perror(file);
-		ft_del_com(list, &((*list)->tokens), i);
+		ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
 	}
-	if ((*toks)->prev->type == SEP)
-		++y;
-	while (--y)
-		ft_change_args(toks);
+	ft_del_com(list, toks, y, 0);
 	return (0);
-}
-
-t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i)
-{
-	if (list->redir_out != -1)
-		close(list->redir_out);
-	while (toks && toks->type != COM)
-		toks = toks->next;
-	if (!toks || toks->ind_command != i)
-	{
-		if (i == list->ac - 1)
-			ft_error("parse error near ", "`\\n'\n", 0);
-		else
-			ft_error("parse error near ", "`|'\n", 0);
-		return (NULL);
-	}
-	return (toks);
 }
 
 int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
@@ -116,7 +31,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 
 	y = 3;
 	rem_tok = *toks;
-	*toks = ft_open_file(rem_tok, *list, i);
+	*toks = ft_open_file(rem_tok, *list, i, 1);
 	if (!*toks)
 		return (-5);
 	file = (*toks)->val;
@@ -127,15 +42,12 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	if ((*list)->redir_out < 0)
 	{
 		perror(file);
-		ft_del_com(list, &((*list)->tokens), i);
+		ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
 	}
-	if ((*toks)->prev->type == SEP)
-		++y;
-	while (--y)
-		ft_change_args(toks);
+	ft_del_com(list, toks, y, 0);
 	return (0);
 }
 

@@ -8,9 +8,10 @@ NAME = ./minishell
 
 SRCS =	src/main.c						\
 		src/env.c						\
+		src/command_checks.c			\
 		src/exec.c						\
-		src/exec_utils_more.c			\
 		src/exec_utils.c				\
+		src/redirects_utils.c			\
 		src/redirects.c					\
 		src/utils.c						\
 		src/free_more.c					\

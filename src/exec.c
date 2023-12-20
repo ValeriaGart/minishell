@@ -1,49 +1,5 @@
-
 #include "minishell.h"
 
-//TODO: overline
-bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
-{
-	struct stat	buf;
-
-	while (toks->ind_command != i)
-		toks = toks->next;
-	while (toks->type != COM)
-		toks = toks->next;
-	if (stat(list->command, &buf) == 0 && ft_strrchr(toks->val, '/'))
-	{
-		if (((buf.st_mode & S_IXUSR) == 0))
-		{
-			ft_error(toks->val, ": Permission denied\n", ft_strlen(toks->val));
-			g_minishell = 126;
-			return (false);
-		}
-		if (S_ISDIR(buf.st_mode))
-		{
-			ft_error(toks->val, ": Is a directory\n", 0);
-			g_minishell = 126;
-			return (false);
-		}
-	}
-	if (access(list->command, F_OK) != 0)
-	{
-		if (ft_strrchr(toks->val, '/'))
-			ft_error(toks->val, ": No such file or directory\n", 0);
-		else
-			ft_error(toks->val, ": command not found\n", 0);
-		g_minishell = 127;
-		return (false);
-	}
-	if (!list->paths_exist && !ft_strrchr(toks->val, '/'))
-	{
-		ft_error(toks->val, ": command not found\n", 0);
-		g_minishell = 127;
-		return (false);
-	}
-	return (true);
-}
-
-//TODO: check if u close all the fds' properly
 void	ft_loop_children(t_pipex *list, int i)
 {
 	ft_check_kid(i, list);
@@ -69,6 +25,7 @@ void	ft_loop_children(t_pipex *list, int i)
 	exit(127);
 }
 
+//TODO: check if u close all the fds' properly
 void	ft_wait_for_my_babies(t_pipex *list)
 {
 	int	i;
@@ -86,14 +43,8 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	}
 }
 
-//TODO: overline
-int	ft_do_all_to_exec(t_pipex *list)
+int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
-	int	i;
-	int	err;
-
-	i = -1;
-	err = 0;
 	while (++i < list->ac)
 	{
 		err = ft_init_list_loop(list, i, 0);
@@ -127,7 +78,7 @@ int	ft_exec(t_data *data, t_tokens *toks)
 	ret = 0;
 	if (init_pipex(&list, data, toks))
 		return (-1);
-	ret = ft_do_all_to_exec(&list);
+	ret = ft_do_all_to_exec(&list, 0, -1);
 	list.tokens = ft_free_toks(list.tokens);
 	ft_list_free(&list);
 	return (ret * -1);

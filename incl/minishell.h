@@ -71,7 +71,6 @@ typedef struct s_tokens
 	char			*val;
 	int				type;
 	int				ind_command;
-	int				ind_word;
 	struct s_tokens	*next;
 	struct s_tokens	*prev;
 }		t_tokens;
@@ -164,6 +163,12 @@ void				*save_free(void *s1, void *s2);
 char				*ft_strjoin_free(char const *s1, char const *s2);
 void				*ft_free_array(char **array);
 
+/* command_checks.c */
+char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
+char				**ft_tok_to_args(t_tokens *toks, int i, int y);
+char				*ft_bcheck_paths(t_env *env);
+bool				ft_command_check(t_pipex *list, t_tokens *toks, int i);
+
 //ft_command_split.c
 char				**ft_command_split(char *s);
 char				**ft_remove_quotes(char **av);
@@ -189,15 +194,16 @@ int					ft_strcmp(char *s1, char *s2);
 /* exec.c */
 int					ft_exec(t_data *data, t_tokens *toks);
 
-/* exec_utils_more.c */
-char				**ft_tok_to_args(t_tokens *toks, int i);
+/* exec_utils.c */
+void				ft_check_kid(int i, t_pipex *list);
+int					ft_right_out(t_pipex *list, int i);
 char				**ft_env_to_twod_arr(t_env *env_list);
 
-/* exec_utils.c */
-char				*ft_bcheck_paths(t_env *env);
-void				ft_check_kid(int i, t_pipex *list);
-char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
-int					ft_right_out(t_pipex *list, int i);
+/* redirects_utils.c */
+int					ft_is_echo_last(t_tokens *toks, int i);
+void				ft_change_args(t_tokens **toks);
+t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
+void				ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
@@ -206,7 +212,7 @@ int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 char				*ft_tok_val(char *str, int *y, int echo, int redir);
 void				ft_assign_prev_cur_tok(t_tokens **toks);
 char				*ft_val_is_not_a_word(char *str, int *y);
-t_tokens			*ft_new_token(int i, int ind, int *y, char **strs);
+int					ft_tok_type(char *value);
 
 /* tokenizing.c */
 int					ft_quotecho_condition(char **val, int y, char *str, int *i);

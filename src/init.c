@@ -14,7 +14,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	reidir_err = ft_redirects(i, list->tokens, list);
 	if (reidir_err)
 		return (reidir_err);
-	list->args = ft_tok_to_args(list->tokens, i);
+	list->args = ft_tok_to_args(list->tokens, i, 0);
 	if (!list->args)
 		return (1);
 	if (!is_builtin(list->tokens, i))

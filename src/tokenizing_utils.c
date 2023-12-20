@@ -1,26 +1,34 @@
 #include "../incl/minishell.h"
 
-//TODO: overline
+int	ft_pre_tok_check(int *i, char *str)
+{
+	int		rem;
+
+	rem = 0;
+	if (str[*i] && (str[*i] == ' ' || str[*i] == '<' || str[*i] == '>'))
+		return (1);
+	while (str[*i] && str[*i] != ' ' && str[*i] != '<' && str[*i] != '>')
+	{
+		if (str[*i] == S || str[*i] == D)
+		{
+			rem = str[*i];
+			(*i)++;
+			while (str[*i] != rem)
+				(*i)++;
+		}
+		(*i)++;
+	}
+	return (0);
+}
+
 char	*ft_tok_val(char *str, int *y, int echo, int redir)
 {
 	char	*value;
 	int		i;
-	int		rem;
 
 	i = *y;
-	if (str[i] && (str[i] == ' ' || str[i] == '<' || str[i] == '>'))
+	if (ft_pre_tok_check(&i, str))
 		return (ft_val_is_not_a_word(str, y));
-	while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
-	{
-		if (str[i] == S || str[i] == D)
-		{
-			rem = str[i];
-			i++;
-			while (str[i] != rem)
-				i++;
-		}
-		i++;
-	}
 	i = i - *y;
 	value = ft_calloc(sizeof(char), i + 1);
 	i = -1;
@@ -78,21 +86,23 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 	return (value);
 }
 
-t_tokens	*ft_new_token(int i, int ind, int *y, char **strs)
+int	ft_tok_type(char *value)
 {
-	t_tokens	*new_tok;
+	int	type;
 
-	new_tok = malloc(sizeof(t_tokens));
-	if (!new_tok)
-		return (NULL);
-	new_tok->val = ft_tok_val(strs[i], y, 0, 0);
-	if (!new_tok->val)
+	type = 0;
+	if (value[0] == ' ')
+		type = SEP;
+	else if (value[0] == '>')
+		type = REDIR_OUT;
+	else if (value[0] == '<')
 	{
-		free(new_tok);
-		return (NULL);
+		if (value[1] && value[1] == '<')
+			type = HERE_DOC;
+		else
+			type = REDIR_IN;
 	}
-	new_tok->type = ft_tok_type(new_tok->val);
-	new_tok->ind_command = i;
-	new_tok->ind_word = ind;
-	return (new_tok);
+	else
+		type = COM;
+	return (type);
 }

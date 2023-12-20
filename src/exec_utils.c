@@ -1,45 +1,46 @@
 #include "../incl/minishell.h"
 
-int	ft_check_if_path(char *str)
+char	**ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
 {
-	int	i;
-
-	i = 0;
-	while (i < 3)
+	while (env_list->next)
 	{
-		if (str[i] && str[i] == '/')
-			break ;
-		else if (str[i] && str[i] != '.')
-			return (0);
-		i++;
+		env_twod[++i] = ft_strdup(env_list->str);
+		if (!env_twod[i])
+		{
+			while (i >= 0)
+				free(env_twod[--i]);
+			free(env_twod);
+			ft_error_msg("Malloc failed\n", 15);
+			return (NULL);
+		}
+		env_list = env_list->next;
 	}
-	return (1);
+	env_twod[++i] = NULL;
+	return (env_twod);
 }
 
-char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
+char	**ft_env_to_twod_arr(t_env *env_list)
 {
-	char	*temp;
-	char	*ret;
-	char	**iter;
+	char	**env_twod;
+	int		i;
+	t_env	*rem_env;
 
-	while (toks && !(toks->ind_command == i && toks->type == COM))
-		toks = toks->next;
-	if (!toks)
-		return (NULL);
-	iter = list->com_paths;
-	while (*iter)
+	i = -1;
+	rem_env = env_list;
+	while (rem_env)
 	{
-		temp = ft_strjoin(*iter, "/");
-		ret = ft_strjoin(temp, toks->val);
-		free(temp);
-		if (access(ret, 0) == 0)
-			return (ret);
-		free(ret);
-		iter++;
+		rem_env = rem_env->next;
+		i++;
 	}
-	list->paths_exist = 0;
-	ret = ft_strdup(toks->val);
-	return (ret);
+	env_twod = malloc(sizeof(char *) * (i + 1));
+	if (!env_twod)
+	{
+		ft_error_msg("Malloc failed\n", 15);
+		return (NULL);
+	}
+	i = -1;
+	env_twod = ft_assign_env_lines(env_list, env_twod, i);
+	return (env_twod);
 }
 
 int	ft_right_out(t_pipex *list, int i)
@@ -55,21 +56,8 @@ int	ft_right_out(t_pipex *list, int i)
 	return (1);
 }
 
-//TODO: overline
-void	ft_check_kid(int i, t_pipex *list)
+void	ft_dup_right_ends(int i, t_pipex *list)
 {
-	if (list->redir_out > 0)
-	{
-		dup2(list->redir_out, STDOUT_FILENO);
-		close(list->redir_out);
-	}
-	if (list->redir_in > 0)
-	{
-		dup2(list->redir_in, STDIN_FILENO);
-		close(list->redir_in);
-	}
-	if (list->ac == 1)
-		return ;
 	if (i == 0)
 	{
 		if (list->redir_out < 0)
@@ -95,13 +83,19 @@ void	ft_check_kid(int i, t_pipex *list)
 	}
 }
 
-char	*ft_bcheck_paths(t_env	*env)
+void	ft_check_kid(int i, t_pipex *list)
 {
-	while (env->next)
+	if (list->redir_out > 0)
 	{
-		if (!ft_strncmp("PATH", env->str, 4))
-			return (env->str + 5);
-		env = env->next;
+		dup2(list->redir_out, STDOUT_FILENO);
+		close(list->redir_out);
 	}
-	return (NULL);
+	if (list->redir_in > 0)
+	{
+		dup2(list->redir_in, STDIN_FILENO);
+		close(list->redir_in);
+	}
+	if (list->ac == 1)
+		return ;
+	ft_dup_right_ends(i, list);
 }

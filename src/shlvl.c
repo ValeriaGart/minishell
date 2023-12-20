@@ -58,7 +58,7 @@ int	ft_shlvl(t_env **env)
 	{
 		write(2, "You can only open minishell with 9 or less SHLVL value!👿\n",
 			60);
-		return (2);/*TODO new->str[i + 1] = '9';*/
+		return (2);
 	}
 	else
 		new->str[i + 1] = new->str[i + 1] + 1;
