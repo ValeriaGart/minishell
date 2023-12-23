@@ -31,7 +31,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 
 	y = 3;
 	rem_tok = *toks;
-	*toks = ft_open_file(rem_tok, *list, i, 1);
+	*toks = ft_open_file(*toks, *list, i, 1);
 	if (!*toks)
 		return (-5);
 	file = (*toks)->val;
@@ -125,7 +125,8 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 				return (-2);
 			return (-1);
 		}
-		toks = toks->next;
+		if (toks)
+			toks = toks->next;
 	}
 	if (list->here_doc)
 		ft_heredoc_exec(list);

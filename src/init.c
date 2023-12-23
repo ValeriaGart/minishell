@@ -12,6 +12,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	list->args = NULL;
 	list->command = NULL;
 	reidir_err = ft_redirects(i, list->tokens, list);
+	reidir_err = ft_redirout_no_com(list->tokens, i, list, reidir_err);
 	if (reidir_err)
 		return (reidir_err);
 	list->args = ft_tok_to_args(list->tokens, i, 0);

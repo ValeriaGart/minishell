@@ -1,5 +1,22 @@
 #include "minishell.h"
 
+int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
+{
+	if (err)
+		return (err);
+	while (toks && toks->ind_command != i)
+		toks = toks->next;
+	if (!toks)
+	{
+		if (i == list->ac - 1)
+			ft_error("parse error near ", "`\\n'\n", 0);
+		else
+			ft_error("parse error near ", "`|'\n", 0);
+		return(-2);
+	}
+	return (0);
+}
+
 int	ft_is_echo_last(t_tokens *toks, int i)
 {
 	t_tokens	*if_last;
@@ -87,4 +104,6 @@ void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 		++i;
 	while (--i)
 		ft_change_args(&iter);
+	if (!iter)
+		(*list)->tokens = NULL;
 }

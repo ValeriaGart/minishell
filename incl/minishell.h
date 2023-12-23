@@ -204,6 +204,7 @@ int					ft_is_echo_last(t_tokens *toks, int i);
 void				ft_change_args(t_tokens **toks);
 t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
 void				ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely);
+int					ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
