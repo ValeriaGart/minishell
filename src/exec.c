@@ -52,6 +52,7 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 			return (0);
 		if (err > 0)
 			return (1);
+		allocate_sig(&list, &i);
 		if (i < list->ac - 1)
 			pipe(list->pipes);
 		if (!err)
@@ -64,6 +65,7 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 			}
 			ft_builtins_p(list, i, list->tokens);
 		}
+		signal(SIGINT, SIG_IGN);
 		ft_list_loop_free(list, i);
 	}
 	ft_wait_for_my_babies(list);

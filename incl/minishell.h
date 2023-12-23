@@ -233,8 +233,10 @@ int					check_open_quote(char *s);
 int					ft_quote_condition(char **val, int y, char *str, int *i);
 
 // singal.c
-void				get_sigint(int sig);
-void				get_sigint_child(int sig);
+void				sig_handel(int sig);
+void				get_sig_child(int sig);
+void				get_sig_parent(int sig);
+void				allocate_sig(t_pipex **list, int *i);
 
 // token.c
 t_dlist				*ft_create_dlist(char *s, int quote);

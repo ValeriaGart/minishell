@@ -62,6 +62,7 @@ void	ft_loop_minishell(t_data *data)
 	read_cmd = NULL;
 	while (1)
 	{
+		sig_handel(1);
 		if (!read_cmd)
 			read_cmd = readline("minishell: ");
 		if (!read_cmd)
@@ -85,8 +86,6 @@ int	main(int ac, char **av, char **env)
 	t_data	data;
 
 	(void)av;
-	signal(SIGINT, get_sigint);
-	signal(SIGQUIT, SIG_IGN);
 	if (ac > 1)
 		return (0);
 	if (ft_env_init(&data, env))
