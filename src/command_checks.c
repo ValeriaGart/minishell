@@ -88,7 +88,7 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 	if (!toks)
 		return (NULL);
 	iter = list->com_paths;
-	while (*iter)
+	while (iter && *iter)
 	{
 		temp = ft_strjoin(*iter, "/");
 		ret = ft_strjoin(temp, toks->val);
