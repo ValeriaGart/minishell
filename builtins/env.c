@@ -19,6 +19,11 @@ int	ft_env(t_data *data, t_pipex *list, int i)
 	int		out;
 
 	out = list->out;
+	if (!ft_is_env(data->env, "PATH", 4))
+	{
+		ft_error("env", ": No such file or directory\n", 0);
+		return (127);
+	}
 	if (ft_too_many_args(list->tokens, i, 1, "env") == NULL)
 		return (127);
 	env = data->env;

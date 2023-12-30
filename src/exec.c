@@ -2,6 +2,7 @@
 
 void	ft_loop_children(t_pipex *list, int i)
 {
+	sig_handel(2);
 	ft_check_kid(i, list);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
 	if (!ft_command_check(list, list->tokens, i))
@@ -33,12 +34,22 @@ void	ft_wait_for_my_babies(t_pipex *list)
 
 	i = 0;
 	status = 0;
+	if (g_minishell == 131)
+		g_minishell = 0;
 	while (i < list->ac)
 	{
 		if (!is_builtin(list->tokens, i))
 			waitpid(list->pids[i], &status, 0);
 		if (!is_builtin(list->tokens, i) && WIFEXITED(status))
 			g_minishell = WEXITSTATUS(status);
+		else if (!is_builtin(list->tokens, i) && WIFSIGNALED(status))
+		{
+			if (!g_minishell && WTERMSIG(status) == SIGINT)
+			{
+				g_minishell = 130;
+				write(1, "\n", 1);
+			}
+		}
 		i++;
 	}
 }

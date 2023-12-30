@@ -12,11 +12,11 @@ void	get_sig_parent(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
 		g_minishell = 130;
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
@@ -24,14 +24,14 @@ void	get_sig_child(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 2);
 		g_minishell = 130;
+		write(STDOUT_FILENO, "\n", 2);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
 	if (sig == SIGQUIT)
 	{
-		write(1, "\n", 2);
+		write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
 		g_minishell = 131;
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -42,12 +42,12 @@ void	sig_handel(int sig)
 {
 	if (sig == 1)
 	{
-		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, get_sig_parent);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	if (sig == 2)
 	{
-		signal(SIGINT, get_sig_child);
+		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, get_sig_child);
 	}
 }

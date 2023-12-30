@@ -1,12 +1,5 @@
 #include "../incl/minishell.h"
 
-int	after_dollar(char next)
-{
-	if (next && (next == '?' || next == '0'))
-		return (1);
-	return (0);
-}
-
 /* we get the letters after the '=' in environment */
 char	*ft_get_var(char *str, t_data *data)
 {
@@ -92,8 +85,8 @@ char	*ft_expander(char *str, t_data *data)
 		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
 			&& str[i + 1] != '\0')
 			new = expander_unquote(data, str, &i, new);
-		else if (q != 2 && str[i] == '$' && str[i + 1] == '?'
-				&& (!str[i + 2] || ft_is_space(str[i + 2])))
+		else if (q != 2 && str[i] == '$' && str[i + 1] == '?' && ((!str[i + 2]
+					|| ft_is_space(str[i + 2])) || str[i + 2]))
 			new = ft_expand_global(&i, new);
 		else
 			new = ft_strjoin_char(new, str[i]);

@@ -51,7 +51,56 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	return (0);
 }
 
-int	ft_heredoc_set(t_tokens **toks, t_pipex *list)
+void	ft_heredoc_exec(char *delim, t_pipex *list)
+{
+	char		*buf;
+
+	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	if (list->redir_in < 0)
+		perror("heredoc");
+	while (1)
+	{
+		write(1, "> ", 2);
+		buf = get_next_line(STDIN_FILENO, 0);
+		if (!ft_strncmp(delim, buf, ft_strlen(delim)))
+			break ;
+		write(list->redir_in, buf, ft_strlen(buf));
+		free(buf);
+	}
+	free(buf);
+	get_next_line(-1, 1);
+	close(list->redir_in);
+	list->redir_in = open(".heredoc", O_RDONLY);
+	unlink(".heredoc");
+}
+
+int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
+{
+	int			y;
+	char		*delim;
+
+	y = 3;
+	if (list->redir_in != -1)
+			close(list->redir_in);
+	if (list->here_doc)
+	{
+		list->here_doc = 0;
+	}
+	*toks = ft_syntax_err_redir(*toks, i);
+	if (!*toks)
+		return (-5);
+	list->here_doc = 1;
+	delim = (*toks)->val;
+	if ((*toks)->prev->type == SEP)
+		++y;
+	ft_heredoc_exec((*toks)->val, list);
+	while (--y)
+		ft_change_args(toks);
+	if (!*toks || (*toks)->prev == NULL)
+		list->tokens = *toks;
+	return (0);
+}
+/*int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
 {
 	int			y;
 	char		*delim;
@@ -62,8 +111,9 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list)
 		free(list->here_doc_delim);
 		list->here_doc = 0;
 	}
-	while ((*toks)->type != COM)
-		*toks = (*toks)->next;
+	*toks = ft_syntax_err_redir(*toks, i);
+	if (!*toks)
+		return (-5);
 	list->here_doc = 1;
 	delim = (*toks)->val;
 	if ((*toks)->prev->type == SEP)
@@ -73,6 +123,8 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list)
 		return (1);
 	while (--y)
 		ft_change_args(toks);
+	if (!*toks || (*toks)->prev == NULL)
+		list->tokens = *toks;
 	return (0);
 }
 
@@ -100,10 +152,12 @@ void	ft_heredoc_exec(t_pipex *list)
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
 	unlink(".heredoc");
-}
+}*/
 
 //TODO: check "pwd | wc -l >"
 //TODO: check "wc -l | "
+//TODO: < < ho cat
+//TODO: check <<<<<< things like that
 int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 {
 	int			err;
@@ -117,18 +171,20 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 		else if (toks->type == REDIR_IN)
 			err = ft_newinfd(&toks, &list, i);
 		else if (toks->type == HERE_DOC)
-			ft_heredoc_set(&toks, list);
+			err = ft_heredoc_set(&toks, list, i);
 		if (err)
 		{
-			g_minishell = 1;
+			if (err != -5)
+				g_minishell = 1;
+			//TODO: if malloc failed, is 2d condition right? :
 			if (err == -5 || i == list->ac - 1)
 				return (-2);
 			return (-1);
 		}
+		if (!list->tokens)
+			toks = NULL;
 		if (toks)
 			toks = toks->next;
 	}
-	if (list->here_doc)
-		ft_heredoc_exec(list);
 	return (0);
 }

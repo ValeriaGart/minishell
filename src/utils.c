@@ -34,3 +34,10 @@ int	ft_strlen_var(char *str)
 		i++;
 	return (i);
 }
+
+int	after_dollar(char next)
+{
+	if (next && (next == '?' || next == '0'))
+		return (1);
+	return (0);
+}

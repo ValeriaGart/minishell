@@ -91,6 +91,7 @@ int	main(int ac, char **av, char **env)
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(&data);
+	ft_putstr_fd("exit\n", 1);
 	ft_free_env(data.env, &data);
 	return (0);
 }

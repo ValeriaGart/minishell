@@ -62,7 +62,6 @@ char	**ft_command_split(char *s)
 			return (ft_free_command(new));
 		c++;
 	}
-	new[c] = NULL;
 	return (new);
 }
 

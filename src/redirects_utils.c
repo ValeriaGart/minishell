@@ -1,5 +1,28 @@
 #include "minishell.h"
 
+t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
+{
+	toks = toks->next;
+	while (toks && toks->ind_command == i && toks->type == SEP)
+		toks = toks->next;
+	if (!toks || toks->ind_command != i || toks->type != COM)
+	{
+		if (!toks)
+			ft_error("syntax error near unexpected token ", "`\\n'\n", 0);
+		else if (toks->ind_command != i)
+			ft_error("syntax error near unexpected token ", "`|'\n", 0);
+		else
+		{
+			ft_error("syntax error near unexpected token ", "`", 0);
+			ft_putstr_fd(toks->val, 2);
+			ft_putstr_fd("'\n", 2);
+		}
+		g_minishell = 2;
+		return (NULL);
+	}
+	return (toks);
+}
+
 int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
 {
 	if (err)
@@ -10,11 +33,11 @@ int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
 		toks = toks->next;
 	if (!toks && list->redir_out != -1)
 	{
-		if (i == list->ac - 1)
+		/*if (i == list->ac - 1)
 			ft_error("parse error near ", "`\\n'\n", 0);
 		else
 			ft_error("parse error near ", "`|'\n", 0);
-		g_minishell = 130;
+		g_minishell = 130;*/
 		return(-2);
 	}
 	if (!toks)
@@ -74,16 +97,7 @@ t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out)
 		if (list->redir_in != -1)
 			close(list->redir_in);
 	}
-	while (toks && toks->type != COM)
-		toks = toks->next;
-	if (!toks || toks->ind_command != i)
-	{
-		if (i == list->ac - 1)
-			ft_error("parse error near ", "`\\n'\n", 0);
-		else
-			ft_error("parse error near ", "`|'\n", 0);
-		return (NULL);
-	}
+	toks = ft_syntax_err_redir(toks, i);
 	return (toks);
 }
 

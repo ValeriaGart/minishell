@@ -86,6 +86,18 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 	return (value);
 }
 
+bool	ft_type_redir(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && str[i] == c)
+		i++;
+	if (str[i])
+		return (false);
+	return (true);
+}
+
 int	ft_tok_type(char *value)
 {
 	int	type;
@@ -93,9 +105,9 @@ int	ft_tok_type(char *value)
 	type = 0;
 	if (value[0] == ' ')
 		type = SEP;
-	else if (value[0] == '>')
+	else if (ft_type_redir(value, '>') == true)
 		type = REDIR_OUT;
-	else if (value[0] == '<')
+	else if (ft_type_redir(value, '<') == true)
 	{
 		if (value[1] && value[1] == '<')
 			type = HERE_DOC;

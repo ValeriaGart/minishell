@@ -60,6 +60,7 @@ int	ft_cd_tilde(t_env *env, t_tokens *toks)
 		return (2);
 	if (chdir(path) == -1)
 		ft_error_cd(path, 2);
+	free(path);
 	return (0);
 }
 

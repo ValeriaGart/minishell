@@ -205,6 +205,7 @@ void				ft_change_args(t_tokens **toks);
 t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
 void				ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely);
 int					ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err);
+t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
@@ -248,5 +249,6 @@ void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
 int					ft_find_index(char *s, char c);
 int					ft_error_msg(char *msg, int msg_len);
 int					ft_strlen_var(char *str);
+int					after_dollar(char next);
 
 #endif
