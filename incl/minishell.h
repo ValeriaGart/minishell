@@ -95,6 +95,7 @@ typedef struct s_pipex
 	int				here_doc;
 	int				out;
 	int				n_flag_echo;
+	int				heredoc_c;
 	char			*paths;
 	char			*command;
 	char			**args;
@@ -238,6 +239,7 @@ int					ft_quote_condition(char **val, int y, char *str, int *i);
 void				sig_handel(int sig);
 void				get_sig_child(int sig);
 void				get_sig_parent(int sig);
+void				get_sig_heredoc(int sig);
 void				allocate_sig(t_pipex **list, int *i);
 
 // token.c

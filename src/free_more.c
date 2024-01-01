@@ -2,6 +2,8 @@
 
 void	ft_list_free(t_pipex *list)
 {
+	if (list->here_doc)
+		unlink(".heredoc");
 	list->com_paths = ft_free_command(list->com_paths);
 	if (list->pids)
 		free(list->pids);

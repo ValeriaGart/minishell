@@ -7,6 +7,8 @@ void	ft_loop_children(t_pipex *list, int i)
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
 	if (!ft_command_check(list, list->tokens, i))
 	{
+		if (list->here_doc)
+			unlink(".heredoc");
 		ft_free_command(list->valid_env);
 		ft_list_loop_free(list, i);
 		list->tokens = ft_free_toks(list->tokens);
@@ -17,6 +19,8 @@ void	ft_loop_children(t_pipex *list, int i)
 	}
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
+	if (list->here_doc)
+		unlink(".heredoc");
 	ft_free_command(list->valid_env);
 	ft_list_loop_free(list, i);
 	list->tokens = ft_free_toks(list->tokens);
@@ -52,18 +56,20 @@ void	ft_wait_for_my_babies(t_pipex *list)
 		}
 		i++;
 	}
+	if (list->heredoc_c)
+		g_minishell = 130;
 }
 
 int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
 	while (++i < list->ac)
 	{
+		allocate_sig(&list, &i);
 		err = ft_init_list_loop(list, i, 0);
 		if (err == -2)
 			return (0);
 		if (err > 0)
 			return (1);
-		allocate_sig(&list, &i);
 		if (i < list->ac - 1)
 			pipe(list->pipes);
 		if (!err)

@@ -38,6 +38,16 @@ void	get_sig_child(int sig)
 	}
 }
 
+void	get_sig_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_minishell = 130;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+	}
+}
+
 void	sig_handel(int sig)
 {
 	if (sig == 1)
@@ -49,5 +59,10 @@ void	sig_handel(int sig)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, get_sig_child);
+	}
+	if (sig == 3)
+	{
+		signal(SIGINT, get_sig_heredoc);
+		signal(SIGQUIT, SIG_IGN);
 	}
 }

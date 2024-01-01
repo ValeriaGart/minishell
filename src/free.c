@@ -2,6 +2,11 @@
 
 void	ft_list_loop_free(t_pipex *list, int i)
 {
+	if (list->here_doc)
+	{
+		list->here_doc = 0;
+		unlink(".heredoc");
+	}
 	if (list->command)
 		free(list->command);
 	list->command = NULL;

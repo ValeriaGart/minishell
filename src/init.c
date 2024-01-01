@@ -5,6 +5,7 @@
 //saved in pipe before
 int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 {
+	list->heredoc_c = 0;
 	list->builtin = 0;
 	list->here_doc = 0;
 	list->redir_in = -1;

@@ -51,6 +51,51 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	return (0);
 }
 
+/*void	ft_heredoc_exec(char *delim, t_pipex *list)
+{
+	char		*buf;
+	char		*tmp;
+	char		*tmp2;
+
+	tmp = NULL;
+	tmp2 = "";
+	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	if (list->redir_in < 0)
+		perror("heredoc");
+	while (g_minishell != 130)
+	{
+		sig_handel(3);
+		signal(SIGINT, get_sig_heredoc);
+		buf = readline("> ");
+		if (!buf || (!ft_strncmp(delim, buf, ft_strlen(delim)) && ft_strlen(delim) == ft_strlen(buf)))
+			break ;
+		tmp2 = ft_strjoin(tmp2, buf);
+		if (buf)
+			free(buf);
+		tmp = tmp2;
+		//tmp = tmp2;
+		tmp2 = ft_strjoin(tmp2, "\n");
+		if (tmp)
+			free(tmp);
+		if (g_minishell == 130)
+		{
+			if (tmp2)
+				free(tmp2);
+			tmp2 = NULL;
+			break;
+		}
+	}
+	if (tmp2)
+		{
+			write(list->redir_in, tmp2, ft_strlen(tmp2));
+			free(tmp2);
+		}
+	
+	get_next_line(-1, 1);
+	close(list->redir_in);
+	list->redir_in = open(".heredoc", O_RDONLY);
+}*/
+
 void	ft_heredoc_exec(char *delim, t_pipex *list)
 {
 	char		*buf;
@@ -58,20 +103,36 @@ void	ft_heredoc_exec(char *delim, t_pipex *list)
 	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (list->redir_in < 0)
 		perror("heredoc");
-	while (1)
+	while (g_minishell != 130)
 	{
-		write(1, "> ", 2);
-		buf = get_next_line(STDIN_FILENO, 0);
-		if (!ft_strncmp(delim, buf, ft_strlen(delim)))
+		sig_handel(3);
+		signal(SIGINT, get_sig_heredoc);
+		buf = readline("> ");
+		if (!buf || (!ft_strncmp(delim, buf, ft_strlen(delim)) && ft_strlen(delim) == ft_strlen(buf)))
 			break ;
 		write(list->redir_in, buf, ft_strlen(buf));
-		free(buf);
+		if (g_minishell != 130)
+		{
+			write(list->redir_in, "\n", 1);
+			free(buf);
+			buf = NULL;
+		}
 	}
-	free(buf);
-	get_next_line(-1, 1);
+	if (g_minishell == 130)
+	{
+		list->heredoc_c = 1;
+		g_minishell = 0;
+	}
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
-	unlink(".heredoc");
+	if (!buf)
+	{
+		ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd(delim, 2);
+		ft_putstr_fd("')\n", 2);
+		return ;
+	}
+	free(buf);
 }
 
 int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
@@ -80,12 +141,14 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
 	char		*delim;
 
 	y = 3;
+
 	if (list->redir_in != -1)
-			close(list->redir_in);
-	if (list->here_doc)
 	{
-		list->here_doc = 0;
+		unlink(".heredoc");
+		close(list->redir_in);
 	}
+	if (list->here_doc)
+		list->here_doc = 0;
 	*toks = ft_syntax_err_redir(*toks, i);
 	if (!*toks)
 		return (-5);
@@ -100,58 +163,34 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
 		list->tokens = *toks;
 	return (0);
 }
+
 /*int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i)
 {
 	int			y;
 	char		*delim;
 
 	y = 3;
+	if (list->redir_in != -1)
+			close(list->redir_in);
 	if (list->here_doc)
 	{
-		free(list->here_doc_delim);
 		list->here_doc = 0;
+		unlink(".heredoc");
 	}
 	*toks = ft_syntax_err_redir(*toks, i);
 	if (!*toks)
 		return (-5);
+	g_minishell = 0;
 	list->here_doc = 1;
 	delim = (*toks)->val;
 	if ((*toks)->prev->type == SEP)
 		++y;
-	list->here_doc_delim = ft_strdup(delim);
-	if (!list->here_doc_delim)
-		return (1);
+	ft_heredoc_exec((*toks)->val, list);
 	while (--y)
 		ft_change_args(toks);
 	if (!*toks || (*toks)->prev == NULL)
 		list->tokens = *toks;
 	return (0);
-}
-
-//TODO: check if heredoc works and unlinks properly
-void	ft_heredoc_exec(t_pipex *list)
-{
-	char		*delim;
-	char		*buf;
-
-	delim = list->here_doc_delim;
-	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
-	if (list->redir_in < 0)
-		perror("heredoc");
-	while (1)
-	{
-		write(1, "> ", 2);
-		buf = get_next_line(STDIN_FILENO, 0);
-		if (!ft_strncmp(delim, buf, ft_strlen(delim)))
-			break ;
-		write(list->redir_in, buf, ft_strlen(buf));
-		free(buf);
-	}
-	free(buf);
-	get_next_line(-1, 1);
-	close(list->redir_in);
-	list->redir_in = open(".heredoc", O_RDONLY);
-	unlink(".heredoc");
 }*/
 
 //TODO: check "pwd | wc -l >"
