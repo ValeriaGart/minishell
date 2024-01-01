@@ -40,7 +40,6 @@ int	init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 	list->command = NULL;
 	list->data = data;
 	list->paths_exist = 1;
-	list->here_doc_delim = NULL;
 	list->tokens = toks;
 	list->ac = ft_find_tok(toks, -1);
 	list->paths = NULL;

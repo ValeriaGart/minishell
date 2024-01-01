@@ -94,7 +94,7 @@ typedef struct s_pipex
 	int				pipes[2];
 	int				here_doc;
 	int				out;
-	char			*here_doc_delim;
+	int				n_flag_echo;
 	char			*paths;
 	char			*command;
 	char			**args;
