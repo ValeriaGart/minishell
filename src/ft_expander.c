@@ -12,7 +12,7 @@ char	*ft_get_var(char *str, t_data *data)
 	env = ft_is_env(env, str, ft_strlen_var(str));
 	if (i || env == NULL || !env->str)
 	{
-		var = ft_strdup("");
+		var = "";
 		return (var);
 	}
 	i = 0;
