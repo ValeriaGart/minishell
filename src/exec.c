@@ -17,6 +17,7 @@ void	ft_loop_children(t_pipex *list, int i)
 		ft_free_env(list->data->env, list->data);
 		exit(g_minishell);
 	}
+	unlink(".heredoc");
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
 	if (list->here_doc)

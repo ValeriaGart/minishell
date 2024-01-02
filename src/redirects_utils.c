@@ -32,14 +32,7 @@ int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
 	while (toks && toks->ind_command == i && toks->type == SEP)
 		toks = toks->next;
 	if (!toks && list->redir_out != -1)
-	{
-		/*if (i == list->ac - 1)
-			ft_error("parse error near ", "`\\n'\n", 0);
-		else
-			ft_error("parse error near ", "`|'\n", 0);
-		g_minishell = 130;*/
 		return(-2);
-	}
 	if (!toks)
 		return(-2);
 	return (0);
