@@ -49,16 +49,6 @@ char	*ft_tok_val(char *str, int *y, int echo, int redir)
 	return (value);
 }
 
-void	ft_assign_prev_cur_tok(t_tokens **toks)
-{
-	t_tokens	*prev;
-
-	prev = *toks;
-	*toks = (*toks)->next;
-	(*toks)->next = NULL;
-	(*toks)->prev = prev;
-}
-
 char	*ft_val_is_not_a_word(char *str, int *y)
 {
 	char	*value;
@@ -88,7 +78,7 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 
 bool	ft_type_redir(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] && str[i] == c)

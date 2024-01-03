@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	ft_assign_prev_cur_tok(t_tokens **toks)
+{
+	t_tokens	*prev;
+
+	prev = *toks;
+	*toks = (*toks)->next;
+	(*toks)->next = NULL;
+	(*toks)->prev = prev;
+}
+
 int	ft_find_index(char *s, char c)
 {
 	int	i;

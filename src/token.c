@@ -30,20 +30,18 @@ void	ft_add_dlist_back(t_dlist **dl, char *str, int quote)
 	tmp->next->prev = tmp;
 }
 
-int	which_symbols(char *s, int q)
+t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out)
 {
-	if (q != 0)
-		return (0);
-	if (ft_strncmp(s, ">>", 2) == 0)
-		return (2);
-	else if (ft_strncmp(s, "<<", 2) == 0)
-		return (2);
-	else if (ft_strncmp(s, "<", 1) == 0)
-		return (1);
-	else if (ft_strncmp(s, ">", 1) == 0)
-		return (1);
-	else if (ft_strncmp(s, (char *)PIPE, 1) == 0)
-		return (1);
+	if (out)
+	{
+		if (list->redir_out != -1)
+			close(list->redir_out);
+	}
 	else
-		return (0);
+	{
+		if (list->redir_in != -1)
+			close(list->redir_in);
+	}
+	toks = ft_syntax_err_redir(toks, i);
+	return (toks);
 }

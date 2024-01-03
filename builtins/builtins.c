@@ -27,6 +27,7 @@ int	is_builtin(t_tokens *toks, int i)
 		builtin = 0;
 	return (builtin);
 }
+
 //TODO: "echo -n" should return new prompt not "-n"
 void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {

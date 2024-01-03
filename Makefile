@@ -13,6 +13,7 @@ SRCS =	src/main.c						\
 		src/exec_utils.c				\
 		src/redirects_utils.c			\
 		src/redirects.c					\
+		src/redir_heredoc.c				\
 		src/utils.c						\
 		src/free_more.c					\
 		src/free.c						\
@@ -37,6 +38,7 @@ SRCS =	src/main.c						\
 		builtins/unset.c				\
 		builtins/builtins.c				\
 		builtins/echo.c					\
+		builtins/echo_utils.c			\
 		builtins/exit.c					\
 		get_next_line/get_next_line.c	\
 		get_next_line/get_next_line_utils.c

@@ -21,8 +21,8 @@ int	ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
 
 int	ft_long_exit_err(int n, t_tokens *toks)
 {
-	if (n > 20 || (n == 19 && toks->val[0] != '-' && toks->val[18] > '7') ||
-		(n == 20 && toks->val[0] == '-' && toks->val[19] == '9')
+	if (n > 20 || (n == 19 && toks->val[0] != '-' && toks->val[18] > '7')
+		|| (n == 20 && toks->val[0] == '-' && toks->val[19] == '9')
 		|| (n == 20 && toks->val[0] == '+' && toks->val[19] > '7'))
 	{
 		g_minishell = 2;

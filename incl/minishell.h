@@ -139,6 +139,11 @@ int					ft_env(t_data *data, t_pipex *list, int i);
 /* builtin echo.c */
 int					ft_echo(t_pipex *list, t_tokens *toks, int i);
 
+/* builtin echo_utils.c */
+int					ft_end_space(t_tokens *toks, int i);
+int					ft_is_nflag_echo(t_tokens *toks);
+int					ft_n_flag_echo(int i, t_tokens **toks, t_pipex *list);
+
 /* builtin pwd.c */
 int					ft_pwd(t_pipex *list);
 
@@ -203,7 +208,6 @@ char				**ft_env_to_twod_arr(t_env *env_list);
 /* redirects_utils.c */
 int					ft_is_echo_last(t_tokens *toks, int i);
 void				ft_change_args(t_tokens **toks);
-t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
 void				ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely);
 int					ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err);
 t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i);
@@ -211,9 +215,12 @@ t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i);
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 
+/* redir_heredoc.c */
+int					ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err);
+void				ft_heredoc_exec(char *delim, t_pipex *list);
+
 //tokenizing_utils.c
 char				*ft_tok_val(char *str, int *y, int echo, int redir);
-void				ft_assign_prev_cur_tok(t_tokens **toks);
 char				*ft_val_is_not_a_word(char *str, int *y);
 int					ft_tok_type(char *value);
 
@@ -246,11 +253,13 @@ void				allocate_sig(t_pipex **list, int *i);
 t_dlist				*ft_create_dlist(char *s, int quote);
 void				ft_add_dlist_back(t_dlist **dl, char *str, int quote);
 void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
+t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
 
 /* utils.c */
 int					ft_find_index(char *s, char c);
 int					ft_error_msg(char *msg, int msg_len);
 int					ft_strlen_var(char *str);
 int					after_dollar(char next);
+void				ft_assign_prev_cur_tok(t_tokens **toks);
 
 #endif

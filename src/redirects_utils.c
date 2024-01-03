@@ -32,9 +32,9 @@ int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
 	while (toks && toks->ind_command == i && toks->type == SEP)
 		toks = toks->next;
 	if (!toks && list->redir_out != -1)
-		return(-2);
+		return (-2);
 	if (!toks)
-		return(-2);
+		return (-2);
 	return (0);
 }
 
@@ -76,22 +76,6 @@ void	ft_change_args(t_tokens **toks)
 		return ;
 	}
 	*toks = next;
-}
-
-t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out)
-{
-	if (out)
-	{
-		if (list->redir_out != -1)
-			close(list->redir_out);
-	}
-	else
-	{
-		if (list->redir_in != -1)
-			close(list->redir_in);
-	}
-	toks = ft_syntax_err_redir(toks, i);
-	return (toks);
 }
 
 void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)

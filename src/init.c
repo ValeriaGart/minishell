@@ -1,9 +1,6 @@
 #include "../incl/minishell.h"
 
-//TODO: check if close redir files everywhere when needed
-//TODO: check if after del unvalid redirect there is nothing 
-//saved in pipe before
-int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
+int	init_part_list(t_pipex *list)
 {
 	list->heredoc_c = 0;
 	list->builtin = 0;
@@ -12,6 +9,15 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	list->redir_out = -1;
 	list->args = NULL;
 	list->command = NULL;
+	return (0);
+}
+
+//TODO: check if close redir files everywhere when needed
+//TODO: check if after del unvalid redirect there is nothing 
+//saved in pipe before
+int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
+{
+	init_part_list(list);
 	reidir_err = ft_redirects(i, list->tokens, list);
 	reidir_err = ft_redirout_no_com(list->tokens, i, list, reidir_err);
 	if (reidir_err)

@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	free_loop_children(t_pipex *list, int *i)
+{
+	ft_free_command(list->valid_env);
+	ft_list_loop_free(list, *i);
+	list->tokens = ft_free_toks(list->tokens);
+	ft_list_free(list);
+	rl_clear_history();
+	ft_free_env(list->data->env, list->data);
+}
+
 void	ft_loop_children(t_pipex *list, int i)
 {
 	sig_handel(2);
@@ -9,12 +19,7 @@ void	ft_loop_children(t_pipex *list, int i)
 	{
 		if (list->here_doc)
 			unlink(".heredoc");
-		ft_free_command(list->valid_env);
-		ft_list_loop_free(list, i);
-		list->tokens = ft_free_toks(list->tokens);
-		ft_list_free(list);
-		rl_clear_history();
-		ft_free_env(list->data->env, list->data);
+		free_loop_children(list, &i);
 		exit(g_minishell);
 	}
 	unlink(".heredoc");
@@ -22,12 +27,7 @@ void	ft_loop_children(t_pipex *list, int i)
 	ft_error_msg("Execve failed\n", 15);
 	if (list->here_doc)
 		unlink(".heredoc");
-	ft_free_command(list->valid_env);
-	ft_list_loop_free(list, i);
-	list->tokens = ft_free_toks(list->tokens);
-	ft_list_free(list);
-	rl_clear_history();
-	ft_free_env(list->data->env, list->data);
+	free_loop_children(list, &i);
 	exit(127);
 }
 
