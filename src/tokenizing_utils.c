@@ -93,7 +93,9 @@ int	ft_tok_type(char *value)
 	int	type;
 
 	type = 0;
-	if (value[0] == ' ')
+	if (value[0] == '\0')
+		type = EMPTY_STR;
+	else if (value[0] == ' ')
 		type = SEP;
 	else if (ft_type_redir(value, '>') == true)
 		type = REDIR_OUT;

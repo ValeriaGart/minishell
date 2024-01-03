@@ -84,7 +84,61 @@ int	ft_check_after_equal(t_env *env, char *val)
 	return (0);
 }
 
-int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
+int	ft_check_export_err(int type)
+{
+	if (type == EMPTY_STR)
+	{
+		ft_putstr_fd("minishell: export: `': not a valid identifier\n", 2);
+		g_minishell = 1;
+		return (1);
+	}
+	return (0);
+}
+
+void	ft_loop_export(t_pipex *list, t_tokens *toks, int i)
+{
+	int	err;
+
+	err = 0;
+	if (!ft_check_export_err(toks->type))
+	{                                                                       
+		if (ft_check_before_equal(toks->val))
+		{
+			ft_export_error(toks, toks->val, i);
+			return ;
+		}
+		err = ft_check_after_equal(list->data->env, toks->val);
+		if (!ft_last_pipe(toks, i))
+			return ;
+		if (!err && !ft_strncmp(toks->val, "SHLVL=", 6))
+			ft_export_shlvl(&(list->data->env), toks->val);
+		else if (!err)
+		{
+			if (!ft_strncmp(toks->val, "OLDPWD=", 7))
+				list->data->old_pwd = 1;
+			ft_add_to_env(&(list->data->env), toks->val);
+		}
+	}
+	toks = toks->next;
+	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
+	if (toks && toks->ind_command == i)
+		ft_loop_export(list, toks, i);	
+}
+
+int		ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
+{
+
+	toks = toks->next;
+	if (!toks || toks->ind_command != i)
+		return (ft_print_env_declare_x(env, list->redir_out));
+	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
+	if (!toks || toks->ind_command != i)
+		return (ft_print_env_declare_x(env, list->redir_out));
+	ft_loop_export(list, toks, i);
+	return (0);
+}
+
+int	ft_exportt(t_pipex *list, t_tokens *toks, int i, t_env *env)
 {
 	int		ret;
 
@@ -95,6 +149,8 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	if (!toks || toks->ind_command != i)
 		return (ft_print_env_declare_x(env, list->redir_out));
+	if (ft_check_export_err(toks->type))
+		return (ret);                                                                              
 	ret = ft_check_before_equal(toks->val);
 	if (ret)
 		return (ft_export_error(toks, toks->val, i));

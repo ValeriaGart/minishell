@@ -34,6 +34,7 @@
 # define REDIR_OUT	3
 # define REDIR_IN	4
 # define HERE_DOC	5
+# define EMPTY_STR	6
 
 //TODO: track if global right everywhere
 extern int			g_minishell;
