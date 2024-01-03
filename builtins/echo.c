@@ -73,7 +73,7 @@ int	ft_echo_normal(t_env *env, char *str, t_pipex *list)
 			;
 		else
 		{
-			if (str[i] == '$' && str[i + 1]
+			if (str[i] == '$' && (i != 0 && str[i - 1] != '\\') && str[i + 1]
 				&& (ft_isalnum(str[i + 1]) == 1 || str[i + 1] == '?'))
 				break ;
 			write(list->out, &str[i], 1);

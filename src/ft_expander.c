@@ -67,6 +67,14 @@ char	*ft_expand_global(int *i, char *new)
 	return (new);
 }
 
+int ft_back_slash(char *str, int *i)
+{
+    if ((str[*i] == '\'' || str[*i] == '\"'))
+        return (1);
+    return (0);
+}
+
+//echo $8
 char	*ft_expander(char *str, t_data *data)
 {
 	int		q;
@@ -82,7 +90,13 @@ char	*ft_expander(char *str, t_data *data)
 			q = str[i] % 2 + 1;
 		else if (is_quote(str[i]) && q == str[i] % 2 + 1)
 			q = 0;
-		if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
+		if (str[i] == '\\' && q != 2)
+		{
+			new = ft_strjoin_char(new, str[i + 1]);
+			if (str[i + 1])
+				i++;
+		}
+		else if (q != 2 && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]))
 			&& str[i + 1] != '\0')
 			new = expander_unquote(data, str, &i, new);
 		else if (q != 2 && str[i] == '$' && str[i + 1] == '?' && ((!str[i + 2]
