@@ -41,7 +41,7 @@ int	ft_quote_cond(char *str, int *i, int *meet_again, t_pipex *list)
 	if (*meet_again == S)
 	{
 		*i = *i + 1;
-		while (str[*i] != S)
+		while (str[*i] && str[*i] != S)
 		{
 			write(list->out, &str[*i], 1);
 			*i = *i + 1;

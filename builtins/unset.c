@@ -3,7 +3,7 @@
 t_env	*ft_is_env(t_env *env, char *val, int i)
 {
 	if (i == 0)
-		while (val && val[i] != '=')
+		while (val && val[i] && val[i] != '=')
 			i++;
 	while (env && val)
 	{
