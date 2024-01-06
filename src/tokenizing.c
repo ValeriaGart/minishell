@@ -38,7 +38,7 @@ t_tokens	*ft_new_token(int i, int *y, char **strs, int redir)
 		free(new_tok);
 		return (NULL);
 	}
-	new_tok->type = ft_tok_type(new_tok->val);
+	new_tok->type = ft_tok_type(new_tok->val, redir);
 	new_tok->ind_command = i;
 	return (new_tok);
 }
@@ -47,6 +47,9 @@ void	ft_if_echo_redir(int *echo, int *redir, t_tokens *toks, int ind)
 {
 	if (toks->type == COM && !ft_strncmp(toks->val, "echo", 4)
 		&& ind < 2 && ft_strlen(toks->val) == 4)
+		(*echo)++;
+	if (toks->type == COM && !ft_strncmp(toks->val, "/bin/echo", 9)
+		&& ind < 2 && ft_strlen(toks->val) == 9)
 		(*echo)++;
 	if (toks->type == REDIR_OUT || toks->type == REDIR_IN)
 		*redir = 1;

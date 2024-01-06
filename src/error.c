@@ -18,14 +18,14 @@ int	ft_export_error(t_tokens *toks, char *val, int ind)
 					ft_putstr_fd(val, 2);
 					write(2, "': not a valid identifier\n", 26);
 					g_minishell = 1;
-					break ;
+					return (1);
 				}
 				i++;
 			}
 		}
 		toks = toks->next;
 	}
-	return (1);
+	return (0);
 }
 
 int	ft_error_screen(char *str)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 15:15:54 by ynguyen           #+#    #+#             */
-/*   Updated: 2023/12/19 12:23:41 by ynguyen          ###   ########.fr       */
+/*   Updated: 2024/01/06 20:39:03 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_list
 long				ft_atol(char *str);
 char				*ft_strdup(const char *s);
 int					ft_isalpha(int c);
+int					ft_isspace(int c);
 int					ft_isalnum(int c);
 int					ft_isprint(int c);
 void				ft_bzero(void *s, size_t n);

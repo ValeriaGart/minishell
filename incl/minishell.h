@@ -223,11 +223,11 @@ void				ft_heredoc_exec(char *delim, t_pipex *list);
 //tokenizing_utils.c
 char				*ft_tok_val(char *str, int *y, int echo, int redir);
 char				*ft_val_is_not_a_word(char *str, int *y);
-int					ft_tok_type(char *value);
+int					ft_tok_type(char *value, int redir);
+bool				ft_type_redir(char *str, char c, int redir);
 
 /* tokenizing.c */
 int					ft_quotecho_condition(char **val, int y, char *str, int *i);
-int					ft_tok_type(char *value);
 t_tokens			*ft_gimme_tokens(char **strs);
 
 /* builtins.c */

@@ -44,6 +44,16 @@ int	ft_quote_condition(char **val, int y, char *str, int *i)
 		value[*i] = str[y];
 		y++;
 	}
+	if (ft_type_redir(value, '>', 0) == true || ft_type_redir(value, '<', 0) == true)
+	{
+		value[*i + 2] = D;
+		while (*i >= 0)
+		{
+			value[*i + 1] = value[*i];
+			*i = *i - 1;
+		}
+		value[0] = D;
+	}
 	y++;
 	return (y);
 }

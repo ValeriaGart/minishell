@@ -5,9 +5,9 @@ int	ft_pre_tok_check(int *i, char *str)
 	int		rem;
 
 	rem = 0;
-	if (str[*i] && (str[*i] == ' ' || str[*i] == '<' || str[*i] == '>'))
+	if (str[*i] && (ft_isspace(str[*i]) || str[*i] == '<' || str[*i] == '>'))
 		return (1);
-	while (str[*i] && str[*i] != ' ' && str[*i] != '<' && str[*i] != '>')
+	while (str[*i] && !ft_isspace(str[*i]) && str[*i] != '<' && str[*i] != '>')
 	{
 		if (str[*i] == S || str[*i] == D)
 		{
@@ -34,7 +34,7 @@ char	*ft_tok_val(char *str, int *y, int echo, int redir)
 	i = -1;
 	if (!value)
 		return (NULL);
-	while (str[*y] && str[*y] != ' ' && str[*y] != '<' && str[*y] != '>')
+	while (str[*y] && !ft_isspace(str[*y]) && str[*y] != '<' && str[*y] != '>')
 	{
 		if ((str[*y] == S || str[*y] == D) && echo && !redir)
 			*y = ft_quotecho_condition(&value, *y, str, &i);
@@ -59,9 +59,9 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 		value = ft_calloc(sizeof(char), 2);
 	if (!value)
 		return (NULL);
-	if (str[*y] == ' ')
+	if (ft_isspace(str[*y]))
 	{
-		while (str[*y] == ' ')
+		while (ft_isspace(str[*y]))
 			(*y)++;
 		value[0] = ' ';
 		return (value);
@@ -76,11 +76,23 @@ char	*ft_val_is_not_a_word(char *str, int *y)
 	return (value);
 }
 
-bool	ft_type_redir(char *str, char c)
+bool	ft_type_redir(char *str, char c, int redir)
 {
 	int	i;
 
 	i = 0;
+	if (str[i] == D && str[i + 1] == c && redir == -1)
+	{
+		i++;
+		while (str[i] != D)
+		{
+			str[i - 1] = str[i];
+			i++;
+		}
+		str[i] = '\0';
+		str[i - 1] = '\0';
+		return (false);
+	}
 	while (str[i] && str[i] == c)
 		i++;
 	if (str[i])
@@ -88,7 +100,7 @@ bool	ft_type_redir(char *str, char c)
 	return (true);
 }
 
-int	ft_tok_type(char *value)
+int	ft_tok_type(char *value, int redir)
 {
 	int	type;
 
@@ -97,9 +109,9 @@ int	ft_tok_type(char *value)
 		type = EMPTY_STR;
 	else if (value[0] == ' ')
 		type = SEP;
-	else if (ft_type_redir(value, '>') == true)
+	else if (ft_type_redir(value, '>', redir) == true)
 		type = REDIR_OUT;
-	else if (ft_type_redir(value, '<') == true)
+	else if (ft_type_redir(value, '<', redir) == true)
 	{
 		if (value[1] && value[1] == '<')
 			type = HERE_DOC;
