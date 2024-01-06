@@ -72,6 +72,7 @@ void	ft_loop_minishell(t_data *data)
 			;
 		else if (read_cmd[0] != '\0')
 			exec_success = part_loop_shell(data, &read_cmd);
+		free(read_cmd);
 		read_cmd = NULL;
 		if (exec_success != true)
 			break ;

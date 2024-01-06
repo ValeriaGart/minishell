@@ -239,6 +239,7 @@ int					ft_find_tok(t_tokens *toks, int i);
 
 // quote.c
 int					is_quote(int c);
+int					is_open_quote(int c);
 int					ft_is_space(char s);
 int					check_open_quote(char *s);
 int					ft_quote_condition(char **val, int y, char *str, int *i);

@@ -62,7 +62,6 @@ void	heredoc_first_set(t_pipex *list)
 int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err)
 {
 	int			y;
-	char		*delim;
 
 	y = 3;
 	g_minishell = 0;
@@ -71,7 +70,6 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err)
 	if (!*toks)
 		return (-5);
 	list->here_doc = 1;
-	delim = (*toks)->val;
 	if ((*toks)->prev->type == SEP)
 		++y;
 	ft_heredoc_exec((*toks)->val, list);

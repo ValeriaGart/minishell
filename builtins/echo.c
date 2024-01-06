@@ -35,7 +35,7 @@ int	ft_quote_cond(char *str, int *i, int *meet_again, t_pipex *list)
 	{
 		if (!(*meet_again))
 			*meet_again = str[*i];
-		else
+		else if (str[*i] == *meet_again)
 			*meet_again = 0;
 	}
 	if (*meet_again == S)

@@ -60,7 +60,7 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	int		j;
 
 	if (s2[0] == '\0')
-		return ((char *)s1);
+		return (free((char *)s2), (char *)s1);
 	new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (new)
 	{

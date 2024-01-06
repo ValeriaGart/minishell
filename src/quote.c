@@ -7,6 +7,22 @@ int	is_quote(int c)
 	return (0);
 }
 
+int	is_open_quote(int c)
+{
+	static bool	is_open[2];
+	int	which_quote;
+
+	if (c == D)
+		which_quote = 0;
+	else if (c == S)
+		which_quote = 1;
+	if (c == D || c == S)
+		is_open[which_quote] ^= true;
+	else
+		return (0);
+	return (is_open[which_quote]);
+}
+
 int	ft_is_space(char s)
 {
 	if (s == 32)
