@@ -125,6 +125,7 @@ void	ft_loop_export(t_pipex *list, t_tokens *toks, int i)
 		ft_loop_export(list, toks, i);	
 }
 
+//TODO:check again: export | sort | grep -v SHLVL | grep -v "declare -x _" | grep -v "PS.=" 
 int		ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 {
 
