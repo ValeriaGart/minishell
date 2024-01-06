@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	error_ms_out(char *delim, t_pipex *list, char **buf)
+void	error_ms_out(char *delim, t_pipex *list, char *buf)
 {
 	if (!buf && g_minishell != 130)
 	{
@@ -45,7 +45,7 @@ void	ft_heredoc_exec(char *delim, t_pipex *list)
 	}
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
-	error_ms_out(delim, list, &buf);
+	error_ms_out(delim, list, buf);
 }
 
 void	heredoc_first_set(t_pipex *list)

@@ -6,6 +6,8 @@ char	*ft_get_var(char *str, t_data *data)
 	int		i;
 	t_env	*env;
 	char	*var;
+	//added tmp var
+	char	*tmp;
 
 	env = data->env;
 	i = after_dollar(*str);
@@ -21,7 +23,12 @@ char	*ft_get_var(char *str, t_data *data)
 	i = 0;
 	while (env->str[i] == str[i])
 		i++;
-	var = ft_strdup((char *)&env->str[++i]);
+	/*changed*/
+	tmp = ft_strjoin("\"", (char *)&env->str[++i]);
+	var = ft_strjoin(tmp, "\"");
+	free (tmp);
+	/*till here*/
+	//var = ft_strdup((char *)&env->str[++i]);
 	if (!var)
 		return (NULL);
 	return (var);
