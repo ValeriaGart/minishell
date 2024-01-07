@@ -1,14 +1,41 @@
 #include "../incl/minishell.h"
 
+char *ft_add_quotes(char *str, int i, int y)
+{
+	char	*tmp1;
+	int 	str_len;
+	int		first_space;
+
+	first_space = 0;
+	str_len = ft_strlen(str);
+	tmp1 = ft_calloc(str_len + 5, sizeof(char));
+	while (y < str_len)
+	{
+		if (ft_isspace(str[y]) && !first_space)
+		{
+			tmp1[i] = str[y];
+			tmp1[i + 1] = D;
+			first_space = 1;
+			i++;
+		}
+		else
+			tmp1[i] = str[y];
+		i++;
+		y++;
+	}
+	if (first_space)
+		tmp1[i] = D;
+	return (tmp1);
+}
+
 /* we get the letters after the '=' in environment */
 char	*ft_get_var(char *str, t_data *data)
 {
 	int		i;
 	t_env	*env;
 	char	*var;
-	//added tmp var
-	char	*tmp;
 
+	var = NULL;
 	env = data->env;
 	i = after_dollar(*str);
 	if (str[i] == D)
@@ -23,15 +50,7 @@ char	*ft_get_var(char *str, t_data *data)
 	i = 0;
 	while (env->str[i] == str[i])
 		i++;
-	/*changed*/
-	tmp = ft_strjoin("\"", (char *)&env->str[++i]);
-	var = ft_strjoin(tmp, "\"");
-	free (tmp);
-	/*till here*/
-	//var = ft_strdup((char *)&env->str[++i]);
-	if (!var)
-		return (NULL);
-	return (var);
+	return (ft_add_quotes((char *)&env->str[++i], 0, 0));
 }
 
 /*we get the letters after the '='*/
@@ -104,36 +123,41 @@ int	ft_is_heredoc(char *new)
 	return (0);
 }
 
+char	*process_character(char *str, char *new, int *i, t_data *data)
+{
+	int q;
+
+	q = 0;
+	if (q == 0 && is_quote(str[*i]))
+		q = str[*i] % 2 + 1;
+	else if (is_quote(str[*i]) && q == str[*i] % 2 + 1)
+		q = 0;
+	if (str[*i] == '\\' && q != 2)
+	{
+		new = ft_strjoin_char(new, str[*i + 1]);
+		if (str[*i + 1])
+			i++;
+	}
+	else if (q != 2 && str[*i] == '$' && ((is_quote(str[*i + 1]) && q == 0)
+		|| (((ft_isalnum(str[*i + 1])) && str[*i + 1] != '\0') && !ft_is_heredoc(new) && str[*i + 1])))
+		new = expander_unquote(data, str, i, new);
+	else if (q != 2 && str[*i] == '$' && str[*i + 1] == '?' && ((!str[*i + 2]
+				|| ft_is_space(str[*i + 2])) || str[*i + 2]))
+		new = ft_expand_global(i, new);
+	else
+		new = ft_strjoin_char(new, str[*i]);
+	return (new);
+}
+
 char	*ft_expander(char *str, t_data *data)
 {
-	int		q;
 	int		i;
 	char	*new;
 
-	q = 0;
 	i = -1;
 	new = ft_strdup("");
 	while (new && str[++i])
-	{
-		if (q == 0 && is_quote(str[i]))
-			q = str[i] % 2 + 1;
-		else if (is_quote(str[i]) && q == str[i] % 2 + 1)
-			q = 0;
-		if (str[i] == '\\' && q != 2)
-		{
-			new = ft_strjoin_char(new, str[i + 1]);
-			if (str[i + 1])
-				i++;
-		}
-		else if (q != 2 && str[i] == '$' && ((is_quote(str[i + 1]) && q == 0)
-			|| (((ft_isalnum(str[i + 1])) && str[i + 1] != '\0') && !ft_is_heredoc(new) && str[i + 1])))
-			new = expander_unquote(data, str, &i, new);
-		else if (q != 2 && str[i] == '$' && str[i + 1] == '?' && ((!str[i + 2]
-					|| ft_is_space(str[i + 2])) || str[i + 2]))
-			new = ft_expand_global(&i, new);
-		else
-			new = ft_strjoin_char(new, str[i]);
-	}
+		new = process_character(str, new, &i, data);
 	free(str);
 	return (new);
 }

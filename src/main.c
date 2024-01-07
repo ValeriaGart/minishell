@@ -36,7 +36,9 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 	if (!(*read_cmd))
 		return (false);
 	toks = NULL;
-	if (*read_cmd[0] != '\0')
+	if (check_input(*read_cmd) != 0)
+		err = 1;
+	if (*read_cmd[0] != '\0' && !err)
 	{
 		if (ft_pre_work(&toks, &err, *read_cmd) == false)
 			return (false);
@@ -46,7 +48,7 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 	if (*read_cmd)
 		free(*read_cmd);
 	*read_cmd = NULL;
-	if (!err && ft_find_tok(toks, -1))
+	if (!err && ft_find_tok(toks, -1) && !data->oh_no_pipe)
 		err = ft_exec(data, toks);
 	if (err < 0)
 		return (false);
@@ -62,6 +64,7 @@ void	ft_loop_minishell(t_data *data)
 	read_cmd = NULL;
 	while (1)
 	{
+		data->oh_no_pipe = 0; 
 		sig_handel(1);
 		if (!read_cmd)
 			read_cmd = readline("minishell: ");

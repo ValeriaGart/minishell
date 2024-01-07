@@ -1,13 +1,12 @@
 #include "../incl/minishell.h"
 
-int	ft_print_env_declare_x(t_env *env, int out)
+int	ft_print_env_declare_x(t_env *env, int out, t_pipex *list)
 {
-	if (out == -1)
-		out = 1;
+	(void)out;
 	while (env->next != NULL)
 	{
-		write(out, "declare -x ", 11);
-		ft_putendl_fd(env->str, out);
+		write(list->out, "declare -x ", 11);
+		ft_putendl_fd(env->str, list->out);
 		env = env->next;
 	}
 	return (0);

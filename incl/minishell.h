@@ -80,6 +80,7 @@ typedef struct s_data
 {
 	char			*pwd;
 	int				old_pwd;
+	int				oh_no_pipe;
 	t_env			*env;
 }					t_data;
 
@@ -134,7 +135,7 @@ void				ft_exit_p(t_pipex *list, t_tokens *toks, int i);
 int					ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i);
 
 /* builtin env.c */
-int					ft_print_env_declare_x(t_env *env, int out);
+int					ft_print_env_declare_x(t_env *env, int out, t_pipex *list);
 int					ft_env(t_data *data, t_pipex *list, int i);
 
 /* builtin echo.c */
@@ -185,6 +186,7 @@ int					ft_count_commands(char *s);
 void				*ft_free_command(char **new);
 
 // expander.c
+char				*ft_get_var(char *str, t_data *data);
 char				*ft_expander(char *str, t_data *data);
 
 /* init.c */

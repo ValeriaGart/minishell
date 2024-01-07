@@ -5,7 +5,8 @@ int	ft_pre_tok_check(int *i, char *str)
 	int		rem;
 
 	rem = 0;
-	if (str[*i] && (ft_isspace(str[*i]) || str[*i] == '<' || str[*i] == '>'))
+	if (str[*i] && (ft_isspace(str[*i]) || str[*i] == '<'
+		|| str[*i] == '>'))
 		return (1);
 	while (str[*i] && !ft_isspace(str[*i]) && str[*i] != '<' && str[*i] != '>')
 	{
