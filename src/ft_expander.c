@@ -82,6 +82,28 @@ char	*ft_expand_global(int *i, char *new)
 	return (new);
 }
 
+int	ft_is_heredoc(char *new)
+{
+	int i;
+
+	i = ft_strlen(new);
+	if (!i)
+		return (0);
+	i--;
+	if (new[i] == D)
+		i--;
+	while (i != -1 && ft_isspace(new[i]))
+		i--;
+	if (i > 0 && new[i] == '<' && new[i - 1] == '<')
+	{
+		while (i != -1 && new[i] == '<')
+			i--;
+		if (i == -1 || ft_isspace(new[i]))
+			return (1);
+	}
+	return (0);
+}
+
 char	*ft_expander(char *str, t_data *data)
 {
 	int		q;
@@ -103,8 +125,8 @@ char	*ft_expander(char *str, t_data *data)
 			if (str[i + 1])
 				i++;
 		}
-		else if (q != 2 && str[i] == '$' && str[i + 1]
-			&& ((is_quote(str[i + 1]) && q == 0) || ((ft_isalnum(str[i + 1])) && str[i + 1] != '\0')))
+		else if (q != 2 && str[i] == '$' && ((is_quote(str[i + 1]) && q == 0)
+			|| (((ft_isalnum(str[i + 1])) && str[i + 1] != '\0') && !ft_is_heredoc(new) && str[i + 1])))
 			new = expander_unquote(data, str, &i, new);
 		else if (q != 2 && str[i] == '$' && str[i + 1] == '?' && ((!str[i + 2]
 					|| ft_is_space(str[i + 2])) || str[i + 2]))
