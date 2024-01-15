@@ -37,6 +37,39 @@ void	ft_repoint_env(t_env *tmp, t_env **new)
 	}
 }
 
+char	*ft_cpyval(char *val, char *new)
+{
+	char	*str;
+	int		i;
+	int		y;
+	int		q;
+
+	i = 0;
+	y = 0;
+	q = 0;
+	str = new;
+	while (val[i])
+	{
+		if (ft_isspace(val[i]) && q > 0)
+		{
+			str[y] = D;
+			q = -1;
+			++y;
+		}
+		str[y] = val[i];
+		if (val[i] == '=' && !q)
+		{
+			str[++y] = D;
+			q = 1;
+		}
+		++i;
+		++y;
+	}
+	if (q > 0)
+		str[y] = D;
+	return (str);
+}
+
 int	ft_add_to_env(t_env **env, char *val)
 {
 	t_env	*new;
@@ -50,13 +83,14 @@ int	ft_add_to_env(t_env **env, char *val)
 		new = malloc(sizeof(t_env));
 	if (!new)
 		return (1);
-	new->str = ft_strdup(val);
+	new->str = ft_calloc(sizeof(char), ft_strlen(val) + 3);//ft_strdup(val);
 	if (!(new->str))
 	{
 		if (new != tmp)
 			free(new);
 		return (1);
 	}
+	new->str = ft_cpyval(val, new->str);
 	if (tmp != new)
 		new->next = *env;
 	*env = new;

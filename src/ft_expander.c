@@ -125,23 +125,20 @@ int	ft_is_heredoc(char *new)
 
 char	*process_character(char *str, char *new, int *i, t_data *data)
 {
-	int q;
-
-	q = 0;
-	if (q == 0 && is_quote(str[*i]))
-		q = str[*i] % 2 + 1;
-	else if (is_quote(str[*i]) && q == str[*i] % 2 + 1)
-		q = 0;
-	if (str[*i] == '\\' && q != 2)
+	if (data->expander_q == 0 && is_quote(str[*i]))
+		data->expander_q = str[*i] % 2 + 1;
+	else if (is_quote(str[*i]) && data->expander_q == str[*i] % 2 + 1)
+		data->expander_q = 0;
+	if (str[*i] == '\\' && data->expander_q != 2)
 	{
 		new = ft_strjoin_char(new, str[*i + 1]);
 		if (str[*i + 1])
-			i++;
+			*i += 1;
 	}
-	else if (q != 2 && str[*i] == '$' && ((is_quote(str[*i + 1]) && q == 0)
+	else if (data->expander_q  != 2 && str[*i] == '$' && ((is_quote(str[*i + 1]) && data->expander_q  == 0)
 		|| (((ft_isalnum(str[*i + 1])) && str[*i + 1] != '\0') && !ft_is_heredoc(new) && str[*i + 1])))
 		new = expander_unquote(data, str, i, new);
-	else if (q != 2 && str[*i] == '$' && str[*i + 1] == '?' && ((!str[*i + 2]
+	else if (data->expander_q  != 2 && str[*i] == '$' && str[*i + 1] == '?' && ((!str[*i + 2]
 				|| ft_is_space(str[*i + 2])) || str[*i + 2]))
 		new = ft_expand_global(i, new);
 	else
@@ -149,12 +146,14 @@ char	*process_character(char *str, char *new, int *i, t_data *data)
 	return (new);
 }
 
+//Yen, i added data->expander_q value, because quotes weren't tracked properly ^^
 char	*ft_expander(char *str, t_data *data)
 {
 	int		i;
 	char	*new;
 
 	i = -1;
+	data->expander_q = 0;
 	new = ft_strdup("");
 	while (new && str[++i])
 		new = process_character(str, new, &i, data);

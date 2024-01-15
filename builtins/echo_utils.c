@@ -17,16 +17,28 @@ int	ft_end_space(t_tokens *toks, int i)
 int	ft_is_nflag_echo(t_tokens *toks)
 {
 	int		y;
+	int		q;
 
 	y = 0;
+	q = 0;
 	if (toks->type != COM)
 		return (0);
-	if (ft_strlen(toks->val) == 2)
-		y = 1;
-	if (ft_strlen(toks->val) == 4 && (toks->val[0] == S || toks->val[0] == D))
-		y = 2;
-	if (y && toks->val[y - 1] == '-' && toks->val[y] == 'n')
-		return (1);
+	if (toks->val[0] == S || toks->val[0] == D)
+		q = toks->val[0];
+	while (toks->val[y] == q)
+		y++;
+	if (toks->val[y] && toks->val[y] == '-')
+	{
+		y++;
+		if (!toks->val[y] || toks->val[y] != 'n')
+			return (0);
+		while (toks->val[y] && toks->val[y] == 'n')
+			y++;
+		while (toks->val[y] && q && toks->val[y] == q)
+			y++;
+		if (!toks->val[y])
+			return (1);
+	}
 	return (0);
 }
 

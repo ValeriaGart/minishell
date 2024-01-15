@@ -21,7 +21,7 @@ bool	ft_pre_work(t_tokens **toks, int *err, char *read_cmd)
 		return (false);
 	*toks = ft_gimme_tokens(av);
 	av = ft_free_command(av);
-	if (!*toks)
+	if (!*toks)  //TODO: is this right?
 		*err = -1;
 	return (true);
 }
@@ -48,7 +48,7 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 	if (*read_cmd)
 		free(*read_cmd);
 	*read_cmd = NULL;
-	if (!err && ft_find_tok(toks, -1) && !data->oh_no_pipe)
+	if (!err && ft_find_tok(toks, -1))
 		err = ft_exec(data, toks);
 	if (err < 0)
 		return (false);
@@ -64,10 +64,20 @@ void	ft_loop_minishell(t_data *data)
 	read_cmd = NULL;
 	while (1)
 	{
-		data->oh_no_pipe = 0; 
 		sig_handel(1);
 		if (!read_cmd)
 			read_cmd = readline("minishell: ");
+		/*if (!read_cmd && isatty(fileno(stdin)))
+			read_cmd = readline("minishell: ");
+		else if (!read_cmd)
+		{
+			char *line;
+			line = get_next_line(fileno(stdin), 0);
+			if (!line)
+				break ;
+			read_cmd = ft_strtrim(line, "\n");
+			free(line);
+		}*/
 		if (!read_cmd)
 			break ;
 		add_history(read_cmd);
@@ -75,7 +85,6 @@ void	ft_loop_minishell(t_data *data)
 			;
 		else if (read_cmd[0] != '\0')
 			exec_success = part_loop_shell(data, &read_cmd);
-		free(read_cmd);
 		read_cmd = NULL;
 		if (exec_success != true)
 			break ;
@@ -84,7 +93,6 @@ void	ft_loop_minishell(t_data *data)
 }
 
 //TODO: check if signals work properly
-//TODO: SHLVL only till 9, after that don't open any new shells
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -95,7 +103,7 @@ int	main(int ac, char **av, char **env)
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(&data);
-	ft_putstr_fd("exit\n", 1);
+	//ft_putstr_fd("exit\n", 1); //TODO: is this right?
 	ft_free_env(data.env, &data);
-	return (0);
+	return (g_minishell);
 }

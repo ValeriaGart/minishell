@@ -80,7 +80,7 @@ typedef struct s_data
 {
 	char			*pwd;
 	int				old_pwd;
-	int				oh_no_pipe;
+	int				expander_q;
 	t_env			*env;
 }					t_data;
 
@@ -235,6 +235,7 @@ t_tokens			*ft_gimme_tokens(char **strs);
 /* builtins.c */
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_tokens *toks, int i);
+bool				ft_builtin_check(char *command, int com_len, char *to_compare, int to_comp_len);
 
 /* main.c */
 int					ft_find_tok(t_tokens *toks, int i);
