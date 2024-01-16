@@ -83,14 +83,14 @@ int	ft_add_to_env(t_env **env, char *val)
 		new = malloc(sizeof(t_env));
 	if (!new)
 		return (1);
-	new->str = ft_calloc(sizeof(char), ft_strlen(val) + 3);//ft_strdup(val);
+	new->str = ft_strdup(val);//ft_calloc(sizeof(char), ft_strlen(val) + 3);//ft_strdup(val);
 	if (!(new->str))
 	{
 		if (new != tmp)
 			free(new);
 		return (1);
 	}
-	new->str = ft_cpyval(val, new->str);
+	//new->str = ft_cpyval(val, new->str);
 	if (tmp != new)
 		new->next = *env;
 	*env = new;

@@ -9,22 +9,23 @@ char *ft_add_quotes(char *str, int i, int y)
 	first_space = 0;
 	str_len = ft_strlen(str);
 	tmp1 = ft_calloc(str_len + 5, sizeof(char));
+	tmp1[0] = D;
 	while (y < str_len)
 	{
-		if (ft_isspace(str[y]) && !first_space)
+		/*if (ft_isspace(str[y]) && !first_space)
 		{
 			tmp1[i] = str[y];
 			tmp1[i + 1] = D;
 			first_space = 1;
 			i++;
-		}
-		else
-			tmp1[i] = str[y];
+		}*/
+		//else
+		tmp1[i] = str[y];
 		i++;
 		y++;
 	}
-	if (first_space)
-		tmp1[i] = D;
+	//if (first_space)
+	tmp1[i] = D;
 	return (tmp1);
 }
 
@@ -50,7 +51,7 @@ char	*ft_get_var(char *str, t_data *data)
 	i = 0;
 	while (env->str[i] == str[i])
 		i++;
-	return (ft_add_quotes((char *)&env->str[++i], 0, 0));
+	return (ft_add_quotes((char *)&env->str[++i], 1, 0));
 }
 
 /*we get the letters after the '='*/
