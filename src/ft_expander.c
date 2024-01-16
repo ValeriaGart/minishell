@@ -1,31 +1,63 @@
 #include "../incl/minishell.h"
 
+int	ft_word_count(char *str)
+{
+	int	i;
+	int	space;
+
+	i = 0;
+	space = 0;
+	if (str && str[i] == '\0')
+		return (space);
+	while (str && str[i])
+	{
+		if (ft_isspace(str[i]))
+		{
+			space++;
+			while (ft_isspace(str[i]))
+				i++;
+		}
+		if (str[i])
+			i++;
+	}
+	return (space + 1);
+}
+
 char *ft_add_quotes(char *str, int i, int y)
 {
 	char	*tmp1;
 	int 	str_len;
-	int		first_space;
+	int		words;
 
-	first_space = 0;
+	words = ft_word_count(str);
 	str_len = ft_strlen(str);
-	tmp1 = ft_calloc(str_len + 5, sizeof(char));
-	tmp1[0] = D;
+	tmp1 = ft_calloc(str_len + (words * 2) + 1, sizeof(char));
+	tmp1[i] = D;
+	i++;
 	while (y < str_len)
 	{
-		/*if (ft_isspace(str[y]) && !first_space)
+		if (ft_isspace(str[y]))
+		{
+			tmp1[i] = D;
+			i++;
+			while (ft_isspace(str[y]))
+			{
+				tmp1[i] = str[y];
+				i++;
+				y++;
+			}
+			tmp1[i] = D;
+			i++;
+		}
+		else
 		{
 			tmp1[i] = str[y];
-			tmp1[i + 1] = D;
-			first_space = 1;
 			i++;
-		}*/
-		//else
-		tmp1[i] = str[y];
-		i++;
-		y++;
+			y++;
+		}
 	}
-	//if (first_space)
 	tmp1[i] = D;
+	i++;
 	return (tmp1);
 }
 
@@ -51,7 +83,7 @@ char	*ft_get_var(char *str, t_data *data)
 	i = 0;
 	while (env->str[i] == str[i])
 		i++;
-	return (ft_add_quotes((char *)&env->str[++i], 1, 0));
+	return (ft_add_quotes((char *)&env->str[++i], 0, 0));
 }
 
 /*we get the letters after the '='*/

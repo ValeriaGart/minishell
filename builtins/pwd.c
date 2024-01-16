@@ -6,6 +6,7 @@ int	ft_pwd(t_pipex *list)
 	char	*tmp;
 	int		out;
 
+	g_minishell = 0;
 	out = 1;
 	out = list->out;
 	tmp = ft_calloc(sizeof(char), 10000);
