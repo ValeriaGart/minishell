@@ -111,5 +111,5 @@ char	*ft_bcheck_paths(t_env	*env)
 			return (env->str + 5);
 		env = env->next;
 	}
-	return (NULL);
+	return (ft_strdup("./")); //TODO: free when needed
 }

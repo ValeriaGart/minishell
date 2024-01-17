@@ -4,7 +4,8 @@ int	ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
 {
 	if (do_exit)
 	{
-		ft_putstr_fd("exit\n", list->out);
+		if (isatty(STDOUT_FILENO))
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 		ft_error(toks->val, ": numeric argument required\n", 0);
 		ft_list_loop_free(list, i);
 		list->tokens = ft_free_toks(list->tokens);
@@ -13,7 +14,8 @@ int	ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
 		ft_free_env(list->data->env, list->data);
 		exit(2);
 	}
-	ft_putstr_fd("exit\n", list->out);
+	if (isatty(STDOUT_FILENO))
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
 	ft_error(toks->val, ": too many arguments\n", 0);
 	g_minishell = 1;
 	return (1);
@@ -69,7 +71,8 @@ void	ft_exit_p(t_pipex *list, t_tokens *toks, int i)
 		if (ft_exit_error_check(toks, 0, i, list))
 			return ;
 	}
-	ft_putstr_fd("exit\n", list->out);
+	if (isatty(STDOUT_FILENO))
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
 	ft_list_loop_free(list, i);
 	list->tokens = ft_free_toks(list->tokens);
 	ft_list_free(list);

@@ -108,7 +108,7 @@ int	ft_tok_type(char *value, int redir)
 	type = 0;
 	if (value[0] == '\0')
 		type = EMPTY_STR;
-	else if (value[0] == ' ')
+	else if (value[0] == ' ' && value[1] == '\0')
 		type = SEP;
 	else if (ft_type_redir(value, '>', redir) == true)
 		type = REDIR_OUT;

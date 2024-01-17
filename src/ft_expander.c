@@ -158,10 +158,6 @@ int	ft_is_heredoc(char *new)
 
 char	*process_character(char *str, char *new, int *i, t_data *data)
 {
-	if (data->expander_q == 0 && is_quote(str[*i]))
-		data->expander_q = str[*i] % 2 + 1;
-	else if (is_quote(str[*i]) && data->expander_q == str[*i] % 2 + 1)
-		data->expander_q = 0;
 	if (str[*i] == '\\' && data->expander_q != 2)
 	{
 		new = ft_strjoin_char(new, str[*i + 1]);
@@ -179,6 +175,21 @@ char	*process_character(char *str, char *new, int *i, t_data *data)
 	return (new);
 }
 
+char	*ft_str_expand_home(char *str, int i)
+{
+	char	*ret;
+
+	ret = ft_calloc(sizeof(char), ft_strlen(str) + 5);
+	if (!ret)
+		return (NULL);
+	ft_strlcpy(ret, str, i + 1);
+	ft_strlcpy(ret + i, "$HOME", 5 + 1);
+	i++;
+	ft_strlcpy(ret + i + 4, str + i, ft_strlen(str + i) + 1);
+	free (str);
+	return (ret);
+}
+
 //Yen, i added data->expander_q value, because quotes weren't tracked properly ^^
 char	*ft_expander(char *str, t_data *data)
 {
@@ -189,7 +200,16 @@ char	*ft_expander(char *str, t_data *data)
 	data->expander_q = 0;
 	new = ft_strdup("");
 	while (new && str[++i])
+	{
+		if (data->expander_q == 0 && is_quote(str[i]))
+			data->expander_q = str[i] % 2 + 1;
+		else if (is_quote(str[i]) && data->expander_q == str[i] % 2 + 1)
+			data->expander_q = 0;
+		if (str[i] == '~' && data->expander_q != 2 && !ft_is_heredoc(new)
+			&& (str[i + 1] == '\0' || ft_isspace(str[i + 1])))
+			str = ft_str_expand_home(str, i); //TODO: make sure to free
 		new = process_character(str, new, &i, data);
+	}
 	free(str);
 	return (new);
 }
