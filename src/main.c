@@ -82,7 +82,7 @@ void	ft_loop_minishell(t_data *data)
 			break ;
 		add_history(read_cmd);
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
-			;
+			free(read_cmd);
 		else if (read_cmd[0] != '\0')
 			exec_success = part_loop_shell(data, &read_cmd);
 		read_cmd = NULL;

@@ -55,8 +55,10 @@ char *ft_get_var_no_quote(char *buf, t_data *data, int ind)
 	str = ft_get_var(&buf[ind + 1], data);
 	if (!str)
 		return (NULL);
+	if (!str[i])
+		return (str);
 	i++;
-	while (str[i] != D)
+	while (str[i] && str[i] != D)
 	{
 		str[i - 1] = str[i];
 		i++;
@@ -75,22 +77,23 @@ char	*ft_expand_heredoc(char *buf, int buf_len, t_data *data)
 	i = 0;
 	tmp = NULL;
 	env_var = NULL;
-	while (buf && i < buf_len)
+	while (buf && buf[i] && i < buf_len)
 	{
 		if (buf[i] == '$' && ft_isalnum(buf[i + 1]))
 		{
 			env_var = ft_get_var_no_quote(buf, data, i);
 			if (!env_var)
-				return (NULL);
-			if (env_var[0] != '\0')
-			{
-				tmp = ft_change_buf(env_var, &buf, i);
-				if (!tmp)
-					save_free((char *)buf, (char *)tmp);
-			}
+				return (buf);
+			//if (env_var[0] != '\0')
+			//{
+			tmp = ft_change_buf(env_var, &buf, i);
+			if (!tmp)
+				save_free((char *)buf, (char *)tmp);
+			//}
 			free(env_var);
 		}
-		i++;
+		if (buf[i])
+			i++;
 	}
 	return (buf);
 }
