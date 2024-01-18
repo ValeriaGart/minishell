@@ -96,7 +96,7 @@ int	ft_exec(t_data *data, t_tokens *toks)
 	int		ret;
 
 	ret = 0;
-	if (init_pipex(&list, data, toks))
+	if (init_malloc_pipex(&list, data, toks))
 		return (-1);
 	ret = ft_do_all_to_exec(&list, 0, -1);
 	list.tokens = ft_free_toks(list.tokens);

@@ -11,6 +11,8 @@ void	ft_list_free(t_pipex *list)
 		close(list->redir_out);
 	if (list->redir_in != -1)
 		close(list->redir_in);
+	if (list->paths)
+		free(list->paths);
 }
 
 char	*ft_strjoin_char(char *str, char c)

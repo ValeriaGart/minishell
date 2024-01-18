@@ -39,7 +39,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	return (0);
 }
 
-int	init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
+void	ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
 	list->rem_fd = -1;
 	list->redir_in = -1;
@@ -50,13 +50,21 @@ int	init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 	list->tokens = toks;
 	list->ac = ft_find_tok(toks, -1);
 	list->paths = NULL;
-	list->paths = ft_bcheck_paths(data->env);
+	list->pids = NULL;
 	list->com_paths = NULL;
-	if (list->paths)
+}
+
+int	init_malloc_pipex(t_pipex *list, t_data *data, t_tokens *toks)
+{
+	ft_init_pipex(list, data, toks);
+	list->paths = ft_bcheck_paths(data->env);
+	if (!list->paths)
+		return (ft_error_msg("Malloc failed\n", 15));
+	list->com_paths = ft_split(list->paths, ':');
+	if (!list->com_paths)
 	{
-		list->com_paths = ft_split(list->paths, ':');
-		if (!list->com_paths)
-			return (ft_error_msg("Malloc failed\n", 15));
+		ft_list_free(list);
+		return (ft_error_msg("Malloc failed\n", 15));
 	}
 	list->pids = malloc(list->ac * sizeof(pid_t));
 	if (!list->pids)

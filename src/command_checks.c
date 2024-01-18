@@ -108,7 +108,7 @@ char	*ft_bcheck_paths(t_env	*env)
 	while (env->next)
 	{
 		if (!ft_strncmp("PATH", env->str, 4))
-			return (env->str + 5);
+			return (ft_strdup(env->str + 5));
 		env = env->next;
 	}
 	return (ft_strdup("./")); //TODO: free when needed
