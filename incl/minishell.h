@@ -149,10 +149,17 @@ int					ft_n_flag_echo(int i, t_tokens **toks, t_pipex *list);
 /* builtin pwd.c */
 int					ft_pwd(t_pipex *list);
 
-/* builtin export.c */
-int					ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
-void				ft_repoint_env(t_env *tmp, t_env **new);
+/* builtin export_utils.c */
+int					ft_check_export_err(int type);
 int					ft_add_to_env(t_env **env, char *val);
+void				ft_loop_export(t_pipex *list, t_tokens *toks, int i, int err);
+int					ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
+
+/* builtin export.c */
+int					ft_check_before_equal(char *val);
+void				ft_repoint_env(t_env *tmp, t_env **new);
+char				*ft_cpyval(char *val, char *new);
+int					ft_check_after_equal(t_env *env, char *val);
 
 /* builtin unset.c */
 void				ft_unset_p(t_pipex *list, t_tokens *toks, int i);

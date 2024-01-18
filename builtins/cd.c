@@ -64,8 +64,6 @@ int	ft_cd_tilde(t_env *env, t_tokens *toks)
 	return (0);
 }
 
-//if list->data->old_pwd - update, else don't touch
-//if PWD->update it, else don't touh 
 int	ft_update_pwd_env(t_pipex *list)
 {
 	char	*old_pwd;

@@ -34,6 +34,7 @@ SRCS =	src/main.c						\
 		builtins/cd.c					\
 		builtins/env.c	 				\
 		builtins/pwd.c					\
+		builtins/export_utils.c			\
 		builtins/export.c				\
 		builtins/unset.c				\
 		builtins/builtins.c				\

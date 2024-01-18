@@ -67,12 +67,12 @@ void	ft_loop_minishell(t_data *data)
 		sig_handel(1);
 		//if (!read_cmd)
 		//	read_cmd = readline("minishell: ");
-		if (!read_cmd && isatty(fileno(stdin)))
+		if (!read_cmd && isatty(STDIN_FILENO))
 			read_cmd = readline("minishell: ");
 		else if (!read_cmd)
 		{
 			char *line;
-			line = get_next_line(fileno(stdin), 0);
+			line = get_next_line(STDIN_FILENO, 0);
 			if (!line)
 				break ;
 			read_cmd = ft_strtrim(line, "\n");

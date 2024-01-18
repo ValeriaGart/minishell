@@ -190,7 +190,6 @@ char	*ft_str_expand_home(char *str, int i)
 	return (ret);
 }
 
-//Yen, i added data->expander_q value, because quotes weren't tracked properly ^^
 char	*ft_expander(char *str, t_data *data)
 {
 	int		i;

@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-bool	ft_builtin_check(char *command, int com_len, char *to_compare, int to_comp_len)
+bool	ft_builtin_check(char *command, int com_len, char *to_compare,
+			int to_comp_len)
 {
 	int	plus_str;
 
@@ -44,7 +45,6 @@ int	is_builtin(t_tokens *toks, int i)
 	return (builtin);
 }
 
-//TODO: "echo -n" should return new prompt not "-n"
 void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {
 	int	builtin;
