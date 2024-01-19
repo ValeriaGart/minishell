@@ -73,7 +73,9 @@ int	ft_loop_new_com_tok(char **strs, t_tokens *toks, int i, int y)
 		else
 			toks->next = ft_new_token(i, &y, strs, -1);
 		if (!toks->next)
+		{
 			return (1);
+		}
 		ft_assign_prev_cur_tok(&toks);
 		ind++;
 	}

@@ -41,6 +41,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 
 void	ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
+	list->block_incr_redir = 0;
 	list->rem_fd = -1;
 	list->redir_in = -1;
 	list->redir_out = -1;

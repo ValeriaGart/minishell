@@ -10,7 +10,7 @@ bool	ft_last_pipe(t_tokens *toks, int i)
 }
 
 t_tokens	*ft_point_to_needed_tok(t_tokens *toks, int i,
-									int next, int skip_char)
+								int next, int skip_char)
 {
 	if (skip_char)
 	{

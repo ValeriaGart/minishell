@@ -75,6 +75,7 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 	toks = ft_point_to_needed_tok(toks, i, 0, 0);
 	while (toks && toks->ind_command == i)
 	{
+		list->block_incr_redir = 0;
 		if (toks->type == REDIR_OUT && err != 1)
 			err = ft_newoutfd(&toks, &list, i);
 		else if (toks->type == REDIR_IN && err != 1)
@@ -92,7 +93,7 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 		}
 		if (!list->tokens)
 			toks = NULL;
-		if (toks)
+		if (toks && !list->block_incr_redir)
 			toks = toks->next;
 	}
 	return (0);

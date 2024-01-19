@@ -5,7 +5,7 @@ t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
 	toks = toks->next;
 	while (toks && toks->ind_command == i && toks->type == SEP)
 		toks = toks->next;
-	if (!toks || toks->ind_command != i || toks->type != COM)
+	if (!toks || toks->ind_command != i || toks->type != COM) //cant go in here with '<echo<'
 	{
 		if (!toks)
 			ft_error("syntax error near unexpected token ", "`\\n'\n", 0);
@@ -62,6 +62,8 @@ void	ft_change_args(t_tokens **toks)
 	t_tokens	*prev;
 	t_tokens	*next;
 
+	if (!*toks)
+		return ;
 	next = (*toks)->next;
 	prev = (*toks)->prev;
 	if ((*toks)->val)
@@ -77,6 +79,27 @@ void	ft_change_args(t_tokens **toks)
 	}
 	*toks = next;
 }
+
+/*void ft_change_args(t_tokens **toks)
+{
+    t_tokens *prev;
+    t_tokens *next;
+
+    next = (*toks)->next;
+    prev = (*toks)->prev;
+    if (*toks && (*toks)->val)
+        free((*toks)->val);
+    if (next)
+        next->prev = prev;
+    if (prev)
+    {
+        prev->next = next;
+        *toks = prev;
+    }
+    else
+		*toks = next;
+	*toks = NULL;
+}*/
 
 void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 {
@@ -104,4 +127,9 @@ void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 		(*list)->tokens = NULL;
 	if (iter && iter->prev == NULL)
 		(*list)->tokens = iter;
+	if (iter)
+	{
+		(*list)->block_incr_redir = 1;
+		*tokens = iter;
+	}
 }

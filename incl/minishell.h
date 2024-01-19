@@ -98,6 +98,7 @@ typedef struct s_pipex
 	int				out;
 	int				n_flag_echo;
 	int				heredoc_c;
+	int				block_incr_redir;
 	char			*paths;
 	char			*command;
 	char			**args;
