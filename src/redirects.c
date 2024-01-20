@@ -15,7 +15,7 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	{
 		perror(file);
 		ft_del_com(list, toks, y, 0);
-		//ft_del_com(list, &((*list)->tokens), i, 1);
+		//TODO: (do you still need this?) ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
@@ -44,7 +44,7 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	{
 		perror(file);
 		ft_del_com(list, toks, y, 0);
-		//ft_del_com(list, &((*list)->tokens), i, 1);
+		//TODO: ( do you still need this?)ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
@@ -63,10 +63,16 @@ int	ft_last_word(int i, t_tokens *toks, t_tokens *toks_orig)
 	return (0);
 }
 
-//TODO: check "pwd | wc -l >"
-//TODO: check "wc -l | "
-//TODO: < < ho cat
-//TODO: check <<<<<< things like that
+void	check_token_type(t_tokens **toks, t_pipex **list, int *i, int *err)
+{
+	if ((*toks)->type == REDIR_OUT && (*err) != 1)
+		*err = ft_newoutfd(toks, list, *i);
+	else if ((*toks)->type == REDIR_IN && (*err) != 1)
+		*err = ft_newinfd(toks, list, *i);
+	else if ((*toks)->type == HERE_DOC)
+		*err = ft_heredoc_set(toks, *list, *i, *err);
+}
+
 int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 {
 	int			err;
@@ -76,17 +82,12 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 	while (toks && toks->ind_command == i)
 	{
 		list->block_incr_redir = 0;
-		if (toks->type == REDIR_OUT && err != 1)
-			err = ft_newoutfd(&toks, &list, i);
-		else if (toks->type == REDIR_IN && err != 1)
-			err = ft_newinfd(&toks, &list, i);
-		else if (toks->type == HERE_DOC)
-			err = ft_heredoc_set(&toks, list, i, err);
+		check_token_type(&toks, &list, &i, &err);
 		if (err && (err != 1 || ft_last_word(i, toks, list->tokens)))
 		{
 			if (err != -5)
 				g_minishell = 1;
-			//TODO: if malloc failed, is 2d condition right? :
+			//TODO: if malloc failed, is 2d condition right? ( do you still need this?)
 			if (err == -5 || i == list->ac - 1)
 				return (-2);
 			return (-1);

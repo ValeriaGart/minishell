@@ -31,7 +31,6 @@ void	ft_loop_children(t_pipex *list, int i)
 	exit(127);
 }
 
-//TODO: check if u close all the fds' properly
 void	ft_wait_for_my_babies(t_pipex *list)
 {
 	int	i;

@@ -1,5 +1,4 @@
 #include "minishell.h"
-
 void	error_ms_out(char *delim, t_pipex *list, char *buf)
 {
 	if (!buf && g_minishell != 130)
@@ -84,12 +83,9 @@ char	*ft_expand_heredoc(char *buf, int buf_len, t_data *data)
 			env_var = ft_get_var_no_quote(buf, data, i);
 			if (!env_var)
 				return (buf);
-			//if (env_var[0] != '\0')
-			//{
 			tmp = ft_change_buf(env_var, &buf, i);
 			if (!tmp)
 				save_free((char *)buf, (char *)tmp);
-			//}
 			free(env_var);
 		}
 		if (buf[i])

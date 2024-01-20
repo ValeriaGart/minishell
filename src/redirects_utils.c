@@ -80,27 +80,6 @@ void	ft_change_args(t_tokens **toks)
 	*toks = next;
 }
 
-/*void ft_change_args(t_tokens **toks)
-{
-    t_tokens *prev;
-    t_tokens *next;
-
-    next = (*toks)->next;
-    prev = (*toks)->prev;
-    if (*toks && (*toks)->val)
-        free((*toks)->val);
-    if (next)
-        next->prev = prev;
-    if (prev)
-    {
-        prev->next = next;
-        *toks = prev;
-    }
-    else
-		*toks = next;
-	*toks = NULL;
-}*/
-
 void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 {
 	t_tokens	*iter;

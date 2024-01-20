@@ -11,9 +11,9 @@ SRCS =	src/main.c						\
 		src/command_checks.c			\
 		src/exec.c						\
 		src/exec_utils.c				\
+		src/redir_heredoc.c				\
 		src/redirects_utils.c			\
 		src/redirects.c					\
-		src/redir_heredoc.c				\
 		src/utils.c						\
 		src/free_more.c					\
 		src/free.c						\

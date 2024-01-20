@@ -21,7 +21,7 @@ bool	ft_pre_work(t_tokens **toks, int *err, char *read_cmd)
 		return (false);
 	*toks = ft_gimme_tokens(av);
 	av = ft_free_command(av);
-	if (!*toks)  //TODO: is this right?
+	if (!*toks)
 		*err = -1;
 	return (true);
 }
@@ -71,7 +71,7 @@ void	ft_loop_minishell(t_data *data)
 			read_cmd = readline("minishell: ");
 		else if (!read_cmd)
 		{
-			char *line;
+			char	*line;
 			line = get_next_line(STDIN_FILENO, 0);
 			if (!line)
 				break ;
@@ -92,7 +92,6 @@ void	ft_loop_minishell(t_data *data)
 	rl_clear_history();
 }
 
-//TODO: check if signals work properly
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -103,7 +102,6 @@ int	main(int ac, char **av, char **env)
 	if (ft_env_init(&data, env))
 		return (1);
 	ft_loop_minishell(&data);
-	//ft_putstr_fd("exit\n", 1); //TODO: is this right?
 	ft_free_env(data.env, &data);
 	return (g_minishell);
 }

@@ -40,7 +40,7 @@ int	ft_add_to_env(t_env **env, char *val)
 void	ft_loop_export(t_pipex *list, t_tokens *toks, int i, int err)
 {
 	if (!ft_check_export_err(toks->type))
-	{                                                                       
+	{
 		if (ft_check_before_equal(toks->val))
 		{
 			ft_export_error(toks, toks->val, i);
@@ -61,12 +61,11 @@ void	ft_loop_export(t_pipex *list, t_tokens *toks, int i, int err)
 	toks = toks->next;
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	if (toks && toks->ind_command == i)
-		ft_loop_export(list, toks, i, 0);	
+		ft_loop_export(list, toks, i, 0);
 }
 
-int		ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
+int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 {
-
 	toks = toks->next;
 	if (!toks || toks->ind_command != i)
 		return (ft_print_env_declare_x(env, list->redir_out, list));

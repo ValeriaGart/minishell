@@ -10,7 +10,7 @@ int	is_quote(int c)
 int	is_open_quote(int c)
 {
 	static bool	is_open[2];
-	int	which_quote;
+	int			which_quote;
 
 	if (c == D)
 		which_quote = 0;
@@ -44,7 +44,8 @@ int	ft_quote_condition(char **val, int y, char *str, int *i)
 		value[*i] = str[y];
 		y++;
 	}
-	if (ft_type_redir(value, '>', 0) == true || ft_type_redir(value, '<', 0) == true)
+	if (ft_type_redir(value, '>', 0) == true
+		|| ft_type_redir(value, '<', 0) == true)
 	{
 		value[*i + 2] = D;
 		while (*i >= 0)
