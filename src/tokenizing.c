@@ -54,6 +54,25 @@ void	ft_if_echo_redir(int *echo, int *redir, t_tokens *toks, int ind)
 		*redir = 0;
 }
 
+int	ft_is_fd_redir(char *str)
+{
+	int	atoid;
+	int	i;
+
+	atoid = 0;
+	i = 0;
+	while (str[i] && ft_isdigit(str[i]))
+		i++;
+	if (!str[i])
+	{
+		atoid = ft_atoi(str);
+		if (atoid > 1024)
+			return (0);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_loop_new_com_tok(char **strs, t_tokens *toks, int i, int y)
 {
 	int	ind;
@@ -77,6 +96,8 @@ int	ft_loop_new_com_tok(char **strs, t_tokens *toks, int i, int y)
 			return (1);
 		}
 		ft_assign_prev_cur_tok(&toks);
+		if (toks->type == REDIR_OUT && toks->prev && ft_is_fd_redir(toks->prev->val))
+			toks->type = FD_REDIR;
 		ind++;
 	}
 	return (0);

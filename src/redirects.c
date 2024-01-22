@@ -65,7 +65,18 @@ int	ft_last_word(int i, t_tokens *toks, t_tokens *toks_orig)
 
 void	check_token_type(t_tokens **toks, t_pipex **list, int *i, int *err)
 {
-	if ((*toks)->type == REDIR_OUT && (*err) != 1)
+	if ((*err) != 1 && (*toks)->type == FD_REDIR)
+	{
+		*err = ft_newoutfd(toks, list, *i);
+		if (*err)
+			return ;
+		(*list)->fd_redir_out = ft_atoi((*toks)->val);
+		dup2((*list)->redir_out, (*list)->fd_redir_out);
+		ft_change_args(toks);
+		close((*list)->redir_out);
+		(*list)->redir_out = -1;
+	}
+	else if ((*toks)->type == REDIR_OUT && (*err) != 1)
 		*err = ft_newoutfd(toks, list, *i);
 	else if ((*toks)->type == REDIR_IN && (*err) != 1)
 		*err = ft_newinfd(toks, list, *i);

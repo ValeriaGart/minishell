@@ -14,32 +14,53 @@ int	ft_end_space(t_tokens *toks, int i)
 	return (1);
 }
 
-int	ft_is_nflag_echo(t_tokens *toks)
+int	ft_check_nflag_chars(t_tokens *toks, int q, int *min_finish, int *is_n)
 {
-	int		y;
-	int		q;
+	int	y;
 
 	y = 0;
-	q = 0;
-	if (toks->type != COM)
-		return (0);
 	if (toks->val[0] == S || toks->val[0] == D)
 		q = toks->val[0];
-	while (toks->val[y] == q)
+	while (toks->val[y] == q && q)
 		y++;
-	if (toks->val[y] && toks->val[y] == '-')
+	if (toks->val[y])
 	{
+		if (toks->val[y] == '-' && *min_finish == 0)
+			*min_finish = 1;
 		y++;
-		if (!toks->val[y] || toks->val[y] != 'n')
+		while ((toks->val[y] == 'n' || (toks->val[y] == q && q)) && *min_finish)
+		{
+			*is_n = 1;
+			y++;
+			if (!q && (toks->val[y] == S || toks->val[y] == D))
+				q = toks->val[y];
+		}
+		if (toks->val[y] && (toks->val[y] != q || *min_finish == 0))
 			return (0);
-		while (toks->val[y] && toks->val[y] == 'n')
-			y++;
-		while (toks->val[y] && q && toks->val[y] == q)
-			y++;
-		if (!toks->val[y])
-			return (1);
 	}
-	return (0);
+	return (1);
+}
+
+int	ft_is_nflag_echo(t_tokens *toks)
+{
+	int		min_finish;
+	int		is_n;
+
+	min_finish = 0;
+	is_n = 0;
+	if (toks->type != COM)
+		return (0);
+	while (toks->prev && (toks->prev->type == COM || toks->type == EMPTY_STR))
+		toks = toks->prev;
+	while(toks && (toks->type == COM || toks->type == EMPTY_STR))
+	{
+		if (!ft_check_nflag_chars(toks, 0, &min_finish, &is_n))
+			return (0);
+		toks = toks->next;
+	}
+	if (min_finish <= 0 || !is_n)
+		return (0);
+	return (1);
 }
 
 int	ft_n_flag_echo(int i, t_tokens **toks, t_pipex *list)

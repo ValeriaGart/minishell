@@ -12,6 +12,8 @@ bool	ft_last_pipe(t_tokens *toks, int i)
 t_tokens	*ft_point_to_needed_tok(t_tokens *toks, int i,
 				int next, int skip_char)
 {
+	if (!toks)
+		return (NULL);
 	if (skip_char)
 	{
 		while (toks && toks->ind_command == i && toks->type == SEP)
@@ -35,6 +37,8 @@ t_tokens	*ft_too_many_args(t_tokens *toks_orig, int i, int limit, char *com)
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	ret = toks;
 	limit--;
+	if ((!toks || toks->ind_command != i) && com[0] == 'c')
+		return (toks);
 	if (!toks || toks->ind_command != i)
 		return (toks_orig);
 	if (toks->next)

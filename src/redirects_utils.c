@@ -5,7 +5,7 @@ t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
 	toks = toks->next;
 	while (toks && toks->ind_command == i && toks->type == SEP)
 		toks = toks->next;
-	if (!toks || toks->ind_command != i || toks->type != COM) //cant go in here with '<echo<'
+	if (!toks || toks->ind_command != i || toks->type != COM)
 	{
 		if (!toks)
 			ft_error("syntax error near unexpected token ", "`\\n'\n", 0);

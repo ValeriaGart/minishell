@@ -35,6 +35,7 @@
 # define REDIR_IN	4
 # define HERE_DOC	5
 # define EMPTY_STR	6
+# define FD_REDIR	7
 
 //TODO: track if global right everywhere
 extern int			g_minishell;
@@ -92,6 +93,7 @@ typedef struct s_pipex
 	int				paths_exist;
 	int				redir_in;
 	int				redir_out;
+	int				fd_redir_out;
 	int				rem_fd;
 	int				pipes[2];
 	int				here_doc;
