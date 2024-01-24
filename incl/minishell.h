@@ -138,7 +138,7 @@ void				ft_exit_p(t_pipex *list, t_tokens *toks, int i);
 int					ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i);
 
 /* builtin env.c */
-int					ft_print_env_declare_x(t_env *env, int out, t_pipex *list);
+int					ft_print_env_declare_x(t_env *env, t_pipex *list);
 int					ft_env(t_data *data, t_pipex *list, int i);
 
 /* builtin echo.c */

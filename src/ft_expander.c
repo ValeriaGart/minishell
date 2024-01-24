@@ -117,7 +117,7 @@ char	*expander_unquote(t_data *data, char *str, int *i, char *new)
 		return (free(get_var), new);
 	}
 	new = ft_strjoin_free(new, get_var);
-	while (new && str[*i + 1] && ft_isalnum(str[*i + 1]))
+	while (new && str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
 		++(*i);
 	return (new);
 }
@@ -165,9 +165,9 @@ char	*process_character(char *str, char *new, int *i, t_data *data)
 			*i += 1;
 	}
 	else if (data->expander_q != 2 && str[*i] == '$' && ((is_quote(str[*i + 1])
-				&& data->expander_q == 0) || (((ft_isalnum(str[*i + 1]))
-					&& str[*i + 1] != '\0') && !ft_is_heredoc(new)
-				&& str[*i + 1])))
+				&& data->expander_q == 0) || ((str[*i + 1] != '\0' 
+				&& ((ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))) 
+				&& !ft_is_heredoc(new) && str[*i + 1])))
 		new = expander_unquote(data, str, i, new);
 	else if (data->expander_q != 2 && str[*i] == '$' && str[*i + 1] == '?'
 		&& ((!str[*i + 2] || ft_is_space(str[*i + 2])) || str[*i + 2]))

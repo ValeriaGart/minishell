@@ -5,13 +5,13 @@ int	ft_check_before_equal(char *val)
 	int	i;
 
 	i = 0;
-	if (val[i] && !ft_isalpha(val[i]))
+	if (val[i] && !ft_isalpha(val[i]) && val[i] != '_')
 		return (1);
 	while (val[i])
 	{
 		if (val[i] == '=')
 			return (0);
-		if (!ft_isalnum(val[i]))
+		if (!ft_isalnum(val[i]) && val[i] != '_')
 			return (1);
 		i++;
 	}

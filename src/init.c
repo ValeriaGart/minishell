@@ -7,6 +7,7 @@ int	init_part_list(t_pipex *list)
 	list->here_doc = 0;
 	list->redir_in = -1;
 	list->redir_out = -1;
+	list->fd_redir_out = -1;
 	list->args = NULL;
 	list->command = NULL;
 	return (0);
@@ -45,6 +46,7 @@ void	ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 	list->rem_fd = -1;
 	list->redir_in = -1;
 	list->redir_out = -1;
+	list->fd_redir_out = -1;
 	list->command = NULL;
 	list->data = data;
 	list->paths_exist = 1;

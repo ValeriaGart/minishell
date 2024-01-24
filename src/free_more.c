@@ -7,8 +7,8 @@ void	ft_list_free(t_pipex *list)
 	list->com_paths = ft_free_command(list->com_paths);
 	if (list->pids)
 		free(list->pids);
-	if (list->redir_out != -1)
-		close(list->redir_out);
+	if (list->fd_redir_out != -1)
+		close(list->fd_redir_out);
 	if (list->redir_in != -1)
 		close(list->redir_in);
 	if (list->paths)

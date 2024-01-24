@@ -22,6 +22,8 @@ t_tokens	*ft_point_to_needed_tok(t_tokens *toks, int i,
 	}
 	while (toks && toks->ind_command != i)
 		toks = toks->next;
+	while (toks && toks->ind_command == i && toks->type == SEP)
+		toks = toks->next;
 	if (toks && next)
 		toks = toks->next;
 	return (toks);
@@ -38,11 +40,9 @@ t_tokens	*ft_too_many_args(t_tokens *toks_orig, int i, int limit, char *com)
 	ret = toks;
 	limit--;
 	if ((!toks || toks->ind_command != i) && com[0] == 'c')
-		return (toks);
+		return (NULL);
 	if (!toks || toks->ind_command != i)
 		return (toks_orig);
-	if (toks->next)
-		toks = toks->next;
 	while (toks && toks->ind_command == i)
 	{
 		if (toks->type != SEP)

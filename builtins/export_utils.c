@@ -68,10 +68,10 @@ int	ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env)
 {
 	toks = toks->next;
 	if (!toks || toks->ind_command != i)
-		return (ft_print_env_declare_x(env, list->redir_out, list));
+		return (ft_print_env_declare_x(env, list));
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	if (!toks || toks->ind_command != i)
-		return (ft_print_env_declare_x(env, list->redir_out, list));
+		return (ft_print_env_declare_x(env, list));
 	ft_loop_export(list, toks, i, 0);
 	return (0);
 }

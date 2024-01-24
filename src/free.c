@@ -22,6 +22,7 @@ void	ft_list_loop_free(t_pipex *list, int i)
 	if (list->ac != 1)
 		close(list->pipes[1]);
 	dup2(1, STDOUT_FILENO);
+	dup2(2, STDERR_FILENO);
 }
 
 void	ft_free_av(char **av)

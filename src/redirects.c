@@ -70,11 +70,14 @@ void	check_token_type(t_tokens **toks, t_pipex **list, int *i, int *err)
 		*err = ft_newoutfd(toks, list, *i);
 		if (*err)
 			return ;
-		(*list)->fd_redir_out = ft_atoi((*toks)->val);
-		dup2((*list)->redir_out, (*list)->fd_redir_out);
-		ft_change_args(toks);
-		close((*list)->redir_out);
-		(*list)->redir_out = -1;
+		if (ft_atoi((*toks)->val) == 2)
+		{
+			(*list)->fd_redir_out = (*list)->redir_out;
+			(*list)->redir_out = -1;
+			dup2((*list)->fd_redir_out, STDERR_FILENO);
+			close((*list)->fd_redir_out);
+			ft_change_args(toks);
+		}
 	}
 	else if ((*toks)->type == REDIR_OUT && (*err) != 1)
 		*err = ft_newoutfd(toks, list, *i);

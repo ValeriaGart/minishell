@@ -40,7 +40,7 @@ int	ft_strlen_var(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && ft_isalnum(str[i]))
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	return (i);
 }
