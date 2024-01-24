@@ -45,3 +45,25 @@ t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out)
 	toks = ft_syntax_err_redir(toks, i);
 	return (toks);
 }
+
+int	ft_quotecho_condition(char **val, int y, char *str, int *i)
+{
+	char	*value;
+	char	meet_again;
+
+	meet_again = str[y];
+	value = *val;
+	*i = *i + 1;
+	value[*i] = str[y];
+	y++;
+	while (str[y] != meet_again)
+	{
+		*i = *i + 1;
+		value[*i] = str[y];
+		y++;
+	}
+	*i = *i + 1;
+	value[*i] = str[y];
+	y++;
+	return (y);
+}

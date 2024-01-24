@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-t_env *ft_find_first_cur(t_env *cur)
+t_env	*ft_find_first_cur(t_env *cur)
 {
 	t_env	*check;
 
@@ -21,13 +21,15 @@ t_env	*ft_new_cur(t_env *cur, t_env *env)
 
 	check = env;
 	next = env;
-	while (next && next->str && next->next && ft_strcmp(next->str, cur->str) <= 0)
+	while (next && next->str && next->next
+		&& ft_strcmp(next->str, cur->str) <= 0)
 		next = next->next;
 	if (!next)
 		return (NULL);
 	while (check && check->str)
 	{
-		if (ft_strcmp(check->str, next->str) < 0 && ft_strcmp(check->str, cur->str) > 0)
+		if (ft_strcmp(check->str, next->str) < 0
+			&& ft_strcmp(check->str, cur->str) > 0)
 			next = check;
 		check = check->next;
 	}
@@ -49,17 +51,16 @@ int	ft_print_env_declare_x(t_env *env, t_pipex *list)
 		equal = 0;
 		if (i != -1)
 			cur = ft_new_cur(cur, env);
-		i = 0;
-		while (cur && cur->str && cur->str[i] && cur->str[0] != '_')
+		i = -1;
+		while (cur && cur->str && cur->str[++i] && cur->str[0] != '_')
 		{
 			if (i == 0)
 				write(list->out, "export ", 7);
 			write(list->out, &(cur->str[i]), 1);
 			if (cur->str[i] == '=' && equal == 0 && ++equal)
 				write(list->out, "\"", 1);
-			i++;
 		}
-		if (cur  && cur->str && cur->str[0] != '_')
+		if (cur && cur->str && cur->str[0] != '_')
 			write(list->out, "\"\n", 2);
 	}
 	return (0);

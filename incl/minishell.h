@@ -125,10 +125,13 @@ int					ft_error(char *val, char *error, int i);
 void				ft_error_cd(char *str, int i);
 int					ft_error_screen(char *str);
 int					ft_export_error(t_tokens *toks, char *val, int ind);
+void				error_ms_out(char *delim, t_pipex *list, char *buf);
 
 /* builtin_utils.c */
-t_tokens			*ft_too_many_args(t_tokens *toks, int i, int limit, char *com);
-t_tokens			*ft_point_to_needed_tok(t_tokens *toks, int i, int next, int skip_char);
+t_tokens			*ft_too_many_args(t_tokens *toks, int i,
+						int limit, char *com);
+t_tokens			*ft_point_to_needed_tok(t_tokens *toks, int i, int next,
+						int skip_char);
 bool				ft_last_pipe(t_tokens *toks, int i);
 
 /* builtin exit.c */
@@ -155,7 +158,8 @@ int					ft_pwd(t_pipex *list);
 /* builtin export_utils.c */
 int					ft_check_export_err(int type);
 int					ft_add_to_env(t_env **env, char *val);
-void				ft_loop_export(t_pipex *list, t_tokens *toks, int i, int err);
+void				ft_loop_export(t_pipex *list, t_tokens *toks,
+						int i, int err);
 int					ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
 
 /* builtin export.c */
@@ -195,16 +199,29 @@ char				**ft_remove_quotes(char **av);
 int					ft_count_commands(char *s);
 void				*ft_free_command(char **new);
 
-// expander.c
+// ft_expander_utils.c
+int					ft_word_count(char *str);
+void				find_dquote(char *str, char *tmp1, int *i, int *y);
+char				*ft_add_quotes(char *str, int i, int y);
 char				*ft_get_var(char *str, t_data *data);
+char				*ft_name_var(char *s);
+
+// ft_expander.c
 char				*ft_expander(char *str, t_data *data);
+
+//heredoc_utils.c
+int					ft_is_heredoc(char *new);
+t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i);
+char				*ft_expand_heredoc(char *buf, int buf_len, t_data *data);
 
 /* init.c */
 int					ft_init_list_loop(t_pipex *list, int i, int reidir_err);
-int					init_malloc_pipex(t_pipex *list, t_data *data, t_tokens *toks);
+int					init_malloc_pipex(t_pipex *list, t_data *data,
+						t_tokens *toks);
 
 // input_check.c
 int					syntax_errors(char c);
+int					check_open_quote(char *s);
 int					check_input(char *s);
 
 // input_utils.c
@@ -221,15 +238,18 @@ char				**ft_env_to_twod_arr(t_env *env_list);
 /* redirects_utils.c */
 int					ft_is_echo_last(t_tokens *toks, int i);
 void				ft_change_args(t_tokens **toks);
-void				ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely);
-int					ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err);
-t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i);
+void				ft_del_com(t_pipex **list, t_tokens **tokens,
+						int i, int completely);
+int					ft_redirout_no_com(t_tokens *toks, int i,
+						t_pipex *list, int err);
 
 /* redirects.c */
 int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 
 /* redir_heredoc.c */
-int					ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err);
+char				*ft_change_buf(char *env_var, char **buf, int i);
+int					ft_heredoc_set(t_tokens **toks, t_pipex *list,
+						int i, int err);
 void				ft_heredoc_exec(char *delim, t_pipex *list);
 
 //tokenizing_utils.c
@@ -245,7 +265,8 @@ t_tokens			*ft_gimme_tokens(char **strs);
 /* builtins.c */
 void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
 int					is_builtin(t_tokens *toks, int i);
-bool				ft_builtin_check(char *command, int com_len, char *to_compare, int to_comp_len);
+bool				ft_builtin_check(char *command, int com_len,
+						char *to_compare, int to_comp_len);
 
 /* main.c */
 int					ft_find_tok(t_tokens *toks, int i);
@@ -254,8 +275,8 @@ int					ft_find_tok(t_tokens *toks, int i);
 int					is_quote(int c);
 int					is_open_quote(int c);
 int					ft_is_space(char s);
-int					check_open_quote(char *s);
 int					ft_quote_condition(char **val, int y, char *str, int *i);
+char				*ft_get_var_no_quote(char *buf, t_data *data, int ind);
 
 // singal.c
 void				sig_handel(int sig);
@@ -267,8 +288,10 @@ void				allocate_sig(t_pipex **list, int *i);
 // token.c
 t_dlist				*ft_create_dlist(char *s, int quote);
 void				ft_add_dlist_back(t_dlist **dl, char *str, int quote);
-void				ft_token_loop(char *s, int *q, int *i, int **sum_q);
-t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out);
+t_tokens			*ft_open_file(t_tokens *toks, t_pipex *list,
+						int i, int out);
+int					ft_quotecho_condition(char **val, int y, char *str,
+						int *i);
 
 /* utils.c */
 int					ft_find_index(char *s, char c);

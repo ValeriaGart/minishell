@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//TODO: cd broke after asked pwd
+//TODO: "cd --" doesnt work
 void	ft_cdhome(t_env *env)
 {
 	t_env	*home_path;

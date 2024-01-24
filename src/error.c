@@ -66,3 +66,22 @@ void	ft_error_cd(char *str, int i)
 	else
 		ft_putstr_fd(": No such file or directory\n", 2);
 }
+
+void	error_ms_out(char *delim, t_pipex *list, char *buf)
+{
+	if (!buf && g_minishell != 130)
+	{
+		ft_putstr_fd("minishell: warning: ", 2);
+		ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd(delim, 2);
+		ft_putstr_fd("')\n", 2);
+		return ;
+	}
+	if (g_minishell == 130)
+	{
+		list->heredoc_c = 1;
+		g_minishell = 0;
+	}
+	if (buf)
+		free(buf);
+}

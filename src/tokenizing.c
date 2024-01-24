@@ -1,27 +1,5 @@
 #include "../incl/minishell.h"
 
-int	ft_quotecho_condition(char **val, int y, char *str, int *i)
-{
-	char	*value;
-	char	meet_again;
-
-	meet_again = str[y];
-	value = *val;
-	*i = *i + 1;
-	value[*i] = str[y];
-	y++;
-	while (str[y] != meet_again)
-	{
-		*i = *i + 1;
-		value[*i] = str[y];
-		y++;
-	}
-	*i = *i + 1;
-	value[*i] = str[y];
-	y++;
-	return (y);
-}
-
 t_tokens	*ft_new_token(int i, int *y, char **strs, int redir)
 {
 	t_tokens	*new_tok;
@@ -45,8 +23,8 @@ t_tokens	*ft_new_token(int i, int *y, char **strs, int redir)
 
 void	ft_if_echo_redir(int *echo, int *redir, t_tokens *toks, int ind)
 {
-	if (toks->type == COM
-			&& (ft_builtin_check(toks->val, ft_strlen(toks->val), "echo", 4) == true) && ind < 2)
+	if (toks->type == COM && (ft_builtin_check(toks->val,
+				ft_strlen(toks->val), "echo", 4) == true) && ind < 2)
 		(*echo)++;
 	if (toks->type == REDIR_OUT || toks->type == REDIR_IN)
 		*redir = 1;
@@ -92,11 +70,10 @@ int	ft_loop_new_com_tok(char **strs, t_tokens *toks, int i, int y)
 		else
 			toks->next = ft_new_token(i, &y, strs, -1);
 		if (!toks->next)
-		{
 			return (1);
-		}
 		ft_assign_prev_cur_tok(&toks);
-		if (toks->type == REDIR_OUT && toks->prev && ft_is_fd_redir(toks->prev->val))
+		if (toks->type == REDIR_OUT && toks->prev
+			&& ft_is_fd_redir(toks->prev->val))
 			toks->type = FD_REDIR;
 		ind++;
 	}

@@ -23,7 +23,9 @@ SRCS =	src/main.c						\
 		src/tokenizing.c				\
 		src/input_utils.c				\
 		src/signal.c					\
+		src/ft_expander_utils.c			\
 		src/ft_expander.c				\
+		src/heredoc_utils.c				\
 		src/init.c						\
 		src/token.c						\
 		src/ft_command_split.c			\

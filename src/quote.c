@@ -58,3 +58,25 @@ int	ft_quote_condition(char **val, int y, char *str, int *i)
 	y++;
 	return (y);
 }
+
+char	*ft_get_var_no_quote(char *buf, t_data *data, int ind)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	str = ft_get_var(&buf[ind + 1], data);
+	if (!str)
+		return (NULL);
+	if (!str[i])
+		return (str);
+	i++;
+	while (str[i] && str[i] != D)
+	{
+		str[i - 1] = str[i];
+		i++;
+	}
+	str[i] = '\0';
+	str[i - 1] = '\0';
+	return (str);
+}

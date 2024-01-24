@@ -32,13 +32,13 @@ int	ft_check_nflag_chars(t_tokens *toks, int q, int *min_finish, int *is_n)
 		y++;
 		if (!q && (toks->val[y] == S || toks->val[y] == D))
 		{
-				q_n = 0;
-				q = toks->val[y];
-				while (toks->val[y] == q && q)
-				{
-					q_n++;
-					y++;
-				}
+			q_n = 0;
+			q = toks->val[y];
+			while (toks->val[y] == q && q)
+			{
+				q_n++;
+				y++;
+			}
 		}
 		while ((toks->val[y] == 'n' || (toks->val[y] == q && q)) && *min_finish)
 		{
@@ -90,7 +90,7 @@ int	ft_is_nflag_echo(t_tokens *toks)
 		return (0);
 	while (toks->prev && (toks->prev->type == COM || toks->type == EMPTY_STR))
 		toks = toks->prev;
-	while(toks && (toks->type == COM || toks->type == EMPTY_STR))
+	while (toks && (toks->type == COM || toks->type == EMPTY_STR))
 	{
 		if (!ft_check_nflag_chars(toks, 0, &min_finish, &is_n))
 			return (0);

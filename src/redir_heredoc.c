@@ -1,22 +1,4 @@
 #include "minishell.h"
-void	error_ms_out(char *delim, t_pipex *list, char *buf)
-{
-	if (!buf && g_minishell != 130)
-	{
-		ft_putstr_fd("minishell: warning: ", 2);
-		ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
-		ft_putstr_fd(delim, 2);
-		ft_putstr_fd("')\n", 2);
-		return ;
-	}
-	if (g_minishell == 130)
-	{
-		list->heredoc_c = 1;
-		g_minishell = 0;
-	}
-	if (buf)
-		free(buf);
-}
 
 char	*ft_change_buf(char *env_var, char **buf, int i)
 {
@@ -45,53 +27,14 @@ char	*ft_change_buf(char *env_var, char **buf, int i)
 	return (*buf);
 }
 
-char *ft_get_var_no_quote(char *buf, t_data *data, int ind)
+void	not_ctr_c(t_pipex **list, char **buf)
 {
-	int		i;
-	char	*str;
-
-	i = 0;
-	str = ft_get_var(&buf[ind + 1], data);
-	if (!str)
-		return (NULL);
-	if (!str[i])
-		return (str);
-	i++;
-	while (str[i] && str[i] != D)
+	if (g_minishell != 130)
 	{
-		str[i - 1] = str[i];
-		i++;
+		write((*list)->redir_in, "\n", 1);
+		free(*buf);
+		(*buf) = NULL;
 	}
-	str[i] = '\0';
-	str[i - 1] = '\0';
-	return (str);
-}
-
-char	*ft_expand_heredoc(char *buf, int buf_len, t_data *data)
-{
-	char	*tmp;
-	char	*env_var;
-	int		i;
-
-	i = 0;
-	tmp = NULL;
-	env_var = NULL;
-	while (buf && buf[i] && i < buf_len)
-	{
-		if (buf[i] == '$' && ft_isalnum(buf[i + 1]))
-		{
-			env_var = ft_get_var_no_quote(buf, data, i);
-			if (!env_var)
-				return (buf);
-			tmp = ft_change_buf(env_var, &buf, i);
-			if (!tmp)
-				save_free((char *)buf, (char *)tmp);
-			free(env_var);
-		}
-		if (buf[i])
-			i++;
-	}
-	return (buf);
 }
 
 void	ft_heredoc_exec(char *delim, t_pipex *list)
@@ -112,12 +55,7 @@ void	ft_heredoc_exec(char *delim, t_pipex *list)
 			break ;
 		buf = ft_expand_heredoc(buf, ft_strlen(buf), list->data);
 		write(list->redir_in, buf, ft_strlen(buf));
-		if (g_minishell != 130)
-		{
-			write(list->redir_in, "\n", 1);
-			free(buf);
-			buf = NULL;
-		}
+		not_ctr_c(&list, &buf);
 	}
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);

@@ -1,28 +1,5 @@
 #include "minishell.h"
 
-t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
-{
-	toks = toks->next;
-	while (toks && toks->ind_command == i && toks->type == SEP)
-		toks = toks->next;
-	if (!toks || toks->ind_command != i || toks->type != COM)
-	{
-		if (!toks)
-			ft_error("syntax error near unexpected token ", "`\\n'\n", 0);
-		else if (toks->ind_command != i)
-			ft_error("syntax error near unexpected token ", "`|'\n", 0);
-		else
-		{
-			ft_error("syntax error near unexpected token ", "`", 0);
-			ft_putstr_fd(toks->val, 2);
-			ft_putstr_fd("'\n", 2);
-		}
-		g_minishell = 2;
-		return (NULL);
-	}
-	return (toks);
-}
-
 int	ft_redirout_no_com(t_tokens *toks, int i, t_pipex *list, int err)
 {
 	if (err)
@@ -80,6 +57,16 @@ void	ft_change_args(t_tokens **toks)
 	*toks = next;
 }
 
+void	count_and_swap(t_tokens	**iter, int *i)
+{
+	while ((*iter)->ind_command != (*i))
+		(*iter) = (*iter)->next;
+	while ((*iter) && (*iter)->ind_command == (*i))
+		ft_change_args(iter);
+	while ((*iter) && (*iter)->prev)
+		(*iter) = (*iter)->prev;
+}
+
 void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 {
 	t_tokens	*iter;
@@ -87,12 +74,7 @@ void	ft_del_com(t_pipex **list, t_tokens **tokens, int i, int completely)
 	iter = *tokens;
 	if (completely)
 	{
-		while (iter->ind_command != i)
-			iter = iter->next;
-		while (iter && iter->ind_command == i)
-			ft_change_args(&iter);
-		while (iter && iter->prev)
-			iter = iter->prev;
+		count_and_swap(&iter, &i);
 		*tokens = iter;
 		if (iter == NULL)
 			(*list)->tokens = iter;

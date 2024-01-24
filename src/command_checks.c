@@ -91,7 +91,14 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 	while (iter && *iter)
 	{
 		temp = ft_strjoin(*iter, "/");
+		if (!temp)
+			return (NULL);
 		ret = ft_strjoin(temp, toks->val);
+		if (!ret)
+		{
+			//TODO: should we free(temp); here?
+			return (NULL);
+		}
 		free(temp);
 		if (access(ret, 0) == 0)
 			return (ret);
