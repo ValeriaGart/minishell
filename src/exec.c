@@ -59,6 +59,7 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	if (list->heredoc_c)
 		g_minishell = 130;
 }
+
 //TODO: ls | cat << stop | grep "asd" gabriel advice needed
 int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
@@ -71,10 +72,13 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 		if (err > 0)
 			return (1);
 		if (i < list->ac - 1)
-			pipe(list->pipes);
+		{
+			if (pipe(list->pipes) == -1)
+				return (ft_list_loop_free(list, i), 1);
+		}
 		if (!err)
 		{
-			if (!is_builtin(list->tokens, i))
+			if (!is_builtin(list->tokens, i)) // if its a pipe -> fork!, no matter builtin there or not!
 			{
 				list->pids[i] = fork();
 				if (list->pids[i] == 0)
