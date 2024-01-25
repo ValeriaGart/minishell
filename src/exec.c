@@ -59,7 +59,7 @@ void	ft_wait_for_my_babies(t_pipex *list)
 	if (list->heredoc_c)
 		g_minishell = 130;
 }
-
+//TODO: ls | cat << stop | grep "asd" gabriel advice needed
 int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
 	while (++i < list->ac)

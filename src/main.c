@@ -44,7 +44,10 @@ bool	part_loop_shell(t_data *data, char **read_cmd)
 			return (false);
 	}
 	else
+	{
+		free(*read_cmd);
 		return (true);
+	}
 	if (*read_cmd)
 		free(*read_cmd);
 	*read_cmd = NULL;

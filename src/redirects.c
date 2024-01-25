@@ -15,7 +15,6 @@ int	ft_newinfd(t_tokens **toks, t_pipex **list, int i)
 	{
 		perror(file);
 		ft_del_com(list, toks, y, 0);
-		//TODO: (do you still need this?) ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);
@@ -44,7 +43,6 @@ int	ft_newoutfd(t_tokens **toks, t_pipex **list, int i)
 	{
 		perror(file);
 		ft_del_com(list, toks, y, 0);
-		//TODO: ( do you still need this?)ft_del_com(list, &((*list)->tokens), i, 1);
 		if (i == (*list)->ac - 1)
 			return (2);
 		return (1);

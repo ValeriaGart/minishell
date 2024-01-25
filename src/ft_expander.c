@@ -33,7 +33,8 @@ char	*ft_expand_global(int *i, char *new)
 
 char	*process_character(char *str, char *new, int *i, t_data *data)
 {
-	if (str[*i] == '\\' && data->expander_q != 2)
+	if (str[*i] == '\\' && data->expander_q != 2
+		&& str[*i + 1] && (str[*i + 1] == '$' || str[*i + 1] == '\\'))
 	{
 		new = ft_strjoin_char(new, str[*i + 1]);
 		if (str[*i + 1])

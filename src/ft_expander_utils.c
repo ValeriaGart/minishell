@@ -72,7 +72,8 @@ char	*ft_get_var(char *str, t_data *data)
 		env = NULL;
 	else
 		env = ft_is_env(env, str, ft_strlen_var(str));
-	if (i || env == NULL || !env->str)
+	if (i || env == NULL || !env->str || (ft_strlen_var(str) + 1)
+		== (int)ft_strlen(env->str))
 	{
 		var = ft_strdup("");
 		return (var);

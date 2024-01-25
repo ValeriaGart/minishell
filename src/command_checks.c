@@ -83,23 +83,27 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 	char	*ret;
 	char	**iter;
 
+	ret = NULL;
 	while (toks && !(toks->ind_command == i && toks->type == COM))
 		toks = toks->next;
 	if (!toks)
 		return (NULL);
 	iter = list->com_paths;
+	if (ft_strchr(toks->val, '/') != NULL || ft_strchr(toks->val, '\\') != NULL)
+	{
+		list->paths_exist = 0;
+		ret = ft_strdup(toks->val);
+		return (ret);
+	}
 	while (iter && *iter)
 	{
 		temp = ft_strjoin(*iter, "/");
 		if (!temp)
 			return (NULL);
 		ret = ft_strjoin(temp, toks->val);
-		if (!ret)
-		{
-			//TODO: should we free(temp); here?
-			return (NULL);
-		}
 		free(temp);
+		if (!ret)
+			return (NULL);
 		if (access(ret, 0) == 0)
 			return (ret);
 		free(ret);
