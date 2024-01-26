@@ -97,9 +97,10 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 		check_token_type(&toks, &list, &i, &err);
 		if (err && (err != 1 || ft_last_word(i, toks, list->tokens)))
 		{
+			if (err == 3)
+				return (1);
 			if (err != -5)
 				g_minishell = 1;
-			//TODO: if malloc failed, is 2d condition right? ( do you still need this?)
 			if (err == -5 || i == list->ac - 1)
 				return (-2);
 			return (-1);

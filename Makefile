@@ -21,7 +21,7 @@ SRCS =	src/main.c						\
 		src/input_check.c				\
 		src/tokenizing_utils.c			\
 		src/tokenizing.c				\
-		src/input_utils.c				\
+		src/wait_n_cmp.c				\
 		src/signal.c					\
 		src/ft_expander_utils.c			\
 		src/ft_expander.c				\
@@ -49,7 +49,7 @@ SRCS =	src/main.c						\
 
 CC = cc
 
-CFLAGS = -g -gdwarf-4 -Wextra -Werror -Wall
+CFLAGS = -g -Wextra -Werror -Wall
 
 CPPFLAGS = -I ./incl
 

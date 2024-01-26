@@ -56,7 +56,7 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 		toks = toks->next;
 	builtin = ft_strlen(toks->val);
 	g_minishell = 0;
-	if (list->ac == 1 && ft_builtin_check(toks->val, builtin, "exit", 4) == true)
+	if (list->ac == 1 && ft_builtin_check(toks->val, builtin, "exit", 4))
 		ft_exit_p(list, toks, i);
 	if (ft_builtin_check(toks->val, builtin, "env", 3) == true)
 		g_minishell = ft_env(list->data, list, i);
@@ -70,6 +70,6 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 		g_minishell = ft_echo(list, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "pwd", 3) == true)
 		ft_pwd(list);
-	if (list->pids[i] == 0)
+	if (list->ac != 1 && list->pids[i] == 0)
 		exit (g_minishell);
 }

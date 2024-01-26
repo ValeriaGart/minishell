@@ -22,7 +22,6 @@ void	ft_loop_children(t_pipex *list, int i)
 		free_loop_children(list, &i);
 		exit(g_minishell);
 	}
-	unlink(".heredoc");
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
 	if (list->here_doc)
@@ -31,36 +30,22 @@ void	ft_loop_children(t_pipex *list, int i)
 	exit(127);
 }
 
-void	ft_wait_for_my_babies(t_pipex *list)
+void	ft_exec_right_way(t_pipex **list, int err, int *i)
 {
-	int	i;
-	int	status;
-
-	i = 0;
-	status = 0;
-	if (g_minishell == 131)
-		g_minishell = 0;
-	while (i < list->ac)
+	if (!err)
 	{
-		if (list->ac != 1 || !is_builtin(list->tokens, i))
-			waitpid(list->pids[i], &status, 0);
-		if ((list->ac != 1 || !is_builtin(list->tokens, i)) && WIFEXITED(status))
-			g_minishell = WEXITSTATUS(status);
-		else if ((list->ac != 1 || !is_builtin(list->tokens, i)) && WIFSIGNALED(status))
+		if (!is_builtin((*list)->tokens, *i))
 		{
-			if (!g_minishell && WTERMSIG(status) == SIGINT)
-			{
-				g_minishell = 130;
-				write(1, "\n", 1);
-			}
+			if ((*list)->ac == 1)
+				(*list)->pids[*i] = fork();
+			if ((*list)->pids[*i] == 0)
+				ft_loop_children((*list), *i);
 		}
-		i++;
+		else if ((*list)->ac == 1 || (*list)->pids[*i] == 0)
+			ft_builtins_p((*list), *i, (*list)->tokens);
 	}
-	if (list->heredoc_c)
-		g_minishell = 130;
 }
 
-//TODO: ls | cat << stop | grep "asd" gabriel advice needed
 int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
 	while (++i < list->ac)
@@ -72,26 +57,16 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 		if (err > 0)
 			return (1);
 		if (!err && list->ac != 1)
+		{
 			if (pipe(list->pipes) == -1)
 				return (ft_list_loop_free(list, i), 1);
 			list->pids[i] = fork();
 		}
-		if (!err)
-		{
-			if (!is_builtin(list->tokens, i))
-			{
-				if (list->ac == 1)
-					list->pids[i] = fork();
-				if (list->pids[i] == 0)
-					ft_loop_children(list, i);
-			}
-			else if (list->ac == 1 || list->pids[i] == 0)
-				ft_builtins_p(list, i, list->tokens);
-		}
+		ft_exec_right_way(&list, err, &i);
 		signal(SIGINT, SIG_IGN);
 		ft_list_loop_free(list, i);
 	}
-	ft_wait_for_my_babies(list);
+	ft_wait_for_my_babies(list, 0);
 	return (0);
 }
 

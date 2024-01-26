@@ -77,24 +77,11 @@ char	**ft_tok_to_args(t_tokens *toks, int i, int y)
 	return (args);
 }
 
-char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
+char	*ft_assign_ret_command(char **iter, char *temp,
+		t_tokens *toks, t_pipex *list)
 {
-	char	*temp;
 	char	*ret;
-	char	**iter;
 
-	ret = NULL;
-	while (toks && !(toks->ind_command == i && toks->type == COM))
-		toks = toks->next;
-	if (!toks)
-		return (NULL);
-	iter = list->com_paths;
-	if (ft_strchr(toks->val, '/') != NULL || ft_strchr(toks->val, '\\') != NULL)
-	{
-		list->paths_exist = 0;
-		ret = ft_strdup(toks->val);
-		return (ret);
-	}
 	while (iter && *iter)
 	{
 		temp = ft_strjoin(*iter, "/");
@@ -114,13 +101,25 @@ char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 	return (ret);
 }
 
-char	*ft_bcheck_paths(t_env	*env)
+char	*ft_gimme_com(t_tokens *toks, t_pipex *list, int i)
 {
-	while (env->next)
+	char	*temp;
+	char	*ret;
+	char	**iter;
+
+	ret = NULL;
+	temp = NULL;
+	while (toks && !(toks->ind_command == i && toks->type == COM))
+		toks = toks->next;
+	if (!toks)
+		return (NULL);
+	iter = list->com_paths;
+	if (ft_strchr(toks->val, '/') != NULL || ft_strchr(toks->val, '\\') != NULL)
 	{
-		if (!ft_strncmp("PATH", env->str, 4))
-			return (ft_strdup(env->str + 5));
-		env = env->next;
+		list->paths_exist = 0;
+		ret = ft_strdup(toks->val);
+		return (ret);
 	}
-	return (ft_strdup("./")); //TODO: free when needed
+	ret = ft_assign_ret_command(iter, temp, toks, list);
+	return (ret);
 }

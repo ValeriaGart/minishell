@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+int	ft_end_space(t_tokens *toks, int i)
+{
+	if (toks->type != SEP)
+		return (0);
+	toks = toks->next;
+	while (toks && toks->ind_command == i)
+	{
+		if (toks->type == COM)
+			return (0);
+		toks = toks->next;
+	}
+	return (1);
+}
+
 bool	ft_last_pipe(t_tokens *toks, int i)
 {
 	while (toks && toks->next)

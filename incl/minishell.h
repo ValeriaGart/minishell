@@ -128,6 +128,7 @@ int					ft_export_error(t_tokens *toks, char *val, int ind);
 void				error_ms_out(char *delim, t_pipex *list, char *buf);
 
 /* builtin_utils.c */
+int					ft_end_space(t_tokens *toks, int i);
 t_tokens			*ft_too_many_args(t_tokens *toks, int i,
 						int limit, char *com);
 t_tokens			*ft_point_to_needed_tok(t_tokens *toks, int i, int next,
@@ -148,7 +149,6 @@ int					ft_env(t_data *data, t_pipex *list, int i);
 int					ft_echo(t_pipex *list, t_tokens *toks, int i);
 
 /* builtin echo_utils.c */
-int					ft_end_space(t_tokens *toks, int i);
 int					ft_is_nflag_echo(t_tokens *toks);
 int					ft_n_flag_echo(int i, t_tokens **toks, t_pipex *list);
 
@@ -188,7 +188,6 @@ void				*ft_free_array(char **array);
 /* command_checks.c */
 char				*ft_gimme_com(t_tokens *toks, t_pipex *list, int i);
 char				**ft_tok_to_args(t_tokens *toks, int i, int y);
-char				*ft_bcheck_paths(t_env *env);
 bool				ft_command_check(t_pipex *list, t_tokens *toks, int i);
 
 //ft_command_split.c
@@ -224,7 +223,9 @@ int					syntax_errors(char c);
 int					check_open_quote(char *s);
 int					check_input(char *s);
 
-// input_utils.c
+// wait_n_cmp.c
+char				*ft_bcheck_paths(t_env *env);
+void				ft_wait_for_my_babies(t_pipex *list, int status);
 int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
@@ -250,7 +251,7 @@ int					ft_redirects(int i, t_tokens *toks, t_pipex *list);
 char				*ft_change_buf(char *env_var, char **buf, int i);
 int					ft_heredoc_set(t_tokens **toks, t_pipex *list,
 						int i, int err);
-void				ft_heredoc_exec(char *delim, t_pipex *list);
+int					ft_heredoc_exec(char *delim, t_pipex *list);
 
 //tokenizing_utils.c
 char				*ft_tok_val(char *str, int *y, int echo, int redir);

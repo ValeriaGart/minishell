@@ -37,7 +37,7 @@ void	not_ctr_c(t_pipex **list, char **buf)
 	}
 }
 
-void	ft_heredoc_exec(char *delim, t_pipex *list)
+int	ft_heredoc_exec(char *delim, t_pipex *list)
 {
 	char		*buf;
 
@@ -50,8 +50,10 @@ void	ft_heredoc_exec(char *delim, t_pipex *list)
 		sig_handel(3);
 		signal(SIGINT, get_sig_heredoc);
 		buf = readline("> ");
-		if (!buf || (!ft_strncmp(delim, buf, ft_strlen(delim))
-				&& ft_strlen(delim) == ft_strlen(buf)))
+		if (!buf)
+			return (1);
+		if (!ft_strncmp(delim, buf, ft_strlen(delim))
+			&& ft_strlen(delim) == ft_strlen(buf))
 			break ;
 		buf = ft_expand_heredoc(buf, ft_strlen(buf), list->data);
 		write(list->redir_in, buf, ft_strlen(buf));
@@ -60,6 +62,7 @@ void	ft_heredoc_exec(char *delim, t_pipex *list)
 	close(list->redir_in);
 	list->redir_in = open(".heredoc", O_RDONLY);
 	error_ms_out(delim, list, buf);
+	return (0);
 }
 
 void	heredoc_first_set(t_pipex *list)
@@ -86,12 +89,12 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err)
 	list->here_doc = 1;
 	if ((*toks)->prev->type == SEP)
 		++y;
-	ft_heredoc_exec((*toks)->val, list);
+	err = ft_heredoc_exec((*toks)->val, list);
+	if (err == 1)
+		return (3);
 	while (--y)
 		ft_change_args(toks);
 	if (!*toks || (*toks)->prev == NULL)
 		list->tokens = *toks;
-	if (err == 1)
-		return (err);
 	return (0);
 }
