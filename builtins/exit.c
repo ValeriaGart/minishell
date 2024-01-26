@@ -65,7 +65,6 @@ void	ft_exit_p(t_pipex *list, t_tokens *toks, int i)
 	toks = toks->next;
 	(void)list;
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
-	g_minishell = 0;
 	if (toks && toks->ind_command == i)
 	{
 		if (ft_exit_error_check(toks, 0, i, list))

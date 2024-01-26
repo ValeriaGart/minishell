@@ -55,12 +55,13 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	while (toks->type != COM)
 		toks = toks->next;
 	builtin = ft_strlen(toks->val);
+	g_minishell = 0;
+	if (list->ac == 1 && ft_builtin_check(toks->val, builtin, "exit", 4) == true)
+		ft_exit_p(list, toks, i);
 	if (ft_builtin_check(toks->val, builtin, "env", 3) == true)
 		g_minishell = ft_env(list->data, list, i);
 	else if (ft_builtin_check(toks->val, builtin, "cd", 2) == true)
 		ft_cd(list, list->data->env, toks, i);
-	else if (ft_builtin_check(toks->val, builtin, "exit", 4) == true)
-		ft_exit_p(list, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "export", 6) == true)
 		ft_export(list, toks, i, list->data->env);
 	else if (ft_builtin_check(toks->val, builtin, "unset", 5) == true)
@@ -69,4 +70,6 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 		g_minishell = ft_echo(list, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "pwd", 3) == true)
 		ft_pwd(list);
+	if (list->pids[i] == 0)
+		exit (g_minishell);
 }

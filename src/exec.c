@@ -42,11 +42,11 @@ void	ft_wait_for_my_babies(t_pipex *list)
 		g_minishell = 0;
 	while (i < list->ac)
 	{
-		if (!is_builtin(list->tokens, i))
+		if (list->ac != 1 || !is_builtin(list->tokens, i))
 			waitpid(list->pids[i], &status, 0);
-		if (!is_builtin(list->tokens, i) && WIFEXITED(status))
+		if ((list->ac != 1 || !is_builtin(list->tokens, i)) && WIFEXITED(status))
 			g_minishell = WEXITSTATUS(status);
-		else if (!is_builtin(list->tokens, i) && WIFSIGNALED(status))
+		else if ((list->ac != 1 || !is_builtin(list->tokens, i)) && WIFSIGNALED(status))
 		{
 			if (!g_minishell && WTERMSIG(status) == SIGINT)
 			{
@@ -71,20 +71,22 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 			return (0);
 		if (err > 0)
 			return (1);
-		if (i < list->ac - 1)
-		{
+		if (!err && list->ac != 1)
 			if (pipe(list->pipes) == -1)
 				return (ft_list_loop_free(list, i), 1);
+			list->pids[i] = fork();
 		}
 		if (!err)
 		{
-			if (!is_builtin(list->tokens, i)) // if its a pipe -> fork!, no matter builtin there or not!
+			if (!is_builtin(list->tokens, i))
 			{
-				list->pids[i] = fork();
+				if (list->ac == 1)
+					list->pids[i] = fork();
 				if (list->pids[i] == 0)
 					ft_loop_children(list, i);
 			}
-			ft_builtins_p(list, i, list->tokens);
+			else if (list->ac == 1 || list->pids[i] == 0)
+				ft_builtins_p(list, i, list->tokens);
 		}
 		signal(SIGINT, SIG_IGN);
 		ft_list_loop_free(list, i);
