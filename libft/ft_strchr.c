@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 16:00:05 by ynguyen           #+#    #+#             */
-/*   Updated: 2023/06/16 18:14:18 by ynguyen          ###   ########.fr       */
+/*   Updated: 2024/01/27 12:56:41 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,3 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (0);
 }
-// int	main(void)
-// {
-// 	char c[] = "this is my imma";
-
-// 	char *s = ft_strchr(c, 'm');
-// 	printf("%s\n", s);
-// 	return (0);
-// }

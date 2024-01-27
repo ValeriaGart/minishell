@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_more.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:12:37 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 13:02:17 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 void	ft_list_free(t_pipex *list)
 {
 	if (list->here_doc)
 		unlink(".heredoc");
-	list->com_paths = ft_free_command(list->com_paths);
+	if (list->com_paths)
+		list->com_paths = ft_free_command(list->com_paths);
 	if (list->pids)
 		free(list->pids);
 	if (list->fd_redir_out != -1)

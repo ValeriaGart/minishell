@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:11:10 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 12:53:32 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -37,7 +49,6 @@
 # define EMPTY_STR	6
 # define FD_REDIR	7
 
-//TODO: track if global right everywhere
 extern int			g_minishell;
 
 typedef struct s_dlist
@@ -230,6 +241,7 @@ int					ft_strcmp(char *s1, char *s2);
 
 /* exec.c */
 int					ft_exec(t_data *data, t_tokens *toks);
+void				free_loop_children(t_pipex *list, int *i);
 
 /* exec_utils.c */
 void				ft_check_kid(int i, t_pipex *list);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynguyen <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 12:35:56 by ynguyen           #+#    #+#             */
-/*   Updated: 2022/10/25 16:11:11 by ynguyen          ###   ########.fr       */
+/*   Updated: 2024/01/27 12:56:34 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,3 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-// int	main(void)
-// {
-// 	char src[] = "yen";
-// 	char dest[5];
-//     memcpy(dest, src, 0);
-// 	ft_memcpy(dest, src, 0);
-// 	printf("dest: %s\n", dest);
-// 	return (0);
-// }

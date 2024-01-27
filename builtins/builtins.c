@@ -1,4 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:09:31 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 13:05:31 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+void	ft_free_exit_builtin(t_pipex *list, int i)
+{
+	ft_list_loop_free(list, i);
+	list->tokens = ft_free_toks(list->tokens);
+	ft_list_free(list);
+	rl_clear_history();
+	ft_free_env(list->data->env, list->data);
+	exit(g_minishell);
+}
 
 bool	ft_builtin_check(char *command, int com_len, char *to_compare,
 			int to_comp_len)
@@ -71,5 +93,5 @@ void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	else if (ft_builtin_check(toks->val, builtin, "pwd", 3) == true)
 		ft_pwd(list);
 	if (list->ac != 1 && list->pids[i] == 0)
-		exit (g_minishell);
+		ft_free_exit_builtin(list, i);
 }

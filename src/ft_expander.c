@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_expander.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:13:10 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 12:26:38 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 char	*expander_unquote(t_data *data, char *str, int *i, char *new)
@@ -16,6 +28,8 @@ char	*expander_unquote(t_data *data, char *str, int *i, char *new)
 	while (new && str[*i + 1] && (ft_isalnum(str[*i + 1])
 			|| str[*i + 1] == '_'))
 		++(*i);
+	if (!new)
+		return (ft_free_new(new));
 	return (new);
 }
 
@@ -85,6 +99,12 @@ char	*ft_expander(char *str, t_data *data)
 		if (str[i] == '~' && data->expander_q != 2 && !ft_is_heredoc(new)
 			&& (str[i + 1] == '\0' || ft_isspace(str[i + 1])))
 			str = ft_str_expand_home(str, i);
+		if (!str)
+		{
+			if (new)
+				free(new);
+			return (NULL);
+		}
 		new = process_character(str, new, &i, data);
 	}
 	free(str);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:12:30 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 13:02:13 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_loop_children(t_pipex *list, int *i)
@@ -15,7 +27,7 @@ void	ft_loop_children(t_pipex *list, int i)
 	sig_handel(2);
 	ft_check_kid(i, list);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
-	if (!ft_command_check(list, list->tokens, i))
+	if (!list->valid_env || !ft_command_check(list, list->tokens, i))
 	{
 		if (list->here_doc)
 			unlink(".heredoc");
@@ -76,10 +88,12 @@ int	ft_exec(t_data *data, t_tokens *toks)
 	int		ret;
 
 	ret = 0;
-	if (init_malloc_pipex(&list, data, toks))
-		return (-1);
-	ret = ft_do_all_to_exec(&list, 0, -1);
+	ret = init_malloc_pipex(&list, data, toks);
+	if (!ret)
+		ret = ft_do_all_to_exec(&list, 0, -1);
 	list.tokens = ft_free_toks(list.tokens);
+	if (ret == -5)
+		return (-1);
 	ft_list_free(&list);
 	return (ret * -1);
 }

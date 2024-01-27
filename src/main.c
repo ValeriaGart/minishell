@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:13:38 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 12:37:14 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 int		g_minishell;
 
-// if input i == -1 -> return ac
 int	ft_find_tok(t_tokens *toks, int i)
 {
 	while (toks && toks->next)
@@ -26,22 +37,17 @@ bool	ft_pre_work(t_tokens **toks, int *err, char *read_cmd)
 	return (true);
 }
 
-bool	part_loop_shell(t_data *data, char **read_cmd)
+bool	part_loop_shell(t_data *data, char **read_cmd, t_tokens *toks, int err)
 {
-	t_tokens	*toks;
-	int			err;
-
-	err = 0;
 	*read_cmd = ft_expander(*read_cmd, data);
 	if (!(*read_cmd))
 		return (false);
-	toks = NULL;
 	if (check_input(*read_cmd) != 0)
 		err = 1;
 	if (*read_cmd[0] != '\0' && !err)
 	{
 		if (ft_pre_work(&toks, &err, *read_cmd) == false)
-			return (false);
+			err = -1;
 	}
 	else
 	{
@@ -87,7 +93,7 @@ void	ft_loop_minishell(t_data *data)
 		if (read_cmd[0] != '\0' && check_input(read_cmd) != 0)
 			free(read_cmd);
 		else if (read_cmd[0] != '\0')
-			exec_success = part_loop_shell(data, &read_cmd);
+			exec_success = part_loop_shell(data, &read_cmd, NULL, 0);
 		read_cmd = NULL;
 		if (exec_success != true)
 			break ;

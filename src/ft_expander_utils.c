@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_expander_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:13:05 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 11:33:16 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 int	ft_word_count(char *str)
@@ -58,7 +70,6 @@ char	*ft_add_quotes(char *str, int i, int y)
 	return (tmp1);
 }
 
-/* we get the letters after the '=' in environment */
 char	*ft_get_var(char *str, t_data *data)
 {
 	int		i;
@@ -84,7 +95,6 @@ char	*ft_get_var(char *str, t_data *data)
 	return (ft_add_quotes((char *)&env->str[++i], 0, 0));
 }
 
-/*we get the letters after the '='*/
 char	*ft_name_var(char *s)
 {
 	char			*var;

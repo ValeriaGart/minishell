@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:13:19 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 13:02:00 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 int	init_part_list(t_pipex *list)
@@ -13,9 +25,6 @@ int	init_part_list(t_pipex *list)
 	return (0);
 }
 
-//TODO: check if close redir files everywhere when needed
-//TODO: check if after del unvalid redirect there is nothing 
-//saved in pipe before
 int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 {
 	init_part_list(list);
@@ -62,18 +71,18 @@ int	init_malloc_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 	ft_init_pipex(list, data, toks);
 	list->paths = ft_bcheck_paths(data->env);
 	if (!list->paths)
-		return (ft_error_msg("Malloc failed\n", 15));
+		return (-5);
 	list->com_paths = ft_split(list->paths, ':');
 	if (!list->com_paths)
 	{
 		ft_list_free(list);
-		return (ft_error_msg("Malloc failed\n", 15));
+		return (-5);
 	}
 	list->pids = malloc(list->ac * sizeof(pid_t));
 	if (!list->pids)
 	{
 		ft_list_free(list);
-		return (ft_error_msg("Malloc failed\n", 15));
+		return (-5);
 	}
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/27 11:12:11 by vharkush          #+#    #+#             */
+/*   Updated: 2024/01/27 12:12:08 by vharkush         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/minishell.h"
 
 char	**ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
@@ -34,10 +46,7 @@ char	**ft_env_to_twod_arr(t_env *env_list)
 	}
 	env_twod = malloc(sizeof(char *) * (i + 1));
 	if (!env_twod)
-	{
-		ft_error_msg("Malloc failed\n", 15);
 		return (NULL);
-	}
 	i = -1;
 	env_twod = ft_assign_env_lines(env_list, env_twod, i);
 	return (env_twod);
