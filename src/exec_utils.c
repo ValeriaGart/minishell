@@ -12,7 +12,7 @@
 
 #include "../incl/minishell.h"
 
-char	**ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
+char **ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
 {
 	while (env_list->next)
 	{
@@ -22,7 +22,6 @@ char	**ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
 			while (i >= 0)
 				free(env_twod[--i]);
 			free(env_twod);
-			ft_error_msg("Malloc failed\n", 15);
 			return (NULL);
 		}
 		env_list = env_list->next;
@@ -31,11 +30,11 @@ char	**ft_assign_env_lines(t_env *env_list, char **env_twod, int i)
 	return (env_twod);
 }
 
-char	**ft_env_to_twod_arr(t_env *env_list)
+char **ft_env_to_twod_arr(t_env *env_list)
 {
-	char	**env_twod;
-	int		i;
-	t_env	*rem_env;
+	char **env_twod;
+	int i;
+	t_env *rem_env;
 
 	i = -1;
 	rem_env = env_list;
@@ -45,14 +44,14 @@ char	**ft_env_to_twod_arr(t_env *env_list)
 		i++;
 	}
 	env_twod = malloc(sizeof(char *) * (i + 1));
-	if (!env_twod)
+	if (env_twod == NULL)
 		return (NULL);
 	i = -1;
 	env_twod = ft_assign_env_lines(env_list, env_twod, i);
 	return (env_twod);
 }
 
-int	ft_right_out(t_pipex *list, int i)
+int ft_right_out(t_pipex *list, int i)
 {
 	if (list->redir_out > 0)
 		return (list->redir_out);
@@ -65,7 +64,7 @@ int	ft_right_out(t_pipex *list, int i)
 	return (1);
 }
 
-void	ft_dup_right_ends(int i, t_pipex *list)
+void ft_dup_right_ends(int i, t_pipex *list)
 {
 	if (i == 0)
 	{
@@ -92,7 +91,7 @@ void	ft_dup_right_ends(int i, t_pipex *list)
 	}
 }
 
-void	ft_check_kid(int i, t_pipex *list)
+void ft_check_kid(int i, t_pipex *list)
 {
 	if (list->redir_out > 0)
 	{
@@ -105,6 +104,6 @@ void	ft_check_kid(int i, t_pipex *list)
 		close(list->redir_in);
 	}
 	if (list->ac == 1)
-		return ;
+		return;
 	ft_dup_right_ends(i, list);
 }

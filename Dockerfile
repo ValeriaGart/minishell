@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libreadline-dev \
     libncurses-dev \
-    git
+    git \
+    valgrind
 
 # Copy your project files into the Docker image
 WORKDIR /usr/src/minishell
@@ -16,4 +17,4 @@ COPY . .
 RUN make all
 
 # Set the command to run your application
-CMD ["./minishell"]
+CMD ["/bin/bash"]

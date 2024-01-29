@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-void	ft_free_exit_builtin(t_pipex *list, int i)
+void ft_free_exit_builtin(t_pipex *list, int i)
 {
-	ft_list_loop_free(list, i);
+	ft_list_loop_free(list, i, 0);
 	list->tokens = ft_free_toks(list->tokens);
 	ft_list_free(list);
 	rl_clear_history();
@@ -22,10 +22,10 @@ void	ft_free_exit_builtin(t_pipex *list, int i)
 	exit(g_minishell);
 }
 
-bool	ft_builtin_check(char *command, int com_len, char *to_compare,
-			int to_comp_len)
+bool ft_builtin_check(char *command, int com_len, char *to_compare,
+					  int to_comp_len)
 {
-	int	plus_str;
+	int plus_str;
 
 	if (com_len >= to_comp_len)
 	{
@@ -39,9 +39,9 @@ bool	ft_builtin_check(char *command, int com_len, char *to_compare,
 	return (false);
 }
 
-int	is_builtin(t_tokens *toks, int i)
+int is_builtin(t_tokens *toks, int i)
 {
-	int	builtin;
+	int builtin;
 
 	while (toks && !(toks->type == COM && toks->ind_command == i))
 		toks = toks->next;
@@ -67,9 +67,9 @@ int	is_builtin(t_tokens *toks, int i)
 	return (builtin);
 }
 
-void	ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
+void ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 {
-	int	builtin;
+	int builtin;
 
 	list->out = ft_right_out(list, i);
 	while (toks->ind_command != i)

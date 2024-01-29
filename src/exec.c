@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-void	free_loop_children(t_pipex *list, int *i)
+void free_loop_children(t_pipex *list, int *i)
 {
 	ft_free_command(list->valid_env);
-	ft_list_loop_free(list, *i);
+	ft_list_loop_free(list, *i, 0);
 	list->tokens = ft_free_toks(list->tokens);
 	ft_list_free(list);
 	rl_clear_history();
 	ft_free_env(list->data->env, list->data);
 }
 
-void	ft_loop_children(t_pipex *list, int i)
+void ft_loop_children(t_pipex *list, int i)
 {
 	sig_handel(2);
 	ft_check_kid(i, list);
@@ -42,7 +42,7 @@ void	ft_loop_children(t_pipex *list, int i)
 	exit(127);
 }
 
-void	ft_exec_right_way(t_pipex **list, int err, int *i)
+void ft_exec_right_way(t_pipex **list, int err, int *i)
 {
 	if (!err)
 	{
@@ -58,7 +58,7 @@ void	ft_exec_right_way(t_pipex **list, int err, int *i)
 	}
 }
 
-int	ft_do_all_to_exec(t_pipex *list, int err, int i)
+int ft_do_all_to_exec(t_pipex *list, int err, int i)
 {
 	while (++i < list->ac)
 	{
@@ -71,21 +71,21 @@ int	ft_do_all_to_exec(t_pipex *list, int err, int i)
 		if (!err && list->ac != 1)
 		{
 			if (pipe(list->pipes) == -1)
-				return (ft_list_loop_free(list, i), 1);
+				return (ft_list_loop_free(list, i, 1), 1);
 			list->pids[i] = fork();
 		}
 		ft_exec_right_way(&list, err, &i);
 		signal(SIGINT, SIG_IGN);
-		ft_list_loop_free(list, i);
+		ft_list_loop_free(list, i, 0);
 	}
 	ft_wait_for_my_babies(list, 0);
 	return (0);
 }
 
-int	ft_exec(t_data *data, t_tokens *toks)
+int ft_exec(t_data *data, t_tokens *toks)
 {
-	t_pipex	list;
-	int		ret;
+	t_pipex list;
+	int ret;
 
 	ret = 0;
 	ret = init_malloc_pipex(&list, data, toks);

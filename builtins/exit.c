@@ -12,14 +12,14 @@
 
 #include "../incl/minishell.h"
 
-int	ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
+int ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
 {
 	if (do_exit)
 	{
 		if (isatty(STDOUT_FILENO))
 			ft_putstr_fd("exit\n", STDOUT_FILENO);
 		ft_error(toks->val, ": numeric argument required\n", 0);
-		ft_list_loop_free(list, i);
+		ft_list_loop_free(list, i, 0);
 		list->tokens = ft_free_toks(list->tokens);
 		ft_list_free(list);
 		rl_clear_history();
@@ -33,11 +33,9 @@ int	ft_exit_special_cond(t_pipex *list, t_tokens *toks, int i, int do_exit)
 	return (1);
 }
 
-int	ft_long_exit_err(int n, t_tokens *toks)
+int ft_long_exit_err(int n, t_tokens *toks)
 {
-	if (n > 20 || (n == 19 && toks->val[0] != '-' && toks->val[18] > '7')
-		|| (n == 20 && toks->val[0] == '-' && toks->val[19] == '9')
-		|| (n == 20 && toks->val[0] == '+' && toks->val[19] > '7'))
+	if (n > 20 || (n == 19 && toks->val[0] != '-' && toks->val[18] > '7') || (n == 20 && toks->val[0] == '-' && toks->val[19] == '9') || (n == 20 && toks->val[0] == '+' && toks->val[19] > '7'))
 	{
 		g_minishell = 2;
 		ft_putstr_fd("minishell: exit: ", 2);
@@ -48,9 +46,9 @@ int	ft_long_exit_err(int n, t_tokens *toks)
 	return (0);
 }
 
-int	ft_exit_error_check(t_tokens *toks, int n, int i, t_pipex *list)
+int ft_exit_error_check(t_tokens *toks, int n, int i, t_pipex *list)
 {
-	int	rem;
+	int rem;
 
 	rem = n;
 	if (toks->val[n] && (toks->val[n] == '-' || toks->val[n] == '+'))
@@ -72,7 +70,7 @@ int	ft_exit_error_check(t_tokens *toks, int n, int i, t_pipex *list)
 	return (0);
 }
 
-void	ft_exit_p(t_pipex *list, t_tokens *toks, int i)
+void ft_exit_p(t_pipex *list, t_tokens *toks, int i)
 {
 	toks = toks->next;
 	(void)list;
@@ -80,11 +78,11 @@ void	ft_exit_p(t_pipex *list, t_tokens *toks, int i)
 	if (toks && toks->ind_command == i)
 	{
 		if (ft_exit_error_check(toks, 0, i, list))
-			return ;
+			return;
 	}
 	if (isatty(STDOUT_FILENO))
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-	ft_list_loop_free(list, i);
+	ft_list_loop_free(list, i, 0);
 	list->tokens = ft_free_toks(list->tokens);
 	ft_list_free(list);
 	rl_clear_history();

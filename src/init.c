@@ -12,7 +12,7 @@
 
 #include "../incl/minishell.h"
 
-int	init_part_list(t_pipex *list)
+int init_part_list(t_pipex *list)
 {
 	list->heredoc_c = 0;
 	list->builtin = 0;
@@ -25,7 +25,7 @@ int	init_part_list(t_pipex *list)
 	return (0);
 }
 
-int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
+int ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 {
 	init_part_list(list);
 	reidir_err = ft_redirects(i, list->tokens, list);
@@ -38,7 +38,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	if (!is_builtin(list->tokens, i))
 	{
 		list->command = ft_gimme_com(list->tokens, list, i);
-		if (!list->command)
+		if (list->command == NULL)
 		{
 			list->args = ft_free_command(list->args);
 			return (1);
@@ -49,7 +49,7 @@ int	ft_init_list_loop(t_pipex *list, int i, int reidir_err)
 	return (0);
 }
 
-void	ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
+void ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
 	list->block_incr_redir = 0;
 	list->rem_fd = -1;
@@ -66,7 +66,7 @@ void	ft_init_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 	list->com_paths = NULL;
 }
 
-int	init_malloc_pipex(t_pipex *list, t_data *data, t_tokens *toks)
+int init_malloc_pipex(t_pipex *list, t_data *data, t_tokens *toks)
 {
 	ft_init_pipex(list, data, toks);
 	list->paths = ft_bcheck_paths(data->env);

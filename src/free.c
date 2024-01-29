@@ -12,7 +12,7 @@
 
 #include "../incl/minishell.h"
 
-void	ft_list_loop_free(t_pipex *list, int i)
+void ft_list_loop_free(t_pipex *list, int i, int pipe_err)
 {
 	if (list->here_doc)
 	{
@@ -31,16 +31,16 @@ void	ft_list_loop_free(t_pipex *list, int i)
 		close(list->rem_fd);
 	if (i < list->ac - 1)
 		list->rem_fd = list->pipes[0];
-	if (list->ac != 1)
+	if (list->ac != 1 && pipe_err == 0)
 		close(list->pipes[1]);
 	dup2(0, STDIN_FILENO);
 	dup2(1, STDOUT_FILENO);
 	dup2(2, STDERR_FILENO);
 }
 
-void	ft_free_av(char **av)
+void ft_free_av(char **av)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (av && av[i])
@@ -52,7 +52,7 @@ void	ft_free_av(char **av)
 		free(av);
 }
 
-void	*save_free(void *s1, void *s2)
+void *save_free(void *s1, void *s2)
 {
 	if (s1)
 	{
@@ -67,11 +67,11 @@ void	*save_free(void *s1, void *s2)
 	return (NULL);
 }
 
-char	*ft_strjoin_free(char const *s1, char const *s2)
+char *ft_strjoin_free(char const *s1, char const *s2)
 {
-	char	*new;
-	int		i;
-	int		j;
+	char *new;
+	int i;
+	int j;
 
 	if (s2[0] == '\0')
 		return (free((char *)s2), (char *)s1);
@@ -90,9 +90,9 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	return (new);
 }
 
-void	*ft_free_array(char **array)
+void *ft_free_array(char **array)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!array)
