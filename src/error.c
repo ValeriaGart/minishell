@@ -6,13 +6,13 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:12:07 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:12:08 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:59:43 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_export_error(t_tokens *toks, char *val, int ind)
+int	ft_export_error(t_tokens *toks, char *val, int ind, t_pipex *list)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ int	ft_export_error(t_tokens *toks, char *val, int ind)
 					write(2, "minishell: export: `", 20);
 					ft_putstr_fd(val, 2);
 					write(2, "': not a valid identifier\n", 26);
-					g_minishell = 1;
+					list->data->exit_code = 1;
 					return (1);
 				}
 				i++;
@@ -81,7 +81,7 @@ void	ft_error_cd(char *str, int i)
 
 void	error_ms_out(char *delim, t_pipex *list, char *buf)
 {
-	if (!buf && g_minishell != 130)
+	if (!buf && list->data->exit_code != 130)
 	{
 		ft_putstr_fd("minishell: warning: ", 2);
 		ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
@@ -89,10 +89,10 @@ void	error_ms_out(char *delim, t_pipex *list, char *buf)
 		ft_putstr_fd("')\n", 2);
 		return ;
 	}
-	if (g_minishell == 130)
+	if (list->data->exit_code == 130)
 	{
 		list->heredoc_c = 1;
-		g_minishell = 0;
+		list->data->exit_code = 0;
 	}
 	if (buf)
 		free(buf);

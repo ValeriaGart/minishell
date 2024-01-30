@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:11:10 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 12:53:32 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 20:17:04 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 #define EMPTY_STR 6
 #define FD_REDIR 7
 
-extern int g_minishell;
+extern volatile int		g_minishell;
 
 typedef struct s_dlist
 {
@@ -90,11 +90,12 @@ typedef struct s_tokens
 
 typedef struct s_data
 {
-	char *pwd;
-	int old_pwd;
-	int expander_q;
-	t_env *env;
-} t_data;
+	char			*pwd;
+	int				old_pwd;
+	int				expander_q;
+	int				exit_code;
+	t_env			*env;
+}					t_data;
 
 typedef struct s_pipex
 {
@@ -132,19 +133,20 @@ int ft_free_env(t_env *env, t_data *data);
 int ft_env_init(t_data *data, char **env);
 
 /* error.c */
-int ft_error(char *val, char *error, int i);
-void ft_error_cd(char *str, int i);
-int ft_error_screen(char *str);
-int ft_export_error(t_tokens *toks, char *val, int ind);
-void error_ms_out(char *delim, t_pipex *list, char *buf);
+int					ft_error(char *val, char *error, int i);
+void				ft_error_cd(char *str, int i);
+int					ft_error_screen(char *str);
+int					ft_export_error(t_tokens *toks, char *val,
+						int ind, t_pipex *list);
+void				error_ms_out(char *delim, t_pipex *list, char *buf);
 
 /* builtin_utils.c */
-int ft_end_space(t_tokens *toks, int i);
-t_tokens *ft_too_many_args(t_tokens *toks, int i,
-						   int limit, char *com);
-t_tokens *ft_point_to_needed_tok(t_tokens *toks, int i, int next,
-								 int skip_char);
-bool ft_last_pipe(t_tokens *toks, int i);
+int					ft_end_space(t_tokens *toks, int i);
+t_tokens			*ft_too_many_args(int i, int limit,
+						char *com, t_pipex *list);
+t_tokens			*ft_point_to_needed_tok(t_tokens *toks, int i, int next,
+						int skip_char);
+bool				ft_last_pipe(t_tokens *toks, int i);
 
 /* builtin exit.c */
 void ft_exit_p(t_pipex *list, t_tokens *toks, int i);
@@ -167,11 +169,11 @@ int ft_n_flag_echo(int i, t_tokens **toks, t_pipex *list);
 int ft_pwd(t_pipex *list);
 
 /* builtin export_utils.c */
-int ft_check_export_err(int type);
-int ft_add_to_env(t_env **env, char *val);
-void ft_loop_export(t_pipex *list, t_tokens *toks,
-					int i, int err);
-int ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
+int					ft_check_export_err(int type, t_pipex *list);
+int					ft_add_to_env(t_env **env, char *val);
+void				ft_loop_export(t_pipex *list, t_tokens *toks,
+						int i, int err);
+int					ft_export(t_pipex *list, t_tokens *toks, int i, t_env *env);
 
 /* builtin export.c */
 int ft_check_before_equal(char *val);
@@ -219,10 +221,10 @@ char *ft_name_var(char *s);
 // ft_expander.c
 char *ft_expander(char *str, t_data *data);
 
-// heredoc_utils.c
-int ft_is_heredoc(char *new);
-t_tokens *ft_syntax_err_redir(t_tokens *toks, int i);
-char *ft_expand_heredoc(char *buf, int buf_len, t_data *data);
+//heredoc_utils.c
+int					ft_is_heredoc(char *new);
+t_tokens			*ft_syntax_err_redir(t_tokens *toks, int i, t_pipex *list);
+char				*ft_expand_heredoc(char *buf, int buf_len, t_data *data);
 
 /* init.c */
 int ft_init_list_loop(t_pipex *list, int i, int reidir_err);
@@ -230,14 +232,15 @@ int init_malloc_pipex(t_pipex *list, t_data *data,
 					  t_tokens *toks);
 
 // input_check.c
-int syntax_errors(char c);
-int check_open_quote(char *s);
-int check_input(char *s);
+int					syntax_errors(char c, t_data *data);
+int					check_open_quote(char *s, t_data *data);
+int					check_input(char *s, t_data *data);
 
 // wait_n_cmp.c
-char *ft_bcheck_paths(t_env *env);
-void ft_wait_for_my_babies(t_pipex *list, int status);
-int ft_strcmp(char *s1, char *s2);
+char				*ft_bcheck_paths(t_env *env);
+void				ft_wait_for_my_babies(t_pipex *list, int status);
+int					ft_strcmp(char *s1, char *s2);
+void				ft_change_ac_on_err(t_tokens *iter, int i);
 
 /* exec.c */
 int ft_exec(t_data *data, t_tokens *toks);
@@ -276,10 +279,11 @@ int ft_quotecho_condition(char **val, int y, char *str, int *i);
 t_tokens *ft_gimme_tokens(char **strs);
 
 /* builtins.c */
-void ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
-int is_builtin(t_tokens *toks, int i);
-bool ft_builtin_check(char *command, int com_len,
-					  char *to_compare, int to_comp_len);
+void				ft_builtins_p(t_pipex *list, int i, t_tokens *toks);
+int					is_builtin(t_tokens *toks, int i);
+bool				ft_builtin_check(char *command, int com_len,
+						char *to_compare, int to_comp_len);
+void				ft_free_exit_builtin(t_pipex *list, int i);
 
 /* main.c */
 int ft_find_tok(t_tokens *toks, int i);
@@ -292,11 +296,11 @@ int ft_quote_condition(char **val, int y, char *str, int *i);
 char *ft_get_var_no_quote(char *buf, t_data *data, int ind);
 
 // singal.c
-void sig_handel(int sig);
-void get_sig_child(int sig);
-void get_sig_parent(int sig);
-void get_sig_heredoc(int sig);
-void allocate_sig(t_pipex **list, int *i);
+void				sig_handel(int sig, t_data *data);
+void				get_sig_child(int sig);
+void				get_sig_parent(int sig);
+void				get_sig_heredoc(int sig);
+void				allocate_sig(t_pipex **list, int *i);
 
 // token.c
 t_dlist *ft_create_dlist(char *s, int quote);

@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:11:40 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 12:06:43 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:58:03 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ bool	ft_access_command(t_pipex *list, t_tokens *toks)
 			ft_error(toks->val, ": No such file or directory\n", 0);
 		else
 			ft_error(toks->val, ": command not found\n", 0);
-		g_minishell = 127;
+		list->data->exit_code = 127;
 		return (false);
 	}
 	if (!list->paths_exist && !ft_strrchr(toks->val, '/'))
 	{
 		ft_error(toks->val, ": command not found\n", 0);
-		g_minishell = 127;
+		list->data->exit_code = 127;
 		return (false);
 	}
 	return (true);
@@ -45,13 +45,13 @@ bool	ft_command_check(t_pipex *list, t_tokens *toks, int i)
 		if (((buf.st_mode & S_IXUSR) == 0))
 		{
 			ft_error(toks->val, ": Permission denied\n", ft_strlen(toks->val));
-			g_minishell = 126;
+			list->data->exit_code = 126;
 			return (false);
 		}
 		if (S_ISDIR(buf.st_mode))
 		{
 			ft_error(toks->val, ": Is a directory\n", 0);
-			g_minishell = 126;
+			list->data->exit_code = 126;
 			return (false);
 		}
 	}

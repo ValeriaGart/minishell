@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:14:09 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 12:05:14 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 19:32:20 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_change_buf(char *env_var, char **buf, int i)
 
 void	not_ctr_c(t_pipex **list, char **buf)
 {
-	if (g_minishell != 130)
+	if ((*list)->data->exit_code != 130)
 	{
 		write((*list)->redir_in, "\n", 1);
 		free(*buf);
@@ -57,9 +57,9 @@ int	ft_heredoc_exec(char *delim, t_pipex *list)
 	list->redir_in = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (list->redir_in < 0)
 		perror("heredoc");
-	while (g_minishell != 130)
+	while (list->data->exit_code != 130)
 	{
-		sig_handel(3);
+		sig_handel(3, list->data);
 		signal(SIGINT, get_sig_heredoc);
 		buf = readline("> ");
 		if (!buf)
@@ -93,9 +93,9 @@ int	ft_heredoc_set(t_tokens **toks, t_pipex *list, int i, int err)
 	int			y;
 
 	y = 3;
-	g_minishell = 0;
+	list->data->exit_code = 0;
 	heredoc_first_set(list);
-	*toks = ft_syntax_err_redir(*toks, i);
+	*toks = ft_syntax_err_redir(*toks, i, list);
 	if (!*toks)
 		return (-5);
 	list->here_doc = 1;

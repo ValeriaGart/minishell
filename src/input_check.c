@@ -6,28 +6,28 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:13:29 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:13:30 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:41:26 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/minishell.h"
 
-int	syntax_errors(char c)
+int	syntax_errors(char c, t_data *data)
 {
 	if (c == PIPE)
 	{
-		g_minishell = 2;
+		data->exit_code = 2;
 		ft_putendl_fd("Pipe can only be used in a full command", 2);
 	}
 	else if (c == D || c == S)
 	{
-		g_minishell = 2;
+		data->exit_code = 2;
 		ft_putendl_fd("Quotes error", 2);
 	}
 	return (2);
 }
 
-int	check_pipe(char *input, int y, int quote)
+int	check_pipe(char *input, int y, int quote, t_data *data)
 {
 	int	end_str;
 	int	i;
@@ -37,20 +37,20 @@ int	check_pipe(char *input, int y, int quote)
 	while (input[i] && ft_is_space(input[i]) == 1)
 		i++;
 	if (input[i] == PIPE || !input[i])
-		return (syntax_errors(input[i]));
+		return (syntax_errors(input[i], data));
 	while (end_str != 0 && ft_is_space(input[end_str]))
 		end_str--;
 	if (input[end_str] == PIPE)
-		return (syntax_errors(input[end_str]));
+		return (syntax_errors(input[end_str], data));
 	y++;
 	while (input[y] && ft_is_space(input[y]) == 1)
 		y++;
 	if (!quote && input[y] == PIPE)
-		return (syntax_errors(input[y]));
+		return (syntax_errors(input[y], data));
 	return (0);
 }
 
-int	check_open_quote(char *s)
+int	check_open_quote(char *s, t_data *data)
 {
 	int		i;
 	char	rem;
@@ -66,7 +66,7 @@ int	check_open_quote(char *s)
 				i++;
 			if (s[i] == '\0')
 			{
-				syntax_errors(S);
+				syntax_errors(S, data);
 				return (1);
 			}
 			i++;
@@ -77,7 +77,7 @@ int	check_open_quote(char *s)
 	return (0);
 }
 
-int	check_input(char *s)
+int	check_input(char *s, t_data *data)
 {
 	int	i;
 	int	quote;
@@ -88,7 +88,7 @@ int	check_input(char *s)
 	{
 		if (ft_is_space(s[i]) == 1)
 			;
-		else if (s[i] == PIPE && check_pipe(s, i, quote))
+		else if (s[i] == PIPE && check_pipe(s, i, quote, data))
 			return (1);
 		else if (s[i] == S || s[i] == D)
 		{
@@ -96,7 +96,7 @@ int	check_input(char *s)
 				quote = s[i];
 			else if (quote == s[i])
 				quote = 0;
-			if (check_open_quote(s))
+			if (check_open_quote(s, data))
 				return (1);
 		}
 	}

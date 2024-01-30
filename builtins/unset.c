@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:10:45 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:10:46 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:57:45 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_unset_p(t_pipex *list, t_tokens *toks, int i)
 
 	env = list->data->env;
 	toks = toks->next;
-	g_minishell = 0;
+	list->data->exit_code = 0;
 	if (!toks || toks->ind_command != i)
 		return ;
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);

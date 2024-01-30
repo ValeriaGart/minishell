@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:09:31 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 13:05:31 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:52:20 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void ft_free_exit_builtin(t_pipex *list, int i)
 	ft_list_free(list);
 	rl_clear_history();
 	ft_free_env(list->data->env, list->data);
-	exit(g_minishell);
+	exit(list->data->exit_code);
 }
 
 bool ft_builtin_check(char *command, int com_len, char *to_compare,
@@ -77,11 +77,11 @@ void ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	while (toks->type != COM)
 		toks = toks->next;
 	builtin = ft_strlen(toks->val);
-	g_minishell = 0;
+	list->data->exit_code = 0;
 	if (list->ac == 1 && ft_builtin_check(toks->val, builtin, "exit", 4))
 		ft_exit_p(list, toks, i);
 	if (ft_builtin_check(toks->val, builtin, "env", 3) == true)
-		g_minishell = ft_env(list->data, list, i);
+		list->data->exit_code = ft_env(list->data, list, i);
 	else if (ft_builtin_check(toks->val, builtin, "cd", 2) == true)
 		ft_cd(list, list->data->env, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "export", 6) == true)
@@ -89,7 +89,7 @@ void ft_builtins_p(t_pipex *list, int i, t_tokens *toks)
 	else if (ft_builtin_check(toks->val, builtin, "unset", 5) == true)
 		ft_unset_p(list, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "echo", 4) == true)
-		g_minishell = ft_echo(list, toks, i);
+		list->data->exit_code = ft_echo(list, toks, i);
 	else if (ft_builtin_check(toks->val, builtin, "pwd", 3) == true)
 		ft_pwd(list);
 	if (list->ac != 1 && list->pids[i] == 0)

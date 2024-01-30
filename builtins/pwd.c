@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:10:27 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:10:28 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:57:38 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_pwd(t_pipex *list)
 	char	*tmp;
 	int		out;
 
-	g_minishell = 0;
+	list->data->exit_code = 0;
 	out = 1;
 	out = list->out;
 	tmp = ft_calloc(sizeof(char), 10000);

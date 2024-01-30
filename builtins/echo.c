@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:09:54 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:09:55 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:54:44 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_echo_env(t_env *env, char *str, int *i, t_pipex *list)
 			if (str[n] == '0')
 				ft_putstr_fd("minishell", list->out);
 			else
-				ft_putnbr_fd(g_minishell, list->out);
+				ft_putnbr_fd(list->data->exit_code, list->out);
 			*i = *i + 1;
 			return ;
 		}

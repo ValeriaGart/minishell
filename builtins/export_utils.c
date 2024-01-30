@@ -6,18 +6,18 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:10:12 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:10:13 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 13:59:36 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/minishell.h"
 
-int	ft_check_export_err(int type)
+int	ft_check_export_err(int type, t_pipex *list)
 {
 	if (type == EMPTY_STR)
 	{
 		ft_putstr_fd("minishell: export: `': not a valid identifier\n", 2);
-		g_minishell = 1;
+		list->data->exit_code = 1;
 		return (1);
 	}
 	return (0);
@@ -51,11 +51,11 @@ int	ft_add_to_env(t_env **env, char *val)
 
 void	ft_loop_export(t_pipex *list, t_tokens *toks, int i, int err)
 {
-	if (!ft_check_export_err(toks->type))
+	if (!ft_check_export_err(toks->type, list))
 	{
 		if (ft_check_before_equal(toks->val))
 		{
-			ft_export_error(toks, toks->val, i);
+			ft_export_error(toks, toks->val, i, list);
 			return ;
 		}
 		err = ft_check_after_equal(list->data->env, toks->val);

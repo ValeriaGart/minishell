@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   wait_n_cmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:14:55 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:14:56 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 19:41:15 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/minishell.h"
+
+void	ft_change_ac_on_err(t_tokens *iter, int i)
+{
+	while (iter && iter->ind_command != i)
+		iter = iter->next;
+	while (iter && iter->ind_command == i)
+	{
+		iter->ind_command = -1;
+		iter = iter->next;
+	}
+}
 
 char	*ft_bcheck_paths(t_env	*env)
 {
@@ -23,32 +34,40 @@ char	*ft_bcheck_paths(t_env	*env)
 	return (ft_strdup("./"));
 }
 
+void	sig_int_quit(int status, t_pipex **list)
+{
+	if (!(*list)->data->exit_code && WTERMSIG(status) == SIGINT)
+	{
+		(*list)->data->exit_code = 130;
+		write(1, "\n", 1);
+	}
+	else if (!(*list)->data->exit_code && WCOREDUMP(status) == SIGQUIT)
+	{
+		(*list)->data->exit_code = 131;
+		write(1, "Quit (core dumped)\n", 20);
+	}
+}
+
 void	ft_wait_for_my_babies(t_pipex *list, int status)
 {
 	int	i;
 
 	i = -1;
-	if (g_minishell == 131)
-		g_minishell = 0;
+	if (list->data->exit_code == 131)
+		list->data->exit_code = 0;
 	while (++i < list->ac)
 	{
 		if (list->ac != 1 || !is_builtin(list->tokens, i))
 			waitpid(list->pids[i], &status, 0);
 		if ((list->ac != 1 || !is_builtin(list->tokens, i))
 			&& WIFEXITED(status))
-			g_minishell = WEXITSTATUS(status);
+			list->data->exit_code = WEXITSTATUS(status);
 		else if ((list->ac != 1 || !is_builtin(list->tokens, i))
 			&& WIFSIGNALED(status))
-		{
-			if (!g_minishell && WTERMSIG(status) == SIGINT)
-			{
-				g_minishell = 130;
-				write(1, "\n", 1);
-			}
-		}
+			sig_int_quit(status, &list);
 	}
 	if (list->heredoc_c)
-		g_minishell = 130;
+		list->data->exit_code = 130;
 }
 
 int	ft_strcmp(char *s1, char *s2)

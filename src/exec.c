@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:12:30 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 13:02:13 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 19:50:44 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void free_loop_children(t_pipex *list, int *i)
 
 void ft_loop_children(t_pipex *list, int i)
 {
-	sig_handel(2);
+	sig_handel(2, list->data);
 	ft_check_kid(i, list);
 	list->valid_env = ft_env_to_twod_arr(list->data->env);
 	if (!list->valid_env || !ft_command_check(list, list->tokens, i))
@@ -32,7 +32,7 @@ void ft_loop_children(t_pipex *list, int i)
 		if (list->here_doc)
 			unlink(".heredoc");
 		free_loop_children(list, &i);
-		exit(g_minishell);
+		exit(list->data->exit_code);
 	}
 	execve(list->command, list->args, list->valid_env);
 	ft_error_msg("Execve failed\n", 15);
@@ -56,6 +56,11 @@ void ft_exec_right_way(t_pipex **list, int err, int *i)
 		else if ((*list)->ac == 1 || (*list)->pids[*i] == 0)
 			ft_builtins_p((*list), *i, (*list)->tokens);
 	}
+	else
+	{
+		if ((*list)->pids[*i] == 0)
+			ft_free_exit_builtin(*list, *i);
+	}
 }
 
 int ft_do_all_to_exec(t_pipex *list, int err, int i)
@@ -68,7 +73,7 @@ int ft_do_all_to_exec(t_pipex *list, int err, int i)
 			return (0);
 		if (err > 0)
 			return (1);
-		if (!err && list->ac != 1)
+		if (list->ac != 1)
 		{
 			if (pipe(list->pipes) == -1)
 				return (ft_list_loop_free(list, i, 1), 1);

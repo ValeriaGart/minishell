@@ -6,20 +6,20 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:09:40 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:09:41 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:08:09 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_cdhome(t_env *env)
+void	ft_cdhome(t_env *env, t_pipex *list)
 {
 	t_env	*home_path;
 
 	home_path = ft_is_env(env, "HOME", 4);
 	if (!home_path)
 	{
-		g_minishell = 1;
+		list->data->exit_code = 1;
 		ft_error_cd("HOME", 1);
 		return ;
 	}
@@ -29,7 +29,7 @@ void	ft_cdhome(t_env *env)
 		ft_error_cd(home_path->str + 5, 2);
 }
 
-int	ft_follow_oldpwd(t_env *env)
+int	ft_follow_oldpwd(t_env *env, t_pipex *list)
 {
 	t_env	*old_pwd;
 
@@ -37,7 +37,7 @@ int	ft_follow_oldpwd(t_env *env)
 	if (!old_pwd)
 	{
 		ft_error_cd("OLDPWD", 1);
-		g_minishell = 1;
+		list->data->exit_code = 1;
 		return (0);
 	}
 	ft_putstr_fd((old_pwd->str) + 7, STDOUT_FILENO);
@@ -50,7 +50,7 @@ int	ft_follow_oldpwd(t_env *env)
 	return (0);
 }
 
-int	ft_cd_tilde(t_env *env, t_tokens *toks)
+int	ft_cd_tilde(t_env *env, t_tokens *toks, t_pipex *list)
 {
 	t_env	*home_path;
 	char	*path_trim;
@@ -59,7 +59,7 @@ int	ft_cd_tilde(t_env *env, t_tokens *toks)
 	home_path = ft_is_env(env, "HOME", 4);
 	if (!home_path)
 	{
-		g_minishell = 1;
+		list->data->exit_code = 1;
 		ft_error_cd("HOME", 1);
 		return (0);
 	}
@@ -105,27 +105,27 @@ int	ft_update_pwd_env(t_pipex *list)
 
 int	ft_cd(t_pipex *list, t_env *env, t_tokens *toks, int i)
 {
-	g_minishell = 0;
-	toks = ft_too_many_args(toks, i, 2, "cd");
-	if (g_minishell)
+	list->data->exit_code = 0;
+	toks = ft_too_many_args(i, 2, "cd", list);
+	if (list->data->exit_code)
 		return (0);
 	if (!toks)
-		ft_cdhome(env);
+		ft_cdhome(env, list);
 	else if (toks->val[0] == '~')
 	{
-		if (ft_cd_tilde(env, toks))
+		if (ft_cd_tilde(env, toks, list))
 			return (1);
 	}
 	else if (toks->val[0] == '-' && ft_strlen(toks->val) == 1)
 	{
-		if (ft_follow_oldpwd(env))
+		if (ft_follow_oldpwd(env, list))
 			return (1);
 	}
 	else
 	{
 		if (chdir(toks->val) == -1)
 		{
-			g_minishell = 1;
+			list->data->exit_code = 1;
 			ft_error_cd(toks->val, 2);
 		}
 	}

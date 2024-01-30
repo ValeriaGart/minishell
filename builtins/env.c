@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:09:59 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:10:00 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:07:56 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	ft_env(t_data *data, t_pipex *list, int i)
 		ft_error("env", ": No such file or directory\n", 0);
 		return (127);
 	}
-	if (ft_too_many_args(list->tokens, i, 1, "env") == NULL)
+	if (ft_too_many_args(i, 1, "env", list) == NULL)
 		return (127);
 	env = data->env;
 	while (env->next != NULL)

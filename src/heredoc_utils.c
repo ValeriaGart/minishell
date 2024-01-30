@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:13:14 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:13:15 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:01:15 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_is_heredoc(char *new)
 	return (0);
 }
 
-t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
+t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i, t_pipex *list)
 {
 	toks = toks->next;
 	while (toks && toks->ind_command == i && toks->type == SEP)
@@ -51,7 +51,7 @@ t_tokens	*ft_syntax_err_redir(t_tokens *toks, int i)
 			ft_putstr_fd(toks->val, 2);
 			ft_putstr_fd("'\n", 2);
 		}
-		g_minishell = 2;
+		list->data->exit_code = 2;
 		return (NULL);
 	}
 	return (toks);

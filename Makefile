@@ -57,13 +57,6 @@ OBJS = $(SRCS:.c=.o)
 
 all:    $(NAME)
 
-#TODO: remove tester
-test: 
-		git clone https://github.com/LucasKuhn/minishell_tester.git minishell_tester
-
-testrm:
-		rm -R minishell_tester
-
 $(NAME): $(OBJS)
 		$(MAKE) -C ./libft
 		$(CC) -o $(NAME) $(CFLAGS) $(CPPFLAGS) $(OBJS) $(LIBFT) $(LIB)

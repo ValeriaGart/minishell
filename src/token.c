@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:14:34 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:14:35 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:02:33 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_tokens	*ft_open_file(t_tokens *toks, t_pipex *list, int i, int out)
 		if (list->redir_in != -1)
 			close(list->redir_in);
 	}
-	toks = ft_syntax_err_redir(toks, i);
+	toks = ft_syntax_err_redir(toks, i, list);
 	return (toks);
 }
 

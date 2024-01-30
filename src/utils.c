@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ynguyen <ynguyen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:14:51 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:14:52 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 19:51:33 by ynguyen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	ft_find_index(char *s, char c)
 
 int	ft_error_msg(char *msg, int msg_len)
 {
-	g_minishell = 1;
 	write(2, msg, msg_len);
 	return (1);
 }

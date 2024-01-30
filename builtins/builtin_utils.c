@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:09:22 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:09:24 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:07:23 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ t_tokens	*ft_point_to_needed_tok(t_tokens *toks, int i,
 	return (toks);
 }
 
-t_tokens	*ft_too_many_args(t_tokens *toks_orig, int i, int limit, char *com)
+t_tokens	*ft_too_many_args(int i, int limit, char *com, t_pipex *list)
 {
 	t_tokens	*ret;
 	t_tokens	*toks;
 
-	toks = toks_orig;
+	toks = list->tokens;
 	toks = ft_point_to_needed_tok(toks, i, 1, 0);
 	toks = ft_point_to_needed_tok(toks, i, 0, SEP);
 	ret = toks;
@@ -68,14 +68,14 @@ t_tokens	*ft_too_many_args(t_tokens *toks_orig, int i, int limit, char *com)
 	if ((!toks || toks->ind_command != i) && com[0] == 'c')
 		return (NULL);
 	if (!toks || toks->ind_command != i)
-		return (toks_orig);
+		return (list->tokens);
 	while (toks && toks->ind_command == i)
 	{
 		if (toks->type != SEP)
 			limit--;
 		if (limit)
 		{
-			g_minishell = 1;
+			list->data->exit_code = 1;
 			ft_error(com, ": too many arguments\n", 0);
 			return (NULL);
 		}

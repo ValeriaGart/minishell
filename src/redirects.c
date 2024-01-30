@@ -6,7 +6,7 @@
 /*   By: vharkush <vharkush@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 11:14:19 by vharkush          #+#    #+#             */
-/*   Updated: 2024/01/27 11:14:20 by vharkush         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:00:27 by vharkush         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	ft_redirects(int i, t_tokens *toks, t_pipex *list)
 			if (err == 3)
 				return (1);
 			if (err != -5)
-				g_minishell = 1;
+				list->data->exit_code = 1;
 			if (err == -5 || i == list->ac - 1)
 				return (-2);
 			return (-1);
